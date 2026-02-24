@@ -1,29 +1,22 @@
 # Product Data Flow
 
 **Direction:** BC → Virtual Stock
-**Purpose:** Sync product and item information from Business Central to Virtual Stock so the retailer's catalogue is kept up to date.
+**Purpose:** Sync product information from Business Central to Virtual Stock so the retailer's catalogue is up to date.
 
 ---
 
 ## Overview
 
-Virtual Stock maintains a product catalogue on behalf of the supplier. Product information — including descriptions, EAN codes, dimensions, images, and pricing — must be pushed from BC (or another source of truth) to Virtual Stock so that the retailer can display and sell the products.
-
-Each product in Virtual Stock is identified by an **External ID** assigned by Virtual Stock at the time of product creation.
+Before orders can flow through the integration, products must exist in Virtual Stock. Product information — such as item references, EAN codes, descriptions, and dimensions — is pushed from BC to Virtual Stock via Web Connect. Virtual Stock assigns each product an **External ID** which is stored back in BC and used for all subsequent stock updates.
 
 ---
 
-## Variants
+## How It Works
 
-### Variant A — REST API via Web Connect
-
-Product data is pushed to Virtual Stock via the REST API using Web Connect. This enables real-time or near-real-time product updates.
-
-**Trigger:** Configurable — can be triggered by item changes in BC or run as a scheduled batch
+**Trigger:** Configurable — can be triggered by item creation/changes in BC or run as an initial one-time sync
 **API endpoints:**
 - `POST /api/v4/products` — create new product
 - `PUT /api/v4/products/{external_id}` — update existing product
-- `POST /api/v4/products/{external_id}/stock` — update stock (see [Stock Update](stock-update.md))
 
 **Objects used:**
 
@@ -33,11 +26,12 @@ Product data is pushed to Virtual Stock via the REST API using Web Connect. This
 
 **Process steps:**
 
-1. Product data changes in BC (or initial sync is triggered)
-2. Web Connect detects the change or runs on schedule
+1. Item created or changed in BC (or initial sync is triggered)
+2. Web Connect detects the change
 3. Product payload built and sent to Virtual Stock
-4. If product is new: Virtual Stock creates it and returns an External ID
-5. External ID stored in BC or Web Connect for future updates and stock syncing
+4. If the product is new: Virtual Stock creates it and returns an **External ID**
+5. External ID stored in BC (on Item Card) or in Web Connect Outgoing Data
+6. External ID is now available for [Stock Updates](stock-update.md)
 
 **Sequence diagram:**
 
@@ -61,28 +55,23 @@ sequenceDiagram
 
 ---
 
-### Variant B — CSV via SFTP (batch)
+## Variants
 
-Product data is exported as a CSV file and transferred to Virtual Stock via SFTP. Suitable for large initial loads or when real-time updates are not required.
+### Variant A — Initial sync + ongoing updates (Standard)
 
-**Trigger:** Scheduled batch (e.g. nightly)
-**Transfer method:** SFTP
-**File format:** CSV (Virtual Stock specification)
+An initial sync pushes all relevant items from BC to Virtual Stock. After that, Web Connect detects item changes and pushes updates automatically.
 
----
+### Variant B — Initial sync only
 
-### Variant C — Manual upload via Virtual Stock portal
-
-Product data is uploaded manually via the Virtual Stock portal using a CSV template provided by Virtual Stock. Used for initial setup, one-off updates, or when no automated integration exists.
+Used when the product catalogue is stable and items rarely change. An initial sync is run once; subsequent updates are handled manually or via periodic re-sync.
 
 ---
 
 ## Configuration Notes
 
-- **External ID:** Virtual Stock assigns an External ID when a product is first created. This ID must be stored and associated with the BC item for all future updates and stock syncs
-- **EAN requirement:** Products should have a valid EAN code; this is used for item matching in the order flow
-- **Images:** Virtual Stock supports product image URLs; images are typically hosted externally (CDN) and linked by URL rather than uploaded directly
-- **Retailer-specific catalogue:** Some retailers may require product data to be submitted through retailer-specific templates or portals rather than directly via the VS API
+- **External ID:** Assigned by Virtual Stock at product creation time. Must be stored and linked to the BC item — required for all stock updates
+- **EAN:** Should be present on every item; used for item matching in the order flow
+- **Retailer-specific requirements:** Some retailers require product data in a specific format or with specific fields. Confirm with Virtual Stock onboarding documentation
 
 ---
 
@@ -90,10 +79,9 @@ Product data is uploaded manually via the Virtual Stock portal using a CSV templ
 
 | Step | What can go wrong | What happens |
 |---|---|---|
-| Building payload | Missing required fields (EAN, title) | VS API returns validation error |
-| Creating product | Duplicate product | VS returns conflict error; update endpoint should be used instead |
-| Storing External ID | Not saved after creation | Future updates and stock syncs fail — cannot match product |
-| SFTP transfer (Variant B) | File format error | VS rejects file; check CSV spec |
+| Building payload | Missing required fields | VS API returns validation error |
+| Creating product | Product already exists | VS returns conflict; use update endpoint instead |
+| Storing External ID | Not saved after creation | Stock updates fail — cannot match product in VS |
 
 ---
 

@@ -7,19 +7,16 @@
 
 ## Overview
 
-After a Sales Order has been created in BC (see [Order — Inbound](order-inbound.md)), an order confirmation is sent back to Virtual Stock. This tells Virtual Stock — and the retailer — that the supplier has received and accepted the order.
+After a Sales Order is created in BC (see [Order — Inbound](order-inbound.md)), an order confirmation is sent back to Virtual Stock automatically by Web Connect. This tells Virtual Stock — and the retailer — that the supplier has received and accepted the order.
 
-Virtual Stock moves the order status from **PENDING** to **PROCESSING** upon receipt of a valid confirmation.
+Virtual Stock moves the order status from **PENDING** to **PROCESSING** upon receipt.
 
 ---
 
-## Variants
+## How It Works
 
-### Variant A — Automatic via Web Connect (Standard)
+**Trigger:** Automatic — triggered by Sales Order creation in BC (no manual action required)
 
-The order confirmation is sent automatically by Web Connect immediately after the Sales Order is created in BC. No manual action is required.
-
-**Trigger:** Automatic — triggered by Sales Order creation in BC
 **Objects used:**
 
 | Object | Role |
@@ -30,8 +27,8 @@ The order confirmation is sent automatically by Web Connect immediately after th
 **Process steps:**
 
 1. Sales Order created in BC (from [Order — Inbound](order-inbound.md))
-2. Web Connect detects new Sales Order
-3. Confirmation payload built using `VS_ORDERCONFIRMATION` + `VS_CONFIRMATION_ITEM`
+2. Web Connect detects the new Sales Order
+3. Confirmation payload built from `VS_ORDERCONFIRMATION` + `VS_CONFIRMATION_ITEM`
 4. Confirmation sent to Virtual Stock
 5. Virtual Stock updates order status to `PROCESSING`
 
@@ -51,16 +48,22 @@ sequenceDiagram
 
 ---
 
-### Variant B — Manual confirmation
+## Variants
 
-In cases where automatic confirmation is not configured, the confirmation can be sent manually from BC or directly via the Virtual Stock portal.
+### Variant A — Full order confirmation (Standard)
+
+All lines on the Sales Order are confirmed in a single confirmation message.
+
+### Variant B — Confirmation with expected date per line
+
+The confirmation includes an expected dispatch or delivery date per order line. Used when the retailer requires date commitments upfront.
 
 ---
 
 ## Configuration Notes
 
-- **Expected date:** The confirmation may include an expected dispatch/delivery date per line
-- **Partial confirmation:** Virtual Stock supports confirming individual order lines separately; implementation depends on customer setup
+- **Expected date:** Optional field; can be included per line in the confirmation
+- **Partial confirmation:** Virtual Stock supports confirming individual lines; whether this is used depends on customer setup
 
 ---
 
@@ -69,10 +72,10 @@ In cases where automatic confirmation is not configured, the confirmation can be
 | Step | What can go wrong | What happens |
 |---|---|---|
 | Sending confirmation | VS API error | Job Queue entry fails; order stays `PENDING` in VS |
-| Sending confirmation | Auth error (401/403) | Token refresh attempted; if fails, check auth config |
-| Sending confirmation | Duplicate confirmation | VS may return error if already confirmed |
+| Sending confirmation | Auth error (401/403) | Token refresh attempted; if fails, check `VS_OAUTH` config |
+| Sending confirmation | Order already confirmed | VS returns error; check for duplicate processing |
 
 ---
 
 **Related:**
-[Overview](../overview.md) · [Order — Inbound](order-inbound.md) · [Shipment / Dispatch](shipment.md) · [Cancellation](cancellation.md) · [Authentication](../authentication.md)
+[Overview](../overview.md) · [Order — Inbound](order-inbound.md) · [Shipment / Dispatch](shipment.md) · [Authentication](../authentication.md)

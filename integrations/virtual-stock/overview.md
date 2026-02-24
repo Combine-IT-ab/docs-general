@@ -46,22 +46,9 @@ stateDiagram-v2
 
 ---
 
-## Integration Methods
-
-Virtual Stock supports multiple integration methods. Web Connect uses REST API for all flows.
-
-| Method | Use case |
-|---|---|
-| REST API (V4) | Real-time order management, stock updates, dispatch |
-| Flat file CSV via SFTP | Batch-based alternative to REST API |
-| Webhook | Retailer receives tracking updates pushed by Virtual Stock |
-| JSON via SFTP | Invoice delivery to retailers |
-
----
-
 ## Authentication
 
-See [Authentication](authentication.md) for all supported methods.
+All flows use OAuth 2.0 (Client Credentials) via Web Connect. See [Authentication](authentication.md) for setup details.
 
 ---
 
