@@ -8,6 +8,7 @@ Open product documentation for Combine-IT integrations. This repository describe
 
 ## Integrations
 
+- [Centra](integrations/centra/overview.md)
 - [Virtual Stock](integrations/virtual-stock/overview.md)
 
 ---
