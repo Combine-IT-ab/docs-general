@@ -107,6 +107,7 @@ When implementing Centra ↔ BC, key decisions include:
 - **Which sales channels** exist and how to identify them
 - **Customer mapping** — which BC customer per Centra market
 - **Financial mappings** — VAT groups, payment methods, shipping agents per country
+- **Shipping fee handling** — how inbound shipping costs are posted in BC (G/L account, item, or charge — configured in Web Connect Codeunit Setup)
 - **Stock calculation** — which warehouses and whether to include reserved stock
 
 ---
