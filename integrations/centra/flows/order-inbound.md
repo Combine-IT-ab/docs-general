@@ -111,6 +111,7 @@ Orders from third-party marketplaces (e.g. Åhléns, Zalando). Each marketplace 
 - **Channel identification:** Set up conditions to distinguish between different sales channels (retail, wholesale, marketplace)
 - **Customer mapping:** Create a mapping from Centra market IDs to BC customer numbers
 - **Item matching:** Configure how items in Centra orders are matched to BC items (typically via EAN or product ID)
+- **Shipping fee mapping:** Inbound orders include a shipping cost from Centra. Configure how this is posted in BC via the Web Connect Codeunit Setup Card (Shipping Fee Type + Shipping Fee No.). Options include posting to a G/L account, creating a shipping item line, or using BC Item Charges.
 - **Webhook registration:** Centra webhooks must be registered in the platform and point to your Web Connect instance
 
 ---
