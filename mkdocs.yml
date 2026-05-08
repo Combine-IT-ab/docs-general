@@ -1,0 +1,133 @@
+site_name: Combine IT Docs
+site_url: https://docs.combineit.se
+site_description: Product documentation for Web Connect, Easy Connect, and Job Queue Monitor
+repo_url: https://github.com/Combine-IT-ab/docs-general
+repo_name: Combine-IT-ab/docs-general
+edit_uri: edit/main/
+
+theme:
+  name: material
+  language: en
+  logo: assets/logo.png
+  favicon: assets/favicon.png
+  palette:
+    - scheme: default
+      primary: custom
+      accent: custom
+  font:
+    text: Inter
+    code: JetBrains Mono
+  features:
+    - navigation.tabs
+    - navigation.tabs.sticky
+    - navigation.sections
+    - navigation.indexes
+    - navigation.top
+    - search.suggest
+    - search.highlight
+    - search.share
+    - content.code.copy
+    - content.action.edit
+
+extra_css:
+  - assets/extra.css
+
+docs_dir: docs
+exclude_docs: |
+  .github/
+
+nav:
+  - Home: README.md
+  - Web Connect:
+    - Overview: products/web-connect/README.md
+    - General:
+      - Overview: products/web-connect/general/README.md
+      - General Setup: products/web-connect/general/general-setup.md
+      - Integrations: products/web-connect/general/integrations.md
+      - Objects: products/web-connect/general/objects.md
+      - Condition List: products/web-connect/general/condition-list.md
+      - Secret Value Storage: products/web-connect/general/secret-value-storage.md
+      - Destinations: products/web-connect/general/destinations.md
+      - Entries: products/web-connect/general/entries.md
+      - Text Mapping: products/web-connect/general/text-mapping.md
+      - Item Inventory: products/web-connect/general/item-inventory.md
+      - Dynamic Flow Fields: products/web-connect/general/dynamic-flow-fields.md
+      - Incoming Data:
+        - Overview: products/web-connect/general/incoming-data/README.md
+        - Mapping: products/web-connect/general/incoming-data/mapping.md
+      - Outgoing Mapping:
+        - Overview: products/web-connect/general/outgoing-mapping/README.md
+        - Outgoing Data: products/web-connect/general/outgoing-mapping/outgoing-data-web.md
+        - Sync Triggers: products/web-connect/general/outgoing-mapping/outgoing-sync-triggers.md
+        - Item Price: products/web-connect/general/outgoing-mapping/item-price.md
+    - Integrations:
+      - Overview: products/web-connect/integrations/README.md
+      - Centra:
+        - Overview: products/web-connect/integrations/centra/overview.md
+        - Order Inbound: products/web-connect/integrations/centra/flows/order-inbound.md
+        - Product Data: products/web-connect/integrations/centra/flows/product-data.md
+        - Stock Update: products/web-connect/integrations/centra/flows/stock-update.md
+        - Shipment: products/web-connect/integrations/centra/flows/shipment.md
+        - Cancellation: products/web-connect/integrations/centra/flows/cancellation.md
+      - Virtual Stock:
+        - Overview: products/web-connect/integrations/virtual-stock/overview.md
+        - Order Inbound: products/web-connect/integrations/virtual-stock/flows/order-inbound.md
+        - Product Data: products/web-connect/integrations/virtual-stock/flows/product-data.md
+        - Stock Update: products/web-connect/integrations/virtual-stock/flows/stock-update.md
+        - Shipment: products/web-connect/integrations/virtual-stock/flows/shipment.md
+        - Order Confirmation: products/web-connect/integrations/virtual-stock/flows/order-confirmation.md
+        - Cancellation: products/web-connect/integrations/virtual-stock/flows/cancellation.md
+  - Easy Connect:
+    - Overview: products/easy-connect/README.md
+    - Setup: products/easy-connect/setup.md
+    - Sync Data Fields: products/easy-connect/sync-data-fields.md
+    - Master Data Handling: products/easy-connect/master-data-handling.md
+    - Master Data Companies: products/easy-connect/master-data-companies.md
+    - Master Data Change Log: products/easy-connect/master-data-change-log.md
+    - Sync Log Entries: products/easy-connect/sync-log-entries.md
+    - Job Queues: products/easy-connect/job-queues.md
+  - Job Queue Monitor:
+    - Overview: products/job-queue-monitor/README.md
+    - Background Monitor Setup: products/job-queue-monitor/background-monitor-setup.md
+    - Background Monitor Log: products/job-queue-monitor/background-monitor-log.md
+    - How to Configure: products/job-queue-monitor/how-to-configure.md
+  - How-to:
+    - Overview: how-to/README.md
+    - Web Connect:
+      - Overview: how-to/web-connect/README.md
+      - Prevent Customer Update (Unique Identifier): how-to/web-connect/prevent-customer-update-unique-identifier.md
+      - Split Cash Payment per Store: how-to/web-connect/split-cash-payment-per-store.md
+      - Stop Sending a Value (Outgoing): how-to/web-connect/stop-sending-value-outgoing.md
+      - Resend an Outgoing Message: how-to/web-connect/resend-outgoing-message.md
+      - Outgoing Inventory to External Systems: how-to/web-connect/outgoing-inventory-to-external-systems.md
+      - WMS "Request not sent" Error: how-to/web-connect/wms-request-not-sent-error.md
+    - Easy Connect:
+      - Overview: how-to/easy-connect/README.md
+      - Orders Not Handled Automatically: how-to/easy-connect/orders-not-handled-automatically.md
+    - Job Queue Monitor:
+      - How to Configure and Activate: products/job-queue-monitor/how-to-configure.md
+
+plugins:
+  - search:
+      lang: en
+
+markdown_extensions:
+  - admonition
+  - pymdownx.details
+  - pymdownx.superfences
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - tables
+  - toc:
+      permalink: true
+
+extra:
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/Combine-IT-ab
+    - icon: fontawesome/solid/globe
+      link: https://www.combineit.se
+
+copyright: Copyright &copy; Combine IT AB

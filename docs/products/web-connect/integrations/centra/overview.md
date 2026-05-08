@@ -107,4 +107,4 @@ When implementing Centra ↔ BC, key decisions include:
 
 ## Related
 
-[Web Connect Integrations](../README.md) · [Flows](flows/) · [How-to](../../../../how-to/web-connect/README.md) · [Centra API Documentation](https://docs.centraapis.com/)
+[Web Connect Integrations](../README.md) · [How-to](../../../../how-to/web-connect/README.md) · [Centra API Documentation](https://docs.centraapis.com/)
