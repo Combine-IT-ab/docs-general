@@ -37,6 +37,7 @@ exclude_docs: |
   .github/
 
 nav:
+  - combineit.se: https://www.combineit.se
   - Home: README.md
   - Web Connect:
     - Overview: products/web-connect/README.md
@@ -131,3 +132,4 @@ extra:
       link: https://www.combineit.se
 
 copyright: Copyright &copy; Combine IT AB
+
