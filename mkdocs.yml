@@ -102,6 +102,7 @@ nav:
       - Resend an Outgoing Message: how-to/web-connect/resend-outgoing-message.md
       - Outgoing Inventory to External Systems: how-to/web-connect/outgoing-inventory-to-external-systems.md
       - WMS "Request not sent" Error: how-to/web-connect/wms-request-not-sent-error.md
+      - Integrations or Automation Not Running: how-to/web-connect/integration-not-running.md
     - Easy Connect:
       - Overview: how-to/easy-connect/README.md
       - Orders Not Handled Automatically: how-to/easy-connect/orders-not-handled-automatically.md
