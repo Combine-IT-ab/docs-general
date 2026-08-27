@@ -10,6 +10,7 @@ Open **Web Connect General Setup** (*Web Connect Allmänna inställningar*) and 
 
 If this is switched off, nothing runs regardless of how everything else is configured. This is the first thing to check.
 
+<img width="885" height="395" alt="bild (3)" src="https://github.com/user-attachments/assets/52841791-a997-4b9b-b2a8-816021533b76" />
 
 
 ## 2. Are the Automatic Processes Enabled?
