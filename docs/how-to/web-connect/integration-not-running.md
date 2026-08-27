@@ -19,7 +19,8 @@ In the same view, open the **Automatic Processes** tab (*Automatiska processer*)
 
 Downloads and uploads are configured per integration and object, each with its own interval and enabled flag. A process that is not enabled will never run, and no error is raised — it simply does nothing.
 
-<!-- screenshot: Automatic Processes tab with downloads and uploads enabled -->
+<img width="1354" height="420" alt="bild (4)" src="https://github.com/user-attachments/assets/04d086f1-5497-4c5b-9fea-377f28ccdd8c" />
+
 
 ## 3. Is the Integration Active?
 
