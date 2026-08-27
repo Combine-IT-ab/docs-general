@@ -28,7 +28,8 @@ Open **Web Connect Integrations** (*Web Connect Integrationer*) and verify that 
 
 An integration can be disabled without any visible error. Messages simply stop being processed.
 
-<!-- screenshot: Web Connect Integrations list showing the Enabled column -->
+<img width="727" height="325" alt="bild (5)" src="https://github.com/user-attachments/assets/5cde6283-e6d3-4bff-a436-d29054e20717" />
+
 
 ## 4. Is the Job Queue Running?
 
