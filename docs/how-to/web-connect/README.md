@@ -10,3 +10,4 @@
 - [How do I resend an outgoing message from Web Connect Outgoing Data?](resend-outgoing-message.md)
 - [Outgoing Inventory to External Systems](outgoing-inventory-to-external-systems.md)
 - [WMS Document shows "Request not sent" with error](wms-request-not-sent-error.md)
+- [Integrations or automation not running](integration-not-running.md)
