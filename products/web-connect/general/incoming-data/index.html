@@ -2320,6 +2320,8 @@
       
         
       
+        
+      
     
     
     
@@ -2529,6 +2531,34 @@
     
   
     WMS "Request not sent" Error
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../../how-to/web-connect/integration-not-running/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Integrations or Automation Not Running
   
 
     
@@ -2945,8 +2975,8 @@
 <h2 id="object-tree-and-processing">Object Tree and Processing<a class="headerlink" href="#object-tree-and-processing" title="Permanent link">&para;</a></h2>
 <p>Incoming data is parsed according to the Web Connect Object tree. The root object maps to the top-level payload structure, with underlying objects handling nested arrays or child records.</p>
 <p>Example for an incoming order:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>Sales Header (root object)  ←  { &quot;orderNumber&quot;: &quot;...&quot;, &quot;lines&quot;: [...] }
-<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>└── Sales Lines             ←  [ { &quot;itemNo&quot;: &quot;...&quot;, &quot;qty&quot;: 2 }, ... ]
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>Sales Header (root object)  ←  { "orderNumber": "...", "lines": [...] }
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>└── Sales Lines             ←  [ { "itemNo": "...", "qty": 2 }, ... ]
 </code></pre></div>
 <p>The mapping, conditions, and text mappings configured on each object control how values are extracted and written to BC.</p>
 <h2 id="processing-statuses">Processing Statuses<a class="headerlink" href="#processing-statuses" title="Permanent link">&para;</a></h2>
