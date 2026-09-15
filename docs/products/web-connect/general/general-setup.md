@@ -25,9 +25,27 @@ Web Connect General Setup contains the global configuration for how Web Connect 
 
 ## Retention Policies
 
-Web Connect uses BC's standard retention policy framework to control how long log data is kept. Configure retention under **Administration → Retention Policies** in Business Central.
+Web Connect uses BC's standard retention policy framework to control how long log data is kept. Without retention policies the Web Connect tables grow until the database is full, which among other things blocks the creation of new sandboxes. Configure retention under **Administration → Retention Policies** in Business Central, or from **Web Connect Settings** where the built-in policies can be enabled directly.
 
-Recommended retention objects: Web Connect Entries, Web Connect Incoming Data, Web Connect Outgoing Data.
+### Recommended policies
+
+| Policy | Table content |
+|--------|---------------|
+| **Values** | Inbox data |
+| **Incoming Data** | Incoming data records |
+| **Error Values** | Faulty values in the inbox |
+| **Blob Data** | Outgoing content |
+| **Outgoing Data** | The outgoing sync table |
+
+### Do not enable
+
+**Sync Outgoing Data After.** This policy deletes the External ID stored on the outgoing data and breaks the sync with the external system. Leave it disabled.
+
+### How the cleanup job behaves
+
+The deletion job is throttled. It pauses after roughly 3,000 transactions to avoid overloading the system and continues the following night. Large backlogs are therefore cleaned up over several nights, not in one run.
+
+See also [Database is full: enable retention policies](../../../how-to/web-connect/database-full-enable-retention-policies.md).
 
 ## Automatic Processes
 

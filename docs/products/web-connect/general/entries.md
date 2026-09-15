@@ -17,6 +17,17 @@ Entries provide a full audit trail of:
 - Whether it succeeded or failed
 - The raw request and response payloads
 
+## Status of an Outgoing Entry
+
+| Status | Meaning |
+|--------|---------|
+| **Sent** | The upload job has sent the entry to the external system. |
+| **Sent and Confirmed** | The external system answered successfully. |
+
+An entry that stays on **Sent** without becoming **Sent and Confirmed** did not get a successful answer. Open the entry: the full request and response payloads and the HTTP status code are shown on the Web Entries page, which is where a failed call is diagnosed.
+
+If the external system returns data in its answer, the upload job can create an Incoming Data record from the response so that the download job processes it (for example to store an ID assigned by the external system).
+
 ## When to Use Entries vs Other Views
 
 | Scenario | Use |

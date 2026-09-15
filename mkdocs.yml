@@ -53,6 +53,7 @@ nav:
       - Text Mapping: products/web-connect/general/text-mapping.md
       - Item Inventory: products/web-connect/general/item-inventory.md
       - Dynamic Flow Fields: products/web-connect/general/dynamic-flow-fields.md
+      - Webhooks: products/web-connect/general/webhooks.md
       - Incoming Data:
         - Overview: products/web-connect/general/incoming-data/README.md
         - Mapping: products/web-connect/general/incoming-data/mapping.md
@@ -103,6 +104,13 @@ nav:
       - Outgoing Inventory to External Systems: how-to/web-connect/outgoing-inventory-to-external-systems.md
       - WMS "Request not sent" Error: how-to/web-connect/wms-request-not-sent-error.md
       - Integrations or Automation Not Running: how-to/web-connect/integration-not-running.md
+      - Database Full: Retention Policies: how-to/web-connect/database-full-enable-retention-policies.md
+      - Record Stuck: Locked by Session: how-to/web-connect/record-stuck-locked-by-session.md
+      - Entity Already Exists: Update with External ID: how-to/web-connect/entity-already-exists-update-with-external-id.md
+      - 401 After Job Queue Stopped: how-to/web-connect/unauthorized-after-job-queue-stopped.md
+      - Limit Content Creation Retries: how-to/web-connect/limit-content-creation-retries.md
+      - Customer Template Not Found: Billing Country: how-to/web-connect/customer-template-not-found-missing-billing-country.md
+      - Ready Integrations Field Not Visible: how-to/web-connect/integration-field-not-visible-enable-feature.md
     - Easy Connect:
       - Overview: how-to/easy-connect/README.md
       - Orders Not Handled Automatically: how-to/easy-connect/orders-not-handled-automatically.md
