@@ -10,6 +10,13 @@ Step-by-step guides for common tasks and troubleshooting across Combine IT produ
 - [How do I resend an outgoing message from Web Connect Outgoing Data?](web-connect/resend-outgoing-message.md)
 - [Outgoing Inventory to External Systems](web-connect/outgoing-inventory-to-external-systems.md)
 - [WMS Document shows "Request not sent" with error](web-connect/wms-request-not-sent-error.md)
+- [Database is full: enable retention policies](web-connect/database-full-enable-retention-policies.md)
+- [Incoming record is stuck: Locked by Session](web-connect/record-stuck-locked-by-session.md)
+- ["Entity already exists" when sending to an external API](web-connect/entity-already-exists-update-with-external-id.md)
+- [Calls fail with 401 Unauthorized after a job queue stopped](web-connect/unauthorized-after-job-queue-stopped.md)
+- [Prevent endless retries when content creation fails](web-connect/limit-content-creation-retries.md)
+- [Order fails: customer template not found because Billing Country is empty](web-connect/customer-template-not-found-missing-billing-country.md)
+- [A Ready Integrations field is not visible or not editable](web-connect/integration-field-not-visible-enable-feature.md)
 
 ## Easy Connect
 
