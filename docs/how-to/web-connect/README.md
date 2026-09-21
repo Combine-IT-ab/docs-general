@@ -18,3 +18,4 @@
 - [Prevent endless retries when content creation fails](limit-content-creation-retries.md)
 - [Order fails: customer template not found because Billing Country is empty](customer-template-not-found-missing-billing-country.md)
 - [A Ready Integrations field is not visible or not editable](integration-field-not-visible-enable-feature.md)
+- [Ongoing rejects a return order for an order it did not ship](ongoing-rejects-return-order.md)
