@@ -47,6 +47,7 @@ nav:
       - Integrations: products/web-connect/general/integrations.md
       - Objects: products/web-connect/general/objects.md
       - Condition List: products/web-connect/general/condition-list.md
+      - Sales Document Creation: products/web-connect/general/sales-document-creation.md
       - Secret Value Storage: products/web-connect/general/secret-value-storage.md
       - Destinations: products/web-connect/general/destinations.md
       - Entries: products/web-connect/general/entries.md
