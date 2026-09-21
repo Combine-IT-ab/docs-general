@@ -96,6 +96,8 @@ Retail/B2C orders from Centra's store. Customer is resolved via a market-to-BC-c
 
 Example: Centra market "Sweden Web" → maps to BC customer "WEBSE"
 
+**Market or shipping country?** Mapping on market alone breaks when the customer changes the shipping country in checkout without the market following (for example market NL, shipping address IT). The order then lands on the wrong BC customer and gets the wrong VAT posting group, and the total check stops it because Centra calculated VAT on the shipping country. Under the EU OSS rules VAT follows the destination, so the recommended setup for retail orders is to resolve the VAT business posting group (and, where customers are per country, the customer) from `shippingAddress.country.code` rather than from `market.name`. A country-to-VAT-group mapping covering all EU countries is the standard building block for this.
+
 ### Variant B — Wholesale / B2B Orders
 
 Wholesale orders placed by B2B accounts. Customer details may be fetched from account data in the order payload.

@@ -13,6 +13,7 @@ Core product documentation for Web Connect. These pages cover how the product wo
 | [Outgoing Mapping](outgoing-mapping/README.md) | How outgoing data is structured and sent |
 | [Incoming Data](incoming-data/README.md) | How incoming data is received and mapped |
 | [Condition List](condition-list.md) | How conditions evaluate fields and route data |
+| [Sales Document Creation](sales-document-creation.md) | Total check, document totals and other settings for creating sales documents |
 
 ---
 
