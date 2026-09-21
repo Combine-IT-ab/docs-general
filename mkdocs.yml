@@ -79,6 +79,9 @@ nav:
         - Shipment: products/web-connect/integrations/virtual-stock/flows/shipment.md
         - Order Confirmation: products/web-connect/integrations/virtual-stock/flows/order-confirmation.md
         - Cancellation: products/web-connect/integrations/virtual-stock/flows/cancellation.md
+      - Ongoing WMS:
+        - Overview: products/web-connect/integrations/ongoing/overview.md
+        - Return Orders: products/web-connect/integrations/ongoing/flows/return-orders.md
   - Easy Connect:
     - Overview: products/easy-connect/README.md
     - Setup: products/easy-connect/setup.md
@@ -111,6 +114,7 @@ nav:
       - Limit Content Creation Retries: how-to/web-connect/limit-content-creation-retries.md
       - Customer Template Not Found: Billing Country: how-to/web-connect/customer-template-not-found-missing-billing-country.md
       - Ready Integrations Field Not Visible: how-to/web-connect/integration-field-not-visible-enable-feature.md
+      - Ongoing Rejects Return Order: how-to/web-connect/ongoing-rejects-return-order.md
     - Easy Connect:
       - Overview: how-to/easy-connect/README.md
       - Orders Not Handled Automatically: how-to/easy-connect/orders-not-handled-automatically.md
