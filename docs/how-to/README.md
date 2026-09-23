@@ -17,6 +17,7 @@ Step-by-step guides for common tasks and troubleshooting across Combine IT produ
 - [Prevent endless retries when content creation fails](web-connect/limit-content-creation-retries.md)
 - [Order fails: customer template not found because Billing Country is empty](web-connect/customer-template-not-found-missing-billing-country.md)
 - [A Ready Integrations field is not visible or not editable](web-connect/integration-field-not-visible-enable-feature.md)
+- [How do I set up an incoming webhook that creates a document in BC?](web-connect/set-up-incoming-webhook.md)
 
 ## Easy Connect
 

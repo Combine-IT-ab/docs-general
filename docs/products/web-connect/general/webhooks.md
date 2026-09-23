@@ -27,6 +27,7 @@ Web Connect normally works asynchronously through two job queues: the upload job
 
 ## Related
 
+- [How do I set up an incoming webhook that creates a document in BC?](../../../how-to/web-connect/set-up-incoming-webhook.md)
 - [Web Connect Objects](objects.md)
 - [Web Connect Incoming Data](incoming-data/README.md)
 - [Web Connect Outgoing Mapping](outgoing-mapping/README.md)
