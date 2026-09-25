@@ -63,6 +63,9 @@ This maps to a JSON payload like:
 | **Number of Minutes Between Runs** | Interval for the download job on this object. |
 | **Content Create Order** | The order in which BC records are created from an incoming payload. See below. |
 | **Data Array** | JSON path to the array that holds the records in an incoming payload, e.g. `items`. See below. |
+| **Source** | The integration source the object belongs to. See below. |
+| **Upload Condition Code** | Outgoing: hold a triggered record back until a condition is met. See below. |
+| **Process Condition Code** | Incoming: skip this object when a condition is met. See below. |
 
 ## Grouping Outgoing Records: Number of Contents per Transaction
 
@@ -82,9 +85,40 @@ For incoming objects the download job sends a Download Request to the external s
 
 The response is stored as an Incoming Data record and converted to JSON regardless of the original format (XML, CSV), so all downstream processing works the same way. When one response contains several records, **Data Array** tells Web Connect which array to split into separate Incoming Data records.
 
+### Pausing and resuming a download
+
+Untick **Download Data** to stop fetching for one object while the rest of the integration keeps running. When you tick it again, Web Connect fetches changes from the point where downloading stopped, so nothing is skipped as long as the external system can return changes since a given time. Check the result after the first run, since how far back the catch up goes depends on the object's setup and on the external API. To pause every object at once, see [How do I pause incoming downloads temporarily?](../../../how-to/web-connect/pause-incoming-download-temporarily.md)
+
 ## Creating BC Records in the Right Order
 
 Incoming JSON is mapped onto the object tree (for example Order Header → Order Line). Fields can be mapped from the current record, its parent, or related records. **Content Create Order** controls the sequence in which BC records are created from one payload, so that a Sales Header exists before its Sales Lines and BC validation does not fail.
+
+## Source on a Web Object
+
+A Web Object works without a **Source**. Source is a grouping that was added later and is not mandatory. It still matters in three ways:
+
+- **Default codeunits.** Web Connect has one codeunit per format (XML, JSON, GraphQL and others). The action that sets the default codeunits looks at the source to pick the right one, so it does not work on an object without a source.
+- **Export.** An object without a source is not included when the integration is exported.
+- **Incoming mapping.** Incoming mappings are filtered by source. A blank source on a mapping applies to all sources.
+
+Give every object, including helper objects such as URL Parameters Objects, the same source as the integration it belongs to.
+
+## Condition Codes on the Web Object
+
+Two properties on the Web Object use conditions from the [Web Connect Condition List](condition-list.md). They look similar but behave differently.
+
+| Property | Direction | What it does |
+|----------|-----------|--------------|
+| **Upload Condition Code** | Outgoing | **Waits.** When a record is triggered, Web Connect checks the condition. If it is not met, the record is held back and checked again on the next run. When the condition is met, the record is sent as a Web Entry. |
+| **Process Condition Code** | Incoming | **Skips.** If the condition is met for an incoming object, that object is ignored and not created in BC. |
+
+**Upload Condition Code** is not the same as the table view on an Outgoing Sync Trigger. The trigger view decides whether a change creates outgoing data at all. The Upload Condition Code lets the change be recorded and waits until the record is complete. Typical uses:
+
+- A shipment must not be sent before the order confirmation has been sent.
+- A product is not sent until its variants exist.
+- A new customer is not sent until name, address and other required fields are filled in. See [How do I stop a record from syncing before it is complete?](../../../how-to/web-connect/stop-a-record-from-syncing-before-it-is-complete.md)
+
+**Process Condition Code** is useful when a payload contains elements that should not become records, for example attributes where only some types should become dimensions. Conditions can be combined with AND and OR, so an existing condition can be extended with one more case.
 
 ## Related
 

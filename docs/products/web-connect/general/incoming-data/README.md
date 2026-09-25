@@ -62,6 +62,16 @@ When processing fails:
 - **Show Processed Data** — see how the payload was interpreted
 - **Show Entry** — open the associated [Web Connect Entry](../entries.md) for full request details
 
+## Checking Mapped Values
+
+On the field lines of an incoming record, **Source Value** is the value as it arrived in the payload, and **Value Text** is the value after text mapping and other transformations. Compare the two when a value ends up wrong in BC: if Source Value is already wrong the problem is in the sending system, otherwise it is in the mapping.
+
+The field values are calculated when the record is validated. After you change a mapping, set the record back to **Not Validated** and process it again, otherwise the old values are used.
+
+## Troubleshooting a Failing Record
+
+To find out which part of a payload fails, see [How do I find out which part of an incoming message is failing?](../../../../how-to/web-connect/debug-why-an-incoming-record-fails.md)
+
 ## In This Section
 
 - [Web Connect Incoming Data Mapping](mapping.md)
