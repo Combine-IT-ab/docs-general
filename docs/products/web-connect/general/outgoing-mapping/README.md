@@ -74,6 +74,18 @@ Filter by **Object Filter** at the top of the page to display mappings for a spe
 | **Special Namespace** | Overrides the XML namespace for this field. |
 | **Encode to Base64** | Encodes Blob field content to Base64 before sending. |
 
+### Date and Time Values
+
+Web Connect formats date and time values as **UTC** by default. Almost all external systems expect UTC, and local time is harder to map and rarely needed.
+
+A datetime in UTC is sent with milliseconds and a time zone letter at the end, where `Z` means UTC. If the external system does not accept that format, for example in a query parameter:
+
+1. Set **Output Format** to **string**. With a datetime output format the value is not cut.
+2. Set **Max Length** (Max String Length) to `19`. That keeps `yyyy-MM-ddTHH:mm:ss` and removes the milliseconds and the `Z`. The value is still UTC.
+3. Leave **Cut out from Position** at `0`. It removes the start of the string, which is only useful when you want the time without the date.
+
+Check the result with **Test Message** before the next job run, see [How do I test what a mapping produces?](../../../../how-to/web-connect/test-a-mapping-with-test-message.md)
+
 ### Child & Related Object Handling
 
 | Field | Description |

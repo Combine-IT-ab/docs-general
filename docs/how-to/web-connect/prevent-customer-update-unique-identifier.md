@@ -36,6 +36,9 @@ When Unique Identifier Action = No Action:
 - This setting only applies when the record already exists
 - It is typically used for B2B customers
 - B2C customers usually use Update/Create instead
+- If the identifier consists of several fields (for example code and value), all of them must have the **same Validation Order**. Validation Order groups the fields into one filter; with different orders Web Connect never finds the existing record
+- If a key value can contain characters such as `&` or `*`, tick **As Is Filter**, see ["Already exists" when a code contains filter characters](already-exists-code-contains-filter-characters.md)
+- To check whether the identifier matches, set the record to **Not Validated** and process it. If **Record ID** is filled in, the existing record was found
 
 ## Related
 

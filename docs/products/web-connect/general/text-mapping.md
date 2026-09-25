@@ -47,6 +47,12 @@ BC Value: Order   →  External: B2C
 BC Value: Invoice →  External: B2B
 ```
 
+## Mapping to Option and Enum Fields
+
+When the BC field is an option or enum field, the BC value in the text mapping is the field's **ordinal value** (the number BC stores), not the caption shown on the page.
+
+Ordinal values are not always a simple sequence `0, 1, 2`. Values that an app extension adds to a standard enum use that app's number range, for example `12096900`. Hard coding `2` because the value is third in the list will then fail or pick the wrong value. Look up the actual ordinal before you map, see [How do I map to an enum value added by an extension?](../../../how-to/web-connect/map-to-extended-enum-value.md)
+
 ## Fields
 
 | Field | Description |
