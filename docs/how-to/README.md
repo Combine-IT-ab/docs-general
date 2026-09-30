@@ -18,6 +18,10 @@ Step-by-step guides for common tasks and troubleshooting across Combine IT produ
 - [Order fails: customer template not found because Billing Country is empty](web-connect/customer-template-not-found-missing-billing-country.md)
 - [A Ready Integrations field is not visible or not editable](web-connect/integration-field-not-visible-enable-feature.md)
 
+## Orderly Trust
+
+- [How to create or edit an order status and its conditions](orderly-trust/create-or-edit-order-status.md)
+
 ## Easy Connect
 
 - [Orders are not being handled automatically](easy-connect/orders-not-handled-automatically.md)

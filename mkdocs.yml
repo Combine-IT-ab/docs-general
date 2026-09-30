@@ -111,6 +111,9 @@ nav:
       - Limit Content Creation Retries: how-to/web-connect/limit-content-creation-retries.md
       - Customer Template Not Found: Billing Country: how-to/web-connect/customer-template-not-found-missing-billing-country.md
       - Ready Integrations Field Not Visible: how-to/web-connect/integration-field-not-visible-enable-feature.md
+    - Orderly Trust:
+      - Overview: how-to/orderly-trust/README.md
+      - Create or Edit an Order Status: how-to/orderly-trust/create-or-edit-order-status.md
     - Easy Connect:
       - Overview: how-to/easy-connect/README.md
       - Orders Not Handled Automatically: how-to/easy-connect/orders-not-handled-automatically.md
