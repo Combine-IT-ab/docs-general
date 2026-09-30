@@ -2,7 +2,9 @@
 
 Practical guides for configuring and using Orderly Trust.
 
-> 📝 *Content in progress.*
+## Guides
+
+- [How to create or edit an order status and its conditions](create-or-edit-order-status.md)
 
 ---
 
