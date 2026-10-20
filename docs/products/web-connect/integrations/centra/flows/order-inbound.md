@@ -102,7 +102,7 @@ Wholesale orders placed by B2B accounts. Customer details may be fetched from ac
 
 ### Variant C — Consignment / Marketplace Orders
 
-Orders from third-party marketplaces (e.g. Åhléns, Zalando). Each marketplace may require its own channel condition and customer mapping.
+Orders from department stores or third-party marketplaces sold through Centra. Each marketplace may require its own channel condition and customer mapping.
 
 ---
 
