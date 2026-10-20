@@ -1,0 +1,21 @@
+name: Kolla gamla adresser
+
+# Varje gammal adress under combineit.se/docs ska ha ett mål i repot.
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  kolla:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Kolla adresslistan
+        run: python3 adresser/kolla.py
