@@ -15,6 +15,7 @@ Mallarna bygger på nulägesmätningen i Combine-IT-ab/docs-internal#47: sökord
 - **Svenskar söker på engelska.** Engelska är huvudspråk. Den svenska versionen har samma struktur och samma fakta.
 - **De nischade systemen har låg sökvolym i Google.** Där vinner vi genom att vara den bästa källan för AI-assistenterna och genom att synas på systemleverantörens partnersida.
 - **Google blandar ihop flera systemnamn.** Därför står systemnamnet alltid tillsammans med kategori och "Business Central".
+- **Web Connect är ingen svart låda.** Det är vår viktigaste skillnad mot konkurrenterna. Appen installeras i kundens egen Business Central, och kunden kan själv se och ändra all konfiguration: mappningar, villkor, triggers och flöden. Konkurrenterna kör integrationen i en extern plattform eller som en tjänst som leverantören sköter. Ingen söker på det, men det är det som avgör när köparen eller AI-assistenten jämför. ChatGPT beskrev oss redan som alternativet för "more direct control over configuration" (docs-internal#47).
 
 ## Regler för all text
 
@@ -25,7 +26,8 @@ Mallarna bygger på nulägesmätningen i Combine-IT-ab/docs-internal#47: sökord
 5. **Skriv ut begränsningarna.** Det som inte stöds står under "Limitations". Det gör sidan trovärdig för både läsare och AI.
 6. **Web Connect nämns alltid tillsammans med Business Central och CombineIT**, aldrig ensamt. Namnet är generiskt och hittas inte annars.
 7. **Inga streck som skiljetecken** i löptexten, på varken engelska eller svenska. Skriv om med punkt, kolon eller komma.
-8. **Diagram i Mermaid**, med samma ikoner som i de befintliga flödena (🛒 webbshop, ⚙️ Web Connect, 🔄 Business Central, 📦 lager, 🏪 kassa).
+8. **Visa att kunden kan konfigurera själv.** Varje översiktssida har stycket "Configure it yourself in Business Central" och raderna "Runs in" och "Configured by" i översiktstabellen. Skriv konkret vad användaren kan ändra (fält, villkor, triggers), inte bara att det går. Konkurrenter nämns aldrig vid namn.
+9. **Diagram i Mermaid**, med samma ikoner som i de befintliga flödena (🛒 webbshop, ⚙️ Web Connect, 🔄 Business Central, 📦 lager, 🏪 kassa).
 
 ## Systemnamn
 
@@ -94,5 +96,6 @@ Varje sida har frontmatter. Bygget (docs-internal#50 och #51) använder den till
 - [ ] Alla `[ATT FYLLA I]` är ersatta med verifierade uppgifter.
 - [ ] Inga kunduppgifter.
 - [ ] Begränsningar finns med.
+- [ ] Stycket "Configure it yourself in Business Central" säger konkret vad användaren kan ändra själv.
 - [ ] Minst tre riktiga frågor i FAQ, gärna från supportärenden.
 - [ ] Svensk version med samma `translation_key` (kan komma i en senare PR).

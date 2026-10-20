@@ -25,7 +25,7 @@ last_reviewed: YYYY-MM-DD
 
 # Business Central and [SYSTEM] integration
 
-[Answer first, two to three sentences. Example: "Web Connect by CombineIT connects Microsoft Dynamics 365 Business Central with Centra, the e-commerce platform. Orders and customers are imported from Centra into Business Central, and stock, shipments, cancellations and product data are sent back to Centra. Web Connect is a Business Central extension available on Microsoft AppSource."]
+[Answer first, two to three sentences. Example: "Web Connect by CombineIT connects Microsoft Dynamics 365 Business Central with Centra, the e-commerce platform. Orders and customers are imported from Centra into Business Central, and stock, shipments, cancellations and product data are sent back to Centra. Web Connect runs inside your own Business Central, where you can see and change every mapping and rule yourself."]
 
 ## At a glance
 
@@ -33,6 +33,8 @@ last_reviewed: YYYY-MM-DD
 |---|---|
 | **System** | [SYSTEM] ([category]) |
 | **Integration product** | Web Connect for Microsoft Dynamics 365 Business Central |
+| **Runs in** | Your own Business Central environment, as an extension [ATT FYLLA I: verifiera med Martin vilka delar som eventuellt körs utanför BC, till exempel mottagning av webhooks] |
+| **Configured by** | You, in Business Central: mappings, conditions, triggers and flows. CombineIT can help, but nothing is hidden. |
 | **Connection** | [REST API, GraphQL, webhooks, SFTP, Azure Service Bus] |
 | **[SYSTEM] API** | [Name and link to the system's API documentation] |
 | **Number of flows** | [n] |
@@ -87,6 +89,19 @@ graph LR
 4. [Map the configuration choices below.]
 5. [Test in a sandbox before production.]
 
+## Configure it yourself in Business Central
+
+Everything in the integration is visible and editable in Business Central. There is no external platform where the logic is hidden.
+
+| What you can change | Where in Web Connect | Example |
+|---|---|---|
+| Field mapping | [Incoming Data mapping or Outgoing Mapping] | [Map a SYSTEM field to a Business Central field] |
+| Conditions | [Condition List] | [Route orders from one sales channel to a specific customer] |
+| Triggers | [Outgoing Sync Triggers] | [Send stock when inventory changes, or on a schedule] |
+| Monitoring | [Entries] | [See every message sent and received, and resend one] |
+
+[Link to the general Web Connect pages that describe each part.]
+
 ## Configuration choices
 
 [The decisions every implementation makes. Describe options generally, never a specific customer's setup.]
@@ -120,4 +135,4 @@ graph LR
 
 ## About Web Connect
 
-Web Connect is an integration platform for Microsoft Dynamics 365 Business Central, developed by CombineIT. It connects Business Central with e-commerce platforms, warehouse systems, POS, returns, marketplaces and EDI through configurable flows, without custom code for each integration. [Statement on MartIT and CombineIT: wording decided in docs-internal#59.] [Web Connect on Microsoft AppSource](https://marketplace.microsoft.com/sv-se/product/PUBID.martitab1633951001710%7CAID.webconnect%7CPAPPID.9f3a7223-19db-4ac7-832f-cf8e4699186f?tab=Overview) · [Contact CombineIT](https://www.combineit.se/contact/)
+Web Connect is an integration platform for Microsoft Dynamics 365 Business Central, developed by CombineIT. It runs inside your own Business Central and connects it with e-commerce platforms, warehouse systems, POS, returns, marketplaces and EDI. Every flow, mapping and rule is configured in Business Central, where you can see and change it yourself, without custom code for each integration. [Statement on MartIT and CombineIT: wording decided in docs-internal#59.] [Web Connect on Microsoft AppSource](https://marketplace.microsoft.com/sv-se/product/PUBID.martitab1633951001710%7CAID.webconnect%7CPAPPID.9f3a7223-19db-4ac7-832f-cf8e4699186f?tab=Overview) · [Contact CombineIT](https://www.combineit.se/contact/)
