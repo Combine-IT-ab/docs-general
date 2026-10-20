@@ -34,6 +34,7 @@ jobs:
           pwd
           cls -la
           cls -la webroots/
-          cls -la webroots/*/
-          cls -la webroots/*/docs/
+          cls -la webroots/by-route/
+          cls -la webroots/www/
+          cls -la webroots/www/docs/
           LFTP
