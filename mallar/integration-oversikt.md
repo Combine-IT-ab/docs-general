@@ -25,7 +25,7 @@ last_reviewed: YYYY-MM-DD
 
 # Business Central and [SYSTEM] integration
 
-[Answer first, two to three sentences. Example: "Web Connect by CombineIT connects Microsoft Dynamics 365 Business Central with Centra, the e-commerce platform. Orders and customers are imported from Centra into Business Central, and stock, shipments, cancellations and product data are sent back to Centra. Web Connect runs inside your own Business Central, where you can see and change every mapping and rule yourself."]
+[Answer first, two to three sentences. Example: "Web Connect by CombineIT connects Microsoft Dynamics 365 Business Central with Centra, the e-commerce platform. Orders and customers are imported from Centra into Business Central, and stock, shipments, cancellations and product data are sent back to Centra. All mappings and rules live in your own Business Central, where you can see and change them yourself."]
 
 ## At a glance
 
@@ -33,7 +33,7 @@ last_reviewed: YYYY-MM-DD
 |---|---|
 | **System** | [SYSTEM] ([category]) |
 | **Integration product** | Web Connect for Microsoft Dynamics 365 Business Central |
-| **Runs in** | Your own Business Central environment, as an extension [ATT FYLLA I: verifiera med Martin vilka delar som eventuellt körs utanför BC, till exempel mottagning av webhooks] |
+| **Runs in** | Your own Business Central environment, as an extension. [Only if the integration uses incoming webhooks: Incoming webhooks are received by an Azure endpoint that passes them on to Web Connect. All processing and configuration stays in Business Central.] |
 | **Configured by** | You, in Business Central: mappings, conditions, triggers and flows. CombineIT can help, but nothing is hidden. |
 | **Connection** | [REST API, GraphQL, webhooks, SFTP, Azure Service Bus] |
 | **[SYSTEM] API** | [Name and link to the system's API documentation] |
@@ -91,7 +91,7 @@ graph LR
 
 ## Configure it yourself in Business Central
 
-Everything in the integration is visible and editable in Business Central. There is no external platform where the logic is hidden.
+All configuration and logic in the integration is visible and editable in Business Central. There is no external integration platform where the logic is hidden. [Only if the integration uses incoming webhooks: The Azure endpoint that receives webhooks only passes the call on to Web Connect.]
 
 | What you can change | Where in Web Connect | Example |
 |---|---|---|
@@ -135,4 +135,4 @@ Everything in the integration is visible and editable in Business Central. There
 
 ## About Web Connect
 
-Web Connect is an integration platform for Microsoft Dynamics 365 Business Central, developed by CombineIT. It runs inside your own Business Central and connects it with e-commerce platforms, warehouse systems, POS, returns, marketplaces and EDI. Every flow, mapping and rule is configured in Business Central, where you can see and change it yourself, without custom code for each integration. [Statement on MartIT and CombineIT: wording decided in docs-internal#59.] [Web Connect on Microsoft AppSource](https://marketplace.microsoft.com/sv-se/product/PUBID.martitab1633951001710%7CAID.webconnect%7CPAPPID.9f3a7223-19db-4ac7-832f-cf8e4699186f?tab=Overview) · [Contact CombineIT](https://www.combineit.se/contact/)
+Web Connect is an integration platform for Microsoft Dynamics 365 Business Central, developed by CombineIT. It is installed in your own Business Central and connects it with e-commerce platforms, warehouse systems, POS, returns, marketplaces and EDI. Every flow, mapping and rule is configured in Business Central, where you can see and change it yourself, without custom code for each integration. [Statement on MartIT and CombineIT: wording decided in docs-internal#59.] [Web Connect on Microsoft AppSource](https://marketplace.microsoft.com/sv-se/product/PUBID.martitab1633951001710%7CAID.webconnect%7CPAPPID.9f3a7223-19db-4ac7-832f-cf8e4699186f?tab=Overview) · [Contact CombineIT](https://www.combineit.se/contact/)
