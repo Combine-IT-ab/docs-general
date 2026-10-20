@@ -33,8 +33,8 @@ jobs:
           set cmd:fail-exit no
           pwd
           cls -la
-          cls -la webroots/
-          cls -la webroots/by-route/
           cls -la webroots/www/
+          # Finns ingen docs-mapp än svarar WordPress på /docs, och då är listningen tom
           cls -la webroots/www/docs/
+          pwd
           LFTP
