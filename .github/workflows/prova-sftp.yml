@@ -1,0 +1,39 @@
+name: Prova SFTP mot one.com
+
+# Loggar in med SFTP-uppgifterna och listar mapparna. Ändrar ingenting.
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - .github/workflows/prova-sftp.yml
+
+permissions:
+  contents: read
+
+jobs:
+  prova:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Installera lftp
+        run: sudo apt-get update -q && sudo apt-get install -y -q lftp
+
+      - name: Hämta värdnyckeln
+        run: |
+          mkdir -p ~/.ssh
+          ssh-keyscan -p 22 ssh.combineit.se >> ~/.ssh/known_hosts
+          ssh-keygen -lf ~/.ssh/known_hosts
+
+      - name: Lista mapparna
+        env:
+          SFTP_USER: ${{ secrets.ONECOM_SFTP_USER }}
+          # lftp läser lösenordet härifrån med --env-password, så det hamnar aldrig på kommandoraden
+          LFTP_PASSWORD: ${{ secrets.ONECOM_SFTP_PASSWORD }}
+        run: |
+          lftp --env-password -u "$SFTP_USER" sftp://ssh.combineit.se <<'LFTP'
+          set cmd:fail-exit no
+          pwd
+          cls -la
+          cls -la www
+          cls -la docs
+          cls -la www/docs
+          LFTP
