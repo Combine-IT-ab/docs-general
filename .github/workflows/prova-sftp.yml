@@ -33,7 +33,7 @@ jobs:
           set cmd:fail-exit no
           pwd
           cls -la
-          cls -la www
-          cls -la docs
-          cls -la www/docs
+          cls -la webroots/
+          cls -la webroots/*/
+          cls -la webroots/*/docs/
           LFTP
