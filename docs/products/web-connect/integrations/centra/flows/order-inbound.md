@@ -7,20 +7,20 @@
 
 ## Overview
 
-When a customer places an order in Centra, the platform sends a webhook event to Web Connect. Web Connect fetches the full order details, determines the correct BC customer based on the sales channel and market, and creates a Sales Order in BC. The order is then automatically confirmed in Centra to indicate that it has been received and is ready for processing.
+Web Connect asks Centra for new and updated orders on a schedule in the Business Central job queue, using a GraphQL query against Centra's event list. For each order, Web Connect fetches the full order details, determines the correct BC customer based on the sales channel and market, and creates a Sales Order in BC. The order is then automatically confirmed in Centra to indicate that it has been received and is ready for processing.
 
 ---
 
 ## How It Works
 
-**Trigger:** Webhook event from Centra when a new order is placed
+**Trigger:** Scheduled fetch from the Business Central job queue (GraphQL query `ReadNewOrders` against Centra's events)
 **Acknowledgment:** Automatic confirmation sent back to Centra
 
 **Objects used:**
 
 | Object | Role |
 |---|---|
-| `CA_NEW_ORDER_EVENT` | Webhook listener — receives order notifications |
+| `CA_NEW_ORDER_EVENT` | Reads new and updated order events from Centra |
 | `CA_ORDER` | Fetches full order payload (header and lines) |
 | `CA_BILLINGADDRESS` | Billing address details |
 | `CA_SHIPPINGADDRESS` | Delivery address details |
@@ -29,12 +29,12 @@ When a customer places an order in Centra, the platform sends a webhook event to
 **Process steps:**
 
 1. Customer places order in Centra
-2. Centra sends webhook → Web Connect (`CA_NEW_ORDER_EVENT`)
-3. Web Connect fetches the full order payload
+2. Web Connect reads new order events from Centra on its next scheduled run (`CA_NEW_ORDER_EVENT`)
+3. Web Connect fetches the full order payload. Orders waiting for payment or on hold are not imported
 4. Sales channel identified via conditions (e.g. DTC Retail, Wholesale, Consignment)
 5. BC customer resolved using market/channel mappings
 6. Sales Order created in BC with order lines
-7. Order confirmation sent automatically → Centra status: PENDING → CONFIRMED
+7. Order confirmation sent automatically → Centra status: PENDING → CONFIRMED, and the event is marked as handled in Centra (`confirmEvents`)
 8. Order is now ready for warehouse to pick, pack, and ship
 
 **Sequence diagram:**
@@ -45,7 +45,8 @@ sequenceDiagram
     participant WC as ⚙️ Web Connect
     participant BC as 🔄 Business Central
 
-    CE-->>WC: Webhook: New order placed
+    WC->>CE: Read new order events (scheduled)
+    CE-->>WC: Order events
     WC->>CE: Fetch full order payload (GraphQL query)
     CE-->>WC: Order data + lines + addresses
     WC->>WC: Identify sales channel
@@ -55,6 +56,7 @@ sequenceDiagram
         BC-->>WC: Sales Order created
         WC->>CE: confirmOrder (automatic)
         CE-->>CE: Order status: PENDING → CONFIRMED
+        WC->>CE: confirmEvents (event handled)
     else Customer mapping missing
         WC-->>WC: Error — order not created ⚠️
     end
@@ -112,7 +114,7 @@ Orders from department stores or third-party marketplaces sold through Centra. E
 - **Customer mapping:** Create a mapping from Centra market IDs to BC customer numbers
 - **Item matching:** Configure how items in Centra orders are matched to BC items (typically via EAN or product ID)
 - **Shipping fee mapping:** Inbound orders include a shipping cost from Centra. Configure how this is posted in BC via the Web Connect Codeunit Setup Card (Shipping Fee Type + Shipping Fee No.). Options include posting to a G/L account, creating a shipping item line, or using BC Item Charges.
-- **Webhook registration:** Centra webhooks must be registered in the platform and point to your Web Connect instance
+- **Fetch schedule:** how often the job queue entry fetches new orders from Centra
 
 ---
 
@@ -120,7 +122,7 @@ Orders from department stores or third-party marketplaces sold through Centra. E
 
 | Step | What can go wrong | What happens |
 |---|---|---|
-| Webhook delivery | Network issue or Web Connect unavailable | Centra retries; order may be delayed |
+| Reading order events | Job queue stopped or Centra API error | Orders are fetched on the next successful run; order may be delayed |
 | Fetching order data | Centra API error | Web Connect retries; order processing delayed |
 | Channel identification | Unknown store/market condition | Order not created; logged with error |
 | Customer lookup | Market ID not in mapping | Sales Order creation fails; error logged |
