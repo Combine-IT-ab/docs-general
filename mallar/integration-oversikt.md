@@ -25,7 +25,7 @@ last_reviewed: YYYY-MM-DD
 
 # Business Central and [SYSTEM] integration
 
-[Answer first, two to three sentences. Example: "Web Connect by CombineIT connects Microsoft Dynamics 365 Business Central with Centra, the e-commerce platform. Orders and customers are imported from Centra into Business Central, and stock, shipments, cancellations and product data are sent back to Centra. All mappings and rules live in your own Business Central, where you can see and change them yourself."]
+[Answer first, two to three sentences. Example: "Web Connect by CombineIT connects Microsoft Dynamics 365 Business Central with Centra, the e-commerce platform. Orders are fetched from Centra into Business Central, and shipments, stock, products, prices and cancellations can be sent back to Centra. You choose which flows to use. All mappings and rules live in your own Business Central, where you can see and change them yourself."]
 
 ## At a glance
 
@@ -33,25 +33,28 @@ last_reviewed: YYYY-MM-DD
 |---|---|
 | **System** | [SYSTEM] ([category]) |
 | **Integration product** | Web Connect for Microsoft Dynamics 365 Business Central |
-| **Runs in** | Your own Business Central environment, as an extension. [Only if the integration uses incoming webhooks: Incoming webhooks are received by an Azure endpoint that passes them on to Web Connect. All processing and configuration stays in Business Central.] |
-| **Configured by** | You, in Business Central: mappings, conditions, triggers and flows. CombineIT can help, but nothing is hidden. |
+| **Runs in** | Your own Business Central environment, as an extension. [Describe how data comes in, verified in the configuration export: fetched on a schedule from the job queue, or (only if the integration uses incoming webhooks) received by an Azure endpoint that passes them on to Web Connect. All processing and configuration stays in Business Central.] |
+| **Configured by** | You, in Business Central: mappings, conditions, triggers and flows. You can do all of it yourself. If you want, CombineIT takes part in any step, as a sounding board or by doing the work. |
 | **Connection** | [REST API, GraphQL, webhooks, SFTP, Azure Service Bus] |
 | **[SYSTEM] API** | [Name and link to the system's API documentation] |
-| **Number of flows** | [n] |
 | **Business Central editions** | [Essentials, Premium: ATT FYLLA I] |
 | **Available from** | [Microsoft AppSource link] |
 
-## What is synchronized
+## What can be synchronized
 
-| Flow | Direction | Trigger | What happens |
-|---|---|---|---|
-| [Order inbound](order-inbound.md) | [SYSTEM] → Business Central | [Webhook or schedule] | [Sales order created in Business Central] |
-| [Stock update](stock-update.md) | Business Central → [SYSTEM] | [Change in inventory or schedule] | [Available stock sent to SYSTEM] |
-| [Flow] | [Direction] | [Trigger] | [What happens] |
+[Everything the integration can do. Which flows a customer uses is decided in "Choose your setup".]
+
+| Data | Direction | What happens |
+|---|---|---|
+| [Orders](order-inbound.md) | [SYSTEM] → Business Central | [Sales order created in Business Central] |
+| [Stock](stock-update.md) | Business Central → [SYSTEM] | [Available stock sent to SYSTEM] |
+| [Data] | [Direction] | [What happens] |
+
+[One sentence on which flow is part of every integration, and that the others are chosen at setup. Link to Choose your setup.]
 
 ## How it works
 
-[Two to four sentences on the architecture: what starts the flows, where Web Connect runs, how errors are handled.]
+[Two to four sentences on the architecture: what starts the flows (schedule, trigger or webhook, verified in the configuration export), where Web Connect runs, how errors are handled.]
 
 ```mermaid
 graph LR
@@ -65,27 +68,34 @@ graph LR
     B -->|[action]| A
 ```
 
-## Master data ownership
+## Choose your setup
 
-| Data | Master system | Direction |
+Each flow has to fit how your business works: which system owns the data, where people do their work, and what the accounting needs. That is why the flows are decided together when a new integration is set up. The options below are the ones Web Connect customers use today. **Common setup** marks the option most Web Connect customers with [SYSTEM] use.
+
+[One subsection per data area. List every option that is in use with real customers, never invented ones. Mark the common setup only when it is verified from the configuration exports (docs-internal#61), and state the share of customers when it is known.]
+
+### [Data area, for example Stock]
+
+| Option | How it works | When it fits |
 |---|---|---|
-| Orders | [SYSTEM or Business Central] | [Direction] |
-| Stock | [System] | [Direction] |
-| Products and prices | [System] | [Direction] |
-| Customers | [System] | [Direction] |
+| **[Option]** (common setup) | [How the data flows, and which system calculates or owns it] | [The situation where this is the right choice] |
+| **[Option]** | [How it works] | [When it fits] |
+
+[After the subsections: one sentence on what is always maintained in SYSTEM.]
 
 ## What you need
 
 - Microsoft Dynamics 365 Business Central [edition and version: ATT FYLLA I]
-- Web Connect installed from Microsoft AppSource
+- Web Connect installed from Microsoft AppSource, with an activated Web Connect license
+- Your approval for Web Connect to be installed and to act in your Business Central environment
 - [Access or API credentials in SYSTEM, and where they are created]
-- [Anything else that is required, for example a webhook endpoint or a license in SYSTEM]
+- [Anything else that is required in SYSTEM, verified in the configuration export]
 
 ## Setting it up
 
-1. [Install Web Connect and the ready integration for SYSTEM.]
-2. [Create the connection and store credentials in Secret Value Storage.]
-3. [Choose which flows to activate.]
+1. Decide which flows to use and which option to choose for each, see Choose your setup.
+2. [Install Web Connect, activate the license and give your approval. Install the ready integration for SYSTEM.]
+3. [Create the connection and store credentials in Secret Value Storage.]
 4. [Map the configuration choices below.]
 5. [Test in a sandbox before production.]
 
