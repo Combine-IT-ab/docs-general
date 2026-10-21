@@ -117,6 +117,32 @@ Each flow has to fit how your business works: which system owns the data, where 
 | **From the warehouse system, through Business Central** | Web Connect reads stock from the warehouse system (WMS), applies the rules you want, for example buffers or selected locations, and sends the result to Centra | Stock is managed in a WMS or 3PL, and you want control over what is shown in the web shop |
 | **Directly between the warehouse system and Centra** | Stock goes from the WMS to Centra without Web Connect | The WMS already has a direct connection to Centra |
 
+**Calculated in Business Central**
+
+```mermaid
+flowchart LR
+    BC["🔄 Business Central<br/>stock changes and is calculated<br/>for the chosen locations"] -->|Available stock| WC["⚙️ Web Connect"]
+    WC -->|Update stock| CE["🛒 Centra"]
+```
+
+**From the warehouse system, through Business Central**
+
+```mermaid
+flowchart LR
+    WMS["📦 Warehouse system<br/>(WMS or 3PL)"] -->|Stock| WC1["⚙️ Web Connect"]
+    WC1 --> BC["🔄 Business Central<br/>applies your rules:<br/>buffers, locations"]
+    BC --> WC2["⚙️ Web Connect"]
+    WC2 -->|Update stock| CE["🛒 Centra"]
+```
+
+**Directly between the warehouse system and Centra**
+
+```mermaid
+flowchart LR
+    WMS["📦 Warehouse system<br/>(WMS or 3PL)"] -->|Stock, without Web Connect| CE["🛒 Centra"]
+    BC["🔄 Business Central"] -.-|Not part of the stock flow| CE
+```
+
 [ATT FYLLA I: vilket alternativ som är vanligt upplägg.]
 
 ### Products
@@ -127,6 +153,30 @@ Each flow has to fit how your business works: which system owns the data, where 
 | **From a PIM or PLM** | A PIM or PLM system is the master for products. How products reach Business Central and Centra is decided in the project | You already maintain products in a PIM or PLM |
 | **Created in Centra** | Products are created in Centra. The items in Business Central are created separately and matched by EAN or SKU | The web team owns the assortment |
 
+**Created in Business Central**
+
+```mermaid
+flowchart LR
+    BC["🔄 Business Central<br/>item and variants created"] -->|Product, variants, sizes| WC["⚙️ Web Connect"]
+    WC -->|Create or update| CE["🛒 Centra<br/>images, texts, categories<br/>added here"]
+```
+
+**From a PIM or PLM**
+
+```mermaid
+flowchart LR
+    PIM["🗂️ PIM or PLM<br/>master for products"] -.->|Decided in the project| CE["🛒 Centra"]
+    PIM -.->|Decided in the project| BC["🔄 Business Central"]
+```
+
+**Created in Centra**
+
+```mermaid
+flowchart LR
+    CE["🛒 Centra<br/>product created"] -->|Order lines with EAN or SKU| WC["⚙️ Web Connect"]
+    WC -->|Matched to the item| BC["🔄 Business Central<br/>item created separately"]
+```
+
 [ATT FYLLA I: vilket alternativ som är vanligt upplägg.]
 
 ### Prices
@@ -135,6 +185,22 @@ Each flow has to fit how your business works: which system owns the data, where 
 |---|---|---|
 | **Business Central → Centra** | Prices are maintained in Business Central and set on the matching Centra price lists | Prices are decided in Business Central |
 | **Maintained in Centra** | Prices are set in Centra and come into Business Central on each order | Prices and campaigns are run in Centra |
+
+**Business Central → Centra**
+
+```mermaid
+flowchart LR
+    BC["🔄 Business Central<br/>price changed"] -->|Price| WC["⚙️ Web Connect"]
+    WC -->|Set on the price list| CE["🛒 Centra<br/>price lists"]
+```
+
+**Maintained in Centra**
+
+```mermaid
+flowchart LR
+    CE["🛒 Centra<br/>prices and campaigns"] -->|Order with prices| WC["⚙️ Web Connect"]
+    WC -->|Sales order lines| BC["🔄 Business Central"]
+```
 
 [ATT FYLLA I: vilket alternativ som är vanligt upplägg.]
 
@@ -146,12 +212,53 @@ Each flow has to fit how your business works: which system owns the data, where 
 | **In Business Central with PSP Connect** | The payment is captured in Business Central, close to the accounting | You use PSP Connect. This is the usual choice then |
 | **Outside the integration** | Capture is handled manually or by another system | Payments are handled separately |
 
+**Through Centra**
+
+```mermaid
+flowchart LR
+    BC["🔄 Business Central<br/>shipment posted"] --> WC["⚙️ Web Connect"]
+    WC -->|Create shipment, then capture| CE["🛒 Centra"]
+    CE -->|Capture| PSP["💳 Centra's payment provider"]
+```
+
+**In Business Central with PSP Connect**
+
+```mermaid
+flowchart LR
+    BC["🔄 Business Central<br/>with PSP Connect"] -->|Capture| PSP["💳 Payment provider"]
+    PSP -->|Result| BC
+    BC --- ACC["Accounting in<br/>Business Central"]
+```
+
+**Outside the integration**
+
+```mermaid
+flowchart LR
+    X["👤 Manual or another system"] -->|Capture| PSP["💳 Payment provider"]
+```
+
 ### Cancellations
 
 | Option | How it works | When it fits |
 |---|---|---|
 | **Business Central → Centra** | When an order or line is cancelled in Business Central, it is cancelled in Centra | Customer service works in Business Central |
 | **Handled in Centra** | Cancellations are made in Centra | Customer service works in Centra |
+
+**Business Central → Centra**
+
+```mermaid
+flowchart LR
+    CS["👤 Customer service"] -->|Cancels order or line| BC["🔄 Business Central"]
+    BC --> WC["⚙️ Web Connect"]
+    WC -->|Cancel order or unshipped lines| CE["🛒 Centra"]
+```
+
+**Handled in Centra**
+
+```mermaid
+flowchart LR
+    CS["👤 Customer service"] -->|Cancels order| CE["🛒 Centra"]
+```
 
 Product enrichment (images, texts, categories and SEO), customers and B2B accounts, stores, markets and price lists are always maintained in Centra.
 
