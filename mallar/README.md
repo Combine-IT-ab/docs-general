@@ -98,6 +98,7 @@ Varje sida har frontmatter. Bygget (docs-internal#50 och #51) använder den till
 - [ ] Begränsningar finns med.
 - [ ] Hur data kommer in (schema, trigger eller webhook) är kontrollerat i konfigexporten, inte antaget.
 - [ ] "Choose your setup" listar bara alternativ som används hos riktiga kunder, och "common setup" är verifierat.
+- [ ] Varje alternativ i "Choose your setup" har ett eget processflöde.
 - [ ] Stycket "Configure it yourself in Business Central" säger konkret vad användaren kan ändra själv.
 - [ ] Minst tre riktiga frågor i FAQ, gärna från supportärenden.
 - [ ] Svensk version med samma `translation_key` (kan komma i en senare PR).

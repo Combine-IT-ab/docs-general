@@ -81,6 +81,16 @@ Each flow has to fit how your business works: which system owns the data, where 
 | **[Option]** (common setup) | [How the data flows, and which system calculates or owns it] | [The situation where this is the right choice] |
 | **[Option]** | [How it works] | [When it fits] |
 
+[One small process flow per option, directly after the table, with the option name in bold above it. Use the same icons as the rest of the page.]
+
+**[Option]**
+
+```mermaid
+flowchart LR
+    A["[System]<br/>[what happens]"] -->|[data]| WC["⚙️ Web Connect"]
+    WC -->|[action]| B["[System]"]
+```
+
 [After the subsections: one sentence on what is always maintained in SYSTEM.]
 
 ## What you need
