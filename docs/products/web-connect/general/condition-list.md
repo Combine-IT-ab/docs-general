@@ -8,6 +8,10 @@ Web Connect Condition List allows you to define reusable filter conditions that 
 
 A condition is a named set of rules that evaluates to true or false for a given record.
 
+## Where Conditions Are Used
+
+Besides mappings and sync triggers, two properties on the Web Object use conditions: **Upload Condition Code** holds an outgoing record back until the condition is met, and **Process Condition Code** skips an incoming object when the condition is met. See [Condition Codes on the Web Object](objects.md#condition-codes-on-the-web-object).
+
 ## Condition Header
 
 | Field | Description |

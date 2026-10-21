@@ -17,6 +17,12 @@ Step-by-step guides for common tasks and troubleshooting across Combine IT produ
 - [Prevent endless retries when content creation fails](web-connect/limit-content-creation-retries.md)
 - [Order fails: customer template not found because Billing Country is empty](web-connect/customer-template-not-found-missing-billing-country.md)
 - [A Ready Integrations field is not visible or not editable](web-connect/integration-field-not-visible-enable-feature.md)
+- ["Already exists" when a code contains filter characters](web-connect/already-exists-code-contains-filter-characters.md)
+- [How do I find out which part of an incoming message is failing?](web-connect/debug-why-an-incoming-record-fails.md)
+- [How do I map to an enum value added by an extension?](web-connect/map-to-extended-enum-value.md)
+- [How do I stop a record from syncing before it is complete?](web-connect/stop-a-record-from-syncing-before-it-is-complete.md)
+- [How do I pause incoming downloads temporarily?](web-connect/pause-incoming-download-temporarily.md)
+- [How do I test what a mapping produces?](web-connect/test-a-mapping-with-test-message.md)
 
 ## Easy Connect
 

@@ -111,6 +111,12 @@ nav:
       - Limit Content Creation Retries: how-to/web-connect/limit-content-creation-retries.md
       - Customer Template Not Found: Billing Country: how-to/web-connect/customer-template-not-found-missing-billing-country.md
       - Ready Integrations Field Not Visible: how-to/web-connect/integration-field-not-visible-enable-feature.md
+      - Already Exists: Code Contains Filter Characters: how-to/web-connect/already-exists-code-contains-filter-characters.md
+      - Debug a Failing Incoming Record: how-to/web-connect/debug-why-an-incoming-record-fails.md
+      - Map to an Extended Enum Value: how-to/web-connect/map-to-extended-enum-value.md
+      - Stop Syncing Before a Record Is Complete: how-to/web-connect/stop-a-record-from-syncing-before-it-is-complete.md
+      - Pause Incoming Downloads: how-to/web-connect/pause-incoming-download-temporarily.md
+      - Test a Mapping with Test Message: how-to/web-connect/test-a-mapping-with-test-message.md
     - Easy Connect:
       - Overview: how-to/easy-connect/README.md
       - Orders Not Handled Automatically: how-to/easy-connect/orders-not-handled-automatically.md
