@@ -37,10 +37,13 @@ last_reviewed: YYYY-MM-DD
 | **Configured by** | You, in Business Central: mappings, conditions, triggers and flows. You can do all of it yourself. If you want, CombineIT takes part in any step, as a sounding board or by doing the work. |
 | **Connection** | [REST API, GraphQL, webhooks, SFTP, Azure Service Bus] |
 | **[SYSTEM] API** | [Name and link to the system's API documentation] |
+| **Data flows** | [n]: [list of the data, for example orders, shipments, stock] |
 | **Business Central editions** | [Essentials, Premium: ATT FYLLA I] |
 | **Available from** | [Microsoft AppSource link] |
 
 ## What can be synchronized
+
+Web Connect has [n, written in words] data flows between Business Central and [SYSTEM].
 
 [Everything the integration can do. Which flows a customer uses is decided in "Choose your setup".]
 
@@ -81,9 +84,9 @@ Each flow has to fit how your business works: which system owns the data, where 
 | **[Option]** (common setup, recommended) | [How the data flows, and which system calculates or owns it] | [The situation where this is the right choice] |
 | **[Option]** | [How it works] | [When it fits] |
 
-[One small process flow per option, directly after the table, with the option name in bold above it. Use the same icons as the rest of the page.]
+[One small process flow per option, directly after the table, under its own heading. The heading names both the data area and the option, so it can be read on its own, for example "Stock calculated in Business Central". Use the same icons as the rest of the page.]
 
-**[Option]**
+#### [Data area] [option]
 
 ```mermaid
 flowchart LR
