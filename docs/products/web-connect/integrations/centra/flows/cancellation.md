@@ -14,7 +14,7 @@ This flow is **optional** and used only when BC initiates order cancellations th
 ## How It Works
 
 **Trigger:** Manual — when an order is cancelled in BC (configurable)
-**API operation:** `cancelOrder` or `cancelOrderLine` mutation in Centra
+**API operation:** `cancelDirectToConsumerOrder` for a whole order, and `updateDirectToConsumerOrder` with cancelled lines for individual lines
 
 **Objects used:**
 
@@ -46,7 +46,7 @@ Triggered automatically based on specific conditions (e.g. item out of stock, or
 
 ### Variant C — No Cancellation Support
 
-Cancellations handled directly in Centra; this flow is not enabled.
+Cancellations handled directly in Centra; this flow is not enabled. This is not recommended: cancel in Business Central, so that a warehouse integration can reject the cancellation if the order is already being picked.
 
 ---
 

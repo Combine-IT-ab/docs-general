@@ -25,6 +25,8 @@ faq:
     answer: "All calls to Centra fail with 401 Unauthorized. Create a new Integration API token in Centra and update the stored secret in Web Connect. Centra does not notify you before a token expires, so set a reminder."
   - question: "Why is a shipment not showing up in Centra?"
     answer: "Centra only accepts shipments on orders that are confirmed. Check that the order was confirmed in Centra after it was created in Business Central, then check the error in Web Connect Entries."
+  - question: "Can we cancel a Centra order that the warehouse has started picking?"
+    answer: "Not from Business Central. With a warehouse integration, Web Connect sends a cancellation request to the warehouse system before anything is cancelled in Centra. If the order has come too far, for example it is being picked, the warehouse system rejects the request. Contact the warehouse to stop the order."
   - question: "Is the payment captured automatically when we ship?"
     answer: "It can be. Web Connect can ask Centra to capture the payment when the shipment is created, and Centra's payment provider performs it. If you use PSP Connect, capture is usually done in Business Central instead, close to the accounting."
 last_reviewed: 2026-10-21
@@ -95,7 +97,7 @@ stateDiagram-v2
 
 ## Choose your setup
 
-Each flow has to fit how your business works: which system owns the data, where people do their work, and what the accounting needs. That is why the flows are decided together when a new integration is set up. The options below are the ones Web Connect customers use today. **Common setup** marks the option most Web Connect customers with Centra use. [ATT FYLLA I: andel av kunderna per vanligt upplägg, när konfigexporten (docs-internal#61) finns.]
+Each flow has to fit how your business works: which system owns the data, where people do their work, and what the accounting needs. That is why the flows are decided together when a new integration is set up. The options below are the ones Web Connect customers use today. **Common setup** marks the option most Web Connect customers with Centra use. **Recommended** marks CombineIT's best practice, where there is one. [ATT FYLLA I: andel av kunderna per vanligt upplägg, när konfigexporten (docs-internal#61) finns.]
 
 ### Orders
 
@@ -239,12 +241,26 @@ flowchart LR
 
 ### Cancellations
 
+Cancel orders in Business Central, not in Centra. Business Central is where the order is handled further, and with a warehouse integration it is the only place that knows whether the warehouse can still stop the order.
+
 | Option | How it works | When it fits |
 |---|---|---|
-| **Business Central → Centra** | When an order or line is cancelled in Business Central, it is cancelled in Centra | Customer service works in Business Central |
-| **Handled in Centra** | Cancellations are made in Centra | Customer service works in Centra |
+| **In Business Central, checked with the warehouse system** (recommended) | Customer service cancels in Business Central. A cancellation request is sent to the warehouse system first. If the warehouse accepts, the order or its unshipped lines are cancelled in Centra. If the order has come too far, for example it is being picked, the warehouse system rejects the request and the order is not cancelled | You have a warehouse integration through Web Connect |
+| **In Business Central** | Customer service cancels in Business Central, and the order or its unshipped lines are cancelled in Centra | The warehouse work is done in Business Central |
 
-**Business Central → Centra**
+**In Business Central, checked with the warehouse system**
+
+```mermaid
+flowchart LR
+    CS["👤 Customer service"] -->|Cancels order or line| BC["🔄 Business Central"]
+    BC --> WC["⚙️ Web Connect"]
+    WC -->|Cancellation request| WMS["📦 Warehouse system"]
+    WMS -->|Accepted| WC2["⚙️ Web Connect"]
+    WC2 -->|Cancel order or unshipped lines| CE["🛒 Centra"]
+    WMS -->|Rejected: order is being picked| STOP["👤 Contact the warehouse"]
+```
+
+**In Business Central**
 
 ```mermaid
 flowchart LR
@@ -253,12 +269,7 @@ flowchart LR
     WC -->|Cancel order or unshipped lines| CE["🛒 Centra"]
 ```
 
-**Handled in Centra**
-
-```mermaid
-flowchart LR
-    CS["👤 Customer service"] -->|Cancels order| CE["🛒 Centra"]
-```
+When Centra cancels an order, it can also cancel the payment authorization and email the customer.
 
 Product enrichment (images, texts, categories and SEO), customers and B2B accounts, stores, markets and price lists are always maintained in Centra.
 
@@ -305,6 +316,7 @@ All configuration and logic in the integration is visible and editable in Busine
 - **Size charts in Centra cannot be changed** once assigned to a product. The product has to be deleted and recreated in Centra. Plan the size structure before products are synced.
 - **Centra API tokens expire** and Centra does not warn before they do. Renewal is manual.
 - **Completed orders cannot be cancelled** in Centra, and orders being processed can only have their unshipped lines cancelled.
+- **Orders the warehouse has started on cannot be cancelled** when a warehouse integration is used. The warehouse system rejects the request, and the warehouse has to be contacted.
 - **Shipments require a confirmed order.** An order that was never confirmed in Centra cannot receive shipments.
 - **Product enrichment stays in Centra.** Images, texts, categories and SEO are not sent from Business Central.
 
@@ -329,6 +341,10 @@ All calls to Centra fail with 401 Unauthorized. Create a new Integration API tok
 ### Why is a shipment not showing up in Centra?
 
 Centra only accepts shipments on orders that are confirmed. Check that the order was confirmed in Centra after it was created in Business Central, then check the error in Web Connect Entries.
+
+### Can we cancel a Centra order that the warehouse has started picking?
+
+Not from Business Central. With a warehouse integration, Web Connect sends a cancellation request to the warehouse system before anything is cancelled in Centra. If the order has come too far, for example it is being picked, the warehouse system rejects the request. Contact the warehouse to stop the order.
 
 ### Is the payment captured automatically when we ship?
 
