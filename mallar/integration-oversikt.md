@@ -70,7 +70,7 @@ graph LR
 
 ## Choose your setup
 
-Each flow has to fit how your business works: which system owns the data, where people do their work, and what the accounting needs. That is why the flows are decided together when a new integration is set up. The options below are the ones Web Connect customers use today. **Common setup** marks the option most Web Connect customers with [SYSTEM] use.
+Each flow has to fit how your business works: which system owns the data, where people do their work, and what the accounting needs. That is why the flows are decided together when a new integration is set up. The options below are the ones Web Connect customers use today. **Common setup** marks the option most Web Connect customers with [SYSTEM] use. **Recommended** marks CombineIT's best practice, where there is one.
 
 [One subsection per data area. List every option that is in use with real customers, never invented ones. Mark the common setup only when it is verified from the configuration exports (docs-internal#61), and state the share of customers when it is known.]
 
@@ -78,7 +78,7 @@ Each flow has to fit how your business works: which system owns the data, where 
 
 | Option | How it works | When it fits |
 |---|---|---|
-| **[Option]** (common setup) | [How the data flows, and which system calculates or owns it] | [The situation where this is the right choice] |
+| **[Option]** (common setup, recommended) | [How the data flows, and which system calculates or owns it] | [The situation where this is the right choice] |
 | **[Option]** | [How it works] | [When it fits] |
 
 [One small process flow per option, directly after the table, with the option name in bold above it. Use the same icons as the rest of the page.]
