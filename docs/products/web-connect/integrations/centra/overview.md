@@ -46,10 +46,13 @@ Web Connect by CombineIT connects Microsoft Dynamics 365 Business Central with C
 | **Configured by** | You, in Business Central: mappings, conditions, triggers and flows. You can do all of it yourself. If you want, CombineIT takes part in any step, as a sounding board or by doing the work. |
 | **Connection** | Centra GraphQL Integration API |
 | **Centra API** | [Centra Integration API](https://docs.centraapis.com/) |
+| **Data flows** | 7: orders, shipments, payment capture, stock, products, prices and cancellations |
 | **Business Central editions** | [ATT FYLLA I: Essentials och Premium enligt Marketplace, verifiera] |
 | **Available from** | [Web Connect on Microsoft AppSource](https://marketplace.microsoft.com/sv-se/product/PUBID.martitab1633951001710%7CAID.webconnect%7CPAPPID.9f3a7223-19db-4ac7-832f-cf8e4699186f?tab=Overview) [ATT FYLLA I: ingår Centra i Web Connect Ready Integrations, och ska den länkas här?] |
 
 ## What can be synchronized
+
+Web Connect has seven data flows between Business Central and Centra.
 
 | Data | Direction | What happens |
 |---|---|---|
@@ -119,7 +122,7 @@ Each flow has to fit how your business works: which system owns the data, where 
 | **From the warehouse system, through Business Central** | Web Connect reads stock from the warehouse system (WMS), applies the rules you want, for example buffers or selected locations, and sends the result to Centra | Stock is managed in a WMS or 3PL, and you want control over what is shown in the web shop |
 | **Directly between the warehouse system and Centra** | Stock goes from the WMS to Centra without Web Connect | The WMS already has a direct connection to Centra |
 
-**Calculated in Business Central**
+#### Stock calculated in Business Central
 
 ```mermaid
 flowchart LR
@@ -127,7 +130,7 @@ flowchart LR
     WC -->|Update stock| CE["🛒 Centra"]
 ```
 
-**From the warehouse system, through Business Central**
+#### Stock from the warehouse system, through Business Central
 
 ```mermaid
 flowchart LR
@@ -137,7 +140,7 @@ flowchart LR
     WC2 -->|Update stock| CE["🛒 Centra"]
 ```
 
-**Directly between the warehouse system and Centra**
+#### Stock directly between the warehouse system and Centra
 
 ```mermaid
 flowchart LR
@@ -155,7 +158,7 @@ flowchart LR
 | **From a PIM or PLM** | A PIM or PLM system is the master for products. How products reach Business Central and Centra is decided in the project | You already maintain products in a PIM or PLM |
 | **Created in Centra** | Products are created in Centra. The items in Business Central are created separately and matched by EAN or SKU | The web team owns the assortment |
 
-**Created in Business Central**
+#### Products created in Business Central
 
 ```mermaid
 flowchart LR
@@ -163,7 +166,7 @@ flowchart LR
     WC -->|Create or update| CE["🛒 Centra<br/>images, texts, categories<br/>added here"]
 ```
 
-**From a PIM or PLM**
+#### Products from a PIM or PLM
 
 ```mermaid
 flowchart LR
@@ -171,7 +174,7 @@ flowchart LR
     PIM -.->|Decided in the project| BC["🔄 Business Central"]
 ```
 
-**Created in Centra**
+#### Products created in Centra
 
 ```mermaid
 flowchart LR
@@ -188,7 +191,7 @@ flowchart LR
 | **Business Central → Centra** | Prices are maintained in Business Central and set on the matching Centra price lists | Prices are decided in Business Central |
 | **Maintained in Centra** | Prices are set in Centra and come into Business Central on each order | Prices and campaigns are run in Centra |
 
-**Business Central → Centra**
+#### Prices from Business Central to Centra
 
 ```mermaid
 flowchart LR
@@ -196,7 +199,7 @@ flowchart LR
     WC -->|Set on the price list| CE["🛒 Centra<br/>price lists"]
 ```
 
-**Maintained in Centra**
+#### Prices maintained in Centra
 
 ```mermaid
 flowchart LR
@@ -214,7 +217,7 @@ flowchart LR
 | **In Business Central with PSP Connect** | The payment is captured in Business Central, close to the accounting | You use PSP Connect. This is the usual choice then |
 | **Outside the integration** | Capture is handled manually or by another system | Payments are handled separately |
 
-**Through Centra**
+#### Payment capture through Centra
 
 ```mermaid
 flowchart LR
@@ -223,7 +226,7 @@ flowchart LR
     CE -->|Capture| PSP["💳 Centra's payment provider"]
 ```
 
-**In Business Central with PSP Connect**
+#### Payment capture in Business Central with PSP Connect
 
 ```mermaid
 flowchart LR
@@ -232,7 +235,7 @@ flowchart LR
     BC --- ACC["Accounting in<br/>Business Central"]
 ```
 
-**Outside the integration**
+#### Payment capture outside the integration
 
 ```mermaid
 flowchart LR
@@ -248,7 +251,7 @@ Cancel orders in Business Central, not in Centra. Business Central is where the 
 | **In Business Central, checked with the warehouse system** (recommended) | Customer service cancels in Business Central. A cancellation request is sent to the warehouse system first. If the warehouse accepts, the order or its unshipped lines are cancelled in Centra. If the order has come too far, for example it is being picked, the warehouse system rejects the request and the order is not cancelled | You have a warehouse integration through Web Connect |
 | **In Business Central** | Customer service cancels in Business Central, and the order or its unshipped lines are cancelled in Centra | The warehouse work is done in Business Central |
 
-**In Business Central, checked with the warehouse system**
+#### Cancellation in Business Central, checked with the warehouse system
 
 ```mermaid
 flowchart LR
@@ -260,7 +263,7 @@ flowchart LR
     WMS -->|Rejected: order is being picked| STOP["👤 Contact the warehouse"]
 ```
 
-**In Business Central**
+#### Cancellation in Business Central
 
 ```mermaid
 flowchart LR
