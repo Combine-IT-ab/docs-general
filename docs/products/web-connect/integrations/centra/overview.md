@@ -48,7 +48,7 @@ Web Connect by CombineIT connects Microsoft Dynamics 365 Business Central with C
 | **Connection** | Centra GraphQL Integration API |
 | **Centra API** | [Centra Integration API](https://docs.centraapis.com/) |
 | **Data flows** | 8: orders, shipments, payment capture, stock, products, prices, cost prices and cancellations |
-| **Business Central editions** | [ATT FYLLA I: Essentials och Premium enligt Marketplace, verifiera] |
+| **Business Central editions** | Essentials and Premium |
 | **Available from** | [Web Connect on Microsoft AppSource](https://marketplace.microsoft.com/sv-se/product/PUBID.martitab1633951001710%7CAID.webconnect%7CPAPPID.9f3a7223-19db-4ac7-832f-cf8e4699186f?tab=Overview). The Centra integration is included in the Web Connect Ready Integrations app |
 
 ## What can be synchronized
@@ -274,7 +274,7 @@ Product enrichment (images, texts, categories and SEO), customers and B2B accoun
 
 ## What you need
 
-- Microsoft Dynamics 365 Business Central [ATT FYLLA I: utgåva och lägsta version]
+- Microsoft Dynamics 365 Business Central, Essentials or Premium
 - Web Connect installed from Microsoft AppSource, with an activated Web Connect license
 - The Web Connect Ready Integrations app installed in the same Business Central environment. The Centra integration is included in it
 - Your approval for Web Connect to be installed and to act in your Business Central environment
@@ -360,4 +360,4 @@ It can be. Web Connect can ask Centra to capture the payment when the shipment i
 
 ## About Web Connect
 
-Web Connect is an integration platform for Microsoft Dynamics 365 Business Central, developed by CombineIT. It is installed in your own Business Central and connects it with e-commerce platforms, warehouse systems, POS, returns, marketplaces and EDI. Every flow, mapping and rule is configured in Business Central, where you can see and change it yourself, without custom code for each integration. [ATT FYLLA I: formulering om MartIT och CombineIT, bestäms i docs-internal#59.] [Web Connect on Microsoft AppSource](https://marketplace.microsoft.com/sv-se/product/PUBID.martitab1633951001710%7CAID.webconnect%7CPAPPID.9f3a7223-19db-4ac7-832f-cf8e4699186f?tab=Overview) · [Contact CombineIT](https://www.combineit.se/contact/)
+Web Connect is an integration platform for Microsoft Dynamics 365 Business Central, developed by CombineIT. It is installed in your own Business Central and connects it with e-commerce platforms, warehouse systems, POS, returns, marketplaces and EDI. Every flow, mapping and rule is configured in Business Central, where you can see and change it yourself, without custom code for each integration. [Web Connect on Microsoft AppSource](https://marketplace.microsoft.com/sv-se/product/PUBID.martitab1633951001710%7CAID.webconnect%7CPAPPID.9f3a7223-19db-4ac7-832f-cf8e4699186f?tab=Overview) · [Contact CombineIT](https://www.combineit.se/contact/)
