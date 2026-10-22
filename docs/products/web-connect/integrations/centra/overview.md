@@ -48,7 +48,7 @@ Web Connect by CombineIT connects Microsoft Dynamics 365 Business Central with C
 | **Centra API** | [Centra Integration API](https://docs.centraapis.com/) |
 | **Data flows** | 8: orders, shipments, payment capture, stock, products, prices, cost prices and cancellations |
 | **Business Central editions** | [ATT FYLLA I: Essentials och Premium enligt Marketplace, verifiera] |
-| **Available from** | [Web Connect on Microsoft AppSource](https://marketplace.microsoft.com/sv-se/product/PUBID.martitab1633951001710%7CAID.webconnect%7CPAPPID.9f3a7223-19db-4ac7-832f-cf8e4699186f?tab=Overview) [ATT FYLLA I: ingår Centra i Web Connect Ready Integrations, och ska den länkas här?] |
+| **Available from** | [Web Connect on Microsoft AppSource](https://marketplace.microsoft.com/sv-se/product/PUBID.martitab1633951001710%7CAID.webconnect%7CPAPPID.9f3a7223-19db-4ac7-832f-cf8e4699186f?tab=Overview). The Centra integration is included in the Web Connect Ready Integrations app |
 
 ## What can be synchronized
 
@@ -275,16 +275,18 @@ Product enrichment (images, texts, categories and SEO), customers and B2B accoun
 
 - Microsoft Dynamics 365 Business Central [ATT FYLLA I: utgåva och lägsta version]
 - Web Connect installed from Microsoft AppSource, with an activated Web Connect license
+- The Web Connect Ready Integrations app installed in the same Business Central environment. The Centra integration is included in it
 - Your approval for Web Connect to be installed and to act in your Business Central environment
 - An Integration API token from Centra (created under System, API Tokens in Centra), with permissions for orders, shipments, products, stock, payments and accounts
 
 ## Setting it up
 
 1. Decide which flows to use and which option to choose for each, see [Choose your setup](#choose-your-setup).
-2. Install Web Connect in Business Central, activate the license and give your approval. [ATT FYLLA I: aktiveras Centra via Ready Integrations eller import av konfiguration?]
-3. Create an Integration API token in Centra and store it in Web Connect [Secret Value Storage](../../general/secret-value-storage.md).
-4. Set up the configuration choices below.
-5. Test the whole order flow in a Business Central sandbox against Centra QA before going live.
+2. Install Web Connect in Business Central, activate the license and give your approval.
+3. Install the Web Connect Ready Integrations app in the same environment and activate the Centra integration.
+4. Create an Integration API token in Centra and store it in Web Connect [Secret Value Storage](../../general/secret-value-storage.md).
+5. Set up the configuration choices below.
+6. Test the whole order flow in a Business Central sandbox against Centra QA before going live.
 
 ## Configure it yourself in Business Central
 
