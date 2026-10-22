@@ -20,7 +20,8 @@ const KALLA = join(ROT, 'docs');
 const MAL = join(ROT, 'src/content/docs');
 const GENERERAT = join(ROT, 'src/generated');
 const CACHE = join(ROT, 'node_modules/.cache/mermaid');
-const BAS = '/docs';
+// Samma bas som i astro.config.mjs
+const BAS = process.env.FORHANDSVISNING === '1' ? '/docs-preview' : '/docs';
 
 const allaFiler = (dir) =>
 	readdirSync(dir).flatMap((namn) => {
