@@ -1,0 +1,61 @@
+name: Bygg dokumentationen
+
+# Varje pull request: bygg sajten och kontrollera att alla gamla adresser finns.
+# Main: bygg förhandsvisningen och lägg den på www.combineit.se/docs-preview/ (noindex).
+# Den rör aldrig /docs. Bytet görs i publicera.yml.
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: bygg-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  bygg:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Installera
+        run: npm ci
+
+      - name: Bygg
+        run: npm run build
+
+      - name: Kontrollera gamla adresser i bygget
+        run: python3 adresser/kolla.py --strikt --bygge dist
+
+      - name: Bygg förhandsvisningen
+        if: github.event_name != 'pull_request'
+        env:
+          FORHANDSVISNING: '1'
+        run: npx astro build --outDir dist-preview
+
+      - name: Installera lftp
+        if: github.event_name != 'pull_request'
+        run: sudo apt-get update -q && sudo apt-get install -y -q lftp
+
+      - name: Ladda upp förhandsvisningen till /docs-preview
+        if: github.event_name != 'pull_request'
+        env:
+          SFTP_USER: ${{ secrets.ONECOM_SFTP_USER }}
+          LFTP_PASSWORD: ${{ secrets.ONECOM_SFTP_PASSWORD }}
+        run: |
+          mkdir -p ~/.ssh
+          ssh-keyscan -p 22 ssh.combineit.se >> ~/.ssh/known_hosts
+          lftp --env-password -u "$SFTP_USER" sftp://ssh.combineit.se <<'LFTP'
+          set cmd:fail-exit yes
+          mirror --reverse --delete --verbose=1 dist-preview webroots/www/docs-preview
+          LFTP
