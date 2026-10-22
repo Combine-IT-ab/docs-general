@@ -1,0 +1,37 @@
+name: Backa publiceringen
+
+# Lägger tillbaka föregående version av /docs (docs-forra). Fanns ingen tidigare
+# version tas /docs bort, och då svarar WordPress och BetterDocs på /docs igen.
+on:
+  workflow_dispatch:
+    inputs:
+      bekrafta:
+        description: 'Skriv BACKA för att lägga tillbaka föregående version'
+        required: true
+
+permissions:
+  contents: read
+
+jobs:
+  backa:
+    if: github.event.inputs.bekrafta == 'BACKA'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Installera lftp
+        run: sudo apt-get update -q && sudo apt-get install -y -q lftp
+
+      - name: Backa
+        env:
+          SFTP_USER: ${{ secrets.ONECOM_SFTP_USER }}
+          LFTP_PASSWORD: ${{ secrets.ONECOM_SFTP_PASSWORD }}
+        run: |
+          mkdir -p ~/.ssh
+          ssh-keyscan -p 22 ssh.combineit.se >> ~/.ssh/known_hosts
+          lftp --env-password -u "$SFTP_USER" sftp://ssh.combineit.se <<'LFTP'
+          set cmd:fail-exit no
+          cd webroots/www
+          rm -rf docs-trasig
+          mv docs docs-trasig
+          mv docs-forra docs
+          cls -la
+          LFTP

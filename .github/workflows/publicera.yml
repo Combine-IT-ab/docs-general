@@ -1,0 +1,79 @@
+name: Publicera till combineit.se/docs
+
+# Startas för hand. Bygger sajten för /docs, laddar upp den till en ny mapp och byter
+# in den i ett steg, så att ingen besökare ser en halvfärdig sajt. Rör bara /docs.
+# Första gången tar mappen över /docs från BetterDocs i WordPress (docs-internal#54).
+# Backa: kör flödet "Backa publiceringen", som lägger tillbaka föregående version.
+on:
+  workflow_dispatch:
+    inputs:
+      bekrafta:
+        description: 'Skriv PUBLICERA för att byta ut combineit.se/docs'
+        required: true
+
+permissions:
+  contents: read
+
+concurrency:
+  group: publicera
+  cancel-in-progress: false
+
+jobs:
+  publicera:
+    if: github.event.inputs.bekrafta == 'PUBLICERA' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Installera
+        run: npm ci
+
+      - name: Bygg
+        run: npm run build
+
+      - name: Kontrollera gamla adresser i bygget
+        run: python3 adresser/kolla.py --strikt --bygge dist
+
+      - name: Stoppa om något sidinnehåll inte är ifyllt
+        run: |
+          if grep -rl "ATT FYLLA I" dist --include=index.html; then
+            echo "::error::Sidorna ovan har platshållare kvar"
+            exit 1
+          fi
+
+      - name: Installera lftp
+        run: sudo apt-get update -q && sudo apt-get install -y -q lftp
+
+      - name: Ladda upp och byt in
+        env:
+          SFTP_USER: ${{ secrets.ONECOM_SFTP_USER }}
+          LFTP_PASSWORD: ${{ secrets.ONECOM_SFTP_PASSWORD }}
+        run: |
+          mkdir -p ~/.ssh
+          ssh-keyscan -p 22 ssh.combineit.se >> ~/.ssh/known_hosts
+          lftp --env-password -u "$SFTP_USER" sftp://ssh.combineit.se <<'LFTP'
+          set cmd:fail-exit yes
+          cd webroots/www
+          rm -rf docs-ny
+          mirror --reverse --verbose=1 dist docs-ny
+          set cmd:fail-exit no
+          rm -rf docs-forra
+          mv docs docs-forra
+          set cmd:fail-exit yes
+          mv docs-ny docs
+          cls -la docs/ | head
+          LFTP
+
+      - name: Kontrollera att sajten svarar
+        run: |
+          sleep 5
+          for adress in /docs/ /docs/introduction/ /docs/web-connect-objects/; do
+            kod=$(curl -s -o /dev/null -w "%{http_code}" "https://www.combineit.se$adress")
+            echo "$adress $kod"
+            [ "$kod" = 200 ] || exit 1
+          done

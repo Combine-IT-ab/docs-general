@@ -1,0 +1,37 @@
+---
+// Rubriken, och på integrationssidor faktarutan direkt under (designen i docs-internal#49).
+import Default from '@astrojs/starlight/components/PageTitle.astro';
+const { data } = Astro.locals.starlightRoute.entry;
+const integration = data.type === 'integration';
+const granskad = data.last_reviewed?.toISOString().slice(0, 10);
+---
+
+<Default />
+{
+	integration && (
+		<dl class="faktaruta">
+			{data.data_flows && (
+				<div>
+					<dt>Data flows</dt>
+					<dd class="stor">{data.data_flows}</dd>
+				</div>
+			)}
+			<div>
+				<dt>Runs in</dt>
+				<dd>Your Business Central</dd>
+			</div>
+			<div>
+				<dt>Configured by</dt>
+				<dd>You</dd>
+			</div>
+			{granskad && (
+				<div>
+					<dt>Last reviewed</dt>
+					<dd>
+						<time datetime={granskad}>{granskad}</time>
+					</dd>
+				</div>
+			)}
+		</dl>
+	)
+}

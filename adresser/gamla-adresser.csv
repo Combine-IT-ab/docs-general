@@ -7,9 +7,9 @@ gammal_adress,typ,mal,kommentar
 /docs/1-1-1-web-connect-incoming-data-mapping/,sida,docs/products/web-connect/general/incoming-data/mapping.md,
 /docs/web-connect-condition-list/,sida,docs/products/web-connect/general/condition-list.md,
 /docs/web-connect-text-mapping/,sida,docs/products/web-connect/general/text-mapping.md,
-/docs/web-connect-logistics-setup/,sida,,"saknas i docs-general, ska flyttas från BetterDocs"
-/docs/web-connect-wms-documents/,sida,,"saknas i docs-general, ska flyttas från BetterDocs"
-/docs/web-connect-wms-return-reason-codes/,sida,,"saknas i docs-general, ska flyttas från BetterDocs"
+/docs/web-connect-logistics-setup/,sida,docs/products/web-connect/general/logistics-setup.md,flyttad från BetterDocs 22 okt 2026
+/docs/web-connect-wms-documents/,sida,docs/products/web-connect/general/wms-documents.md,flyttad från BetterDocs 22 okt 2026
+/docs/web-connect-wms-return-reason-codes/,sida,docs/products/web-connect/general/wms-return-reason-codes.md,flyttad från BetterDocs 22 okt 2026
 /docs/web-connect-outgoing-data-web-in-progess/,sida,docs/products/web-connect/general/outgoing-mapping/outgoing-data-web.md,"felstavad slug, behålls ändå"
 /docs/web-connect-outgoing-sync-triggers/,sida,docs/products/web-connect/general/outgoing-mapping/outgoing-sync-triggers.md,
 /docs/web-connect-general-setup/,sida,docs/products/web-connect/general/general-setup.md,

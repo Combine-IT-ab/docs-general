@@ -1,0 +1,7 @@
+node_modules/
+dist/
+dist-wordpress/
+.astro/
+src/content/docs/
+src/generated/
+public/assets/
