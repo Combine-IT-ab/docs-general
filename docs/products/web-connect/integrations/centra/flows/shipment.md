@@ -19,28 +19,27 @@ The flow involves three steps:
 ## How It Works
 
 **Trigger:** Posted Sales Shipment created in BC
-**API operations:** `createShipment` → `completeShipment` → `captureShipment`
+**API operations:** `createShipment` (with shipped date, tracking and an optional capture flag), and `captureOrder` when capture is done as a separate step
 
 **Objects used:**
 
 | Object | Role |
 |---|---|
-| `CA_SHIPMENT` | Creates shipment record in Centra |
-| `CA_SHIPMENTINPUT` | Specifies which order lines are shipped |
-| `CA_SHIPMENTINFO` | Carrier, tracking number, shipment date |
-| `CA_CONFIRM_SHIPPEDORDER` | Completes the shipment |
-| `CA_CAPTURESHIPMENT` | Triggers payment capture |
+| `CA_SHIPMENT` | Creates the shipment in Centra (`createShipment`) |
+| `CA_SHIPMENTINPUT` | Order, shipped lines, shipped date, and the flags `isGoodToGo`, `isPaid` and `capture` |
+| `CA_SHIPMENTINFO` | Carrier, service, tracking number and return tracking number |
+| `CA_CONFIRM_SHIPPEDORDER` | Confirms the order in Centra (`confirmOrder`) as part of the shipment flow |
+| `CA_CAPTURESHIPMENT` | Requests payment capture for the order (`captureOrder`) |
 
 **Process steps:**
 
 1. Warehouse posts a Sales Shipment in BC
 2. Web Connect detects the shipment creation
-3. Web Connect sends `createShipment` to Centra with item quantities and dates
-4. Centra confirms shipment received → order status: CONFIRMED → PROCESSING
-5. Web Connect sends `completeShipment` to mark shipment as done
-6. Web Connect sends `captureShipment` to trigger PSP payment capture
-7. Payment is authorized/captured by Centra's payment provider
-8. Order moves toward `COMPLETED` status once all lines are shipped
+3. Web Connect sends `createShipment` to Centra with the shipped lines, shipped date, carrier and tracking number
+4. Centra registers the shipment → order status: CONFIRMED → PROCESSING
+5. If capture is used, it is requested with the capture flag on the shipment or with `captureOrder`
+6. Centra's payment provider captures the payment
+7. Order moves toward `COMPLETED` status once all lines are shipped
 
 **Sequence diagram:**
 
@@ -51,11 +50,9 @@ sequenceDiagram
     participant CE as 🛒 Centra
 
     BC-->>WC: Posted Sales Shipment created
-    WC->>CE: createShipment (order ID, lines, quantities)
+    WC->>CE: createShipment (order, lines, shipped date, tracking)
     CE-->>WC: Shipment created
-    WC->>CE: completeShipment (shipment ID)
-    CE-->>WC: Shipment marked complete
-    WC->>CE: captureShipment (capture payment)
+    WC->>CE: captureOrder (if capture is used)
     CE-->>CE: PSP payment capture triggered
     CE-->>CE: Order status: CONFIRMED → PROCESSING
 ```

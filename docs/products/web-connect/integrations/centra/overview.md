@@ -28,7 +28,7 @@ faq:
   - question: "Can we cancel a Centra order that the warehouse has started picking?"
     answer: "Not from Business Central. With a warehouse integration, Web Connect sends a cancellation request to the warehouse system before anything is cancelled in Centra. If the order has come too far, for example it is being picked, the warehouse system rejects the request. Contact the warehouse to stop the order."
   - question: "Is the payment captured automatically when we ship?"
-    answer: "It can be. Web Connect can ask Centra to capture the payment when the shipment is created, and Centra's payment provider performs it. If you use PSP Connect, capture is usually done in Business Central instead, close to the accounting."
+    answer: "It can be. Web Connect can ask Centra to capture the payment when the shipment is created, and Centra's payment provider performs it. If you use PSP Connect from N3 Vision, capture is usually done in Business Central instead, close to the accounting."
 last_reviewed: 2026-10-21
 ---
 
@@ -46,29 +46,30 @@ Web Connect by CombineIT connects Microsoft Dynamics 365 Business Central with C
 | **Configured by** | You, in Business Central: mappings, conditions, triggers and flows. You can do all of it yourself. If you want, CombineIT takes part in any step, as a sounding board or by doing the work. |
 | **Connection** | Centra GraphQL Integration API |
 | **Centra API** | [Centra Integration API](https://docs.centraapis.com/) |
-| **Data flows** | 7: orders, shipments, payment capture, stock, products, prices and cancellations |
+| **Data flows** | 8: orders, shipments, payment capture, stock, products, prices, cost prices and cancellations |
 | **Business Central editions** | [ATT FYLLA I: Essentials och Premium enligt Marketplace, verifiera] |
 | **Available from** | [Web Connect on Microsoft AppSource](https://marketplace.microsoft.com/sv-se/product/PUBID.martitab1633951001710%7CAID.webconnect%7CPAPPID.9f3a7223-19db-4ac7-832f-cf8e4699186f?tab=Overview) [ATT FYLLA I: ingår Centra i Web Connect Ready Integrations, och ska den länkas här?] |
 
 ## What can be synchronized
 
-Web Connect has seven data flows between Business Central and Centra.
+Web Connect has eight data flows between Business Central and Centra.
 
 | Data | Direction | What happens |
 |---|---|---|
 | [Orders](flows/order-inbound.md) | Centra → Business Central | New orders are fetched, a sales order is created and the order is confirmed in Centra |
-| [Shipments](flows/shipment.md) | Business Central → Centra | A posted sales shipment is created and completed in Centra |
+| [Shipments](flows/shipment.md) | Business Central → Centra | A posted sales shipment is created in Centra with carrier and tracking number |
 | Payment capture | Business Central → Centra | Centra is asked to capture the payment when the order ships |
 | [Stock](flows/stock-update.md) | Business Central → Centra | Available stock is sent to Centra |
 | [Products](flows/product-data.md) | Business Central → Centra | Products, variants and sizes are created or updated in Centra |
 | Prices | Business Central → Centra | Prices are set on the matching Centra price lists |
+| Cost prices | Business Central → Centra | The unit cost of each variant is updated in Centra when it changes in Business Central |
 | [Cancellations](flows/cancellation.md) | Business Central → Centra | The order or its unshipped lines are cancelled in Centra |
 
 Orders are part of every Centra integration. The other flows are chosen when the integration is set up, depending on where each kind of data is maintained in your business. See [Choose your setup](#choose-your-setup).
 
 ## How it works
 
-Web Connect asks Centra for new and updated orders on a schedule, using a GraphQL query against Centra's event list. For each order it fetches the full order, identifies the sales channel, creates the sales order in Business Central, confirms the order in Centra and marks the event as handled. When something changes in Business Central (a shipment is posted, stock moves, a price changes), an outgoing sync trigger in Web Connect sends the change to Centra. Every message in both directions is logged in Web Connect Entries, where it can be inspected and resent.
+Web Connect asks Centra for new and updated orders on a schedule, using a GraphQL query. It reads either Centra's event list or the orders updated since the last fetch. For each order it fetches the full order, identifies the sales channel, creates the sales order in Business Central, confirms the order in Centra and marks the event as handled. When something changes in Business Central (a shipment is posted, stock moves, a price changes), an outgoing sync trigger in Web Connect sends the change to Centra. Every message in both directions is logged in Web Connect Entries, where it can be inspected and resent.
 
 ```mermaid
 graph LR
@@ -80,7 +81,7 @@ graph LR
     B -->|Create sales order| C
     B -->|Confirm order| A
     C -->|Shipment posted| B
-    B -->|Create and complete shipment| A
+    B -->|Create shipment with tracking| A
     C -->|Stock, price or product changed| B
     B -->|Update stock, prices, products| A
 ```
@@ -100,7 +101,7 @@ stateDiagram-v2
 
 ## Choose your setup
 
-Each flow has to fit how your business works: which system owns the data, where people do their work, and what the accounting needs. That is why the flows are decided together when a new integration is set up. The options below are the ones Web Connect customers use today. **Common setup** marks the option most Web Connect customers with Centra use. **Recommended** marks CombineIT's best practice, where there is one. [ATT FYLLA I: andel av kunderna per vanligt upplägg, när konfigexporten (docs-internal#61) finns.]
+Each flow has to fit how your business works: which system owns the data, where people do their work, and what the accounting needs. That is why the flows are decided together when a new integration is set up. The options below are the ones Web Connect customers use today. **Common setup** marks the option most Web Connect customers with Centra use. **Recommended** marks CombineIT's best practice, where there is one.
 
 ### Orders
 
@@ -112,13 +113,13 @@ Each flow has to fit how your business works: which system owns the data, where 
 
 | Option | How it works | When it fits |
 |---|---|---|
-| **Business Central → Centra** (common setup) | When a sales shipment is posted, the shipment is created and completed in Centra | When the warehouse work is registered in Business Central, directly or through a warehouse integration |
+| **Business Central → Centra** (common setup) | When a sales shipment is posted, the shipment is created in Centra with carrier and tracking number | When the warehouse work is registered in Business Central, directly or through a warehouse integration |
 
 ### Stock
 
 | Option | How it works | When it fits |
 |---|---|---|
-| **Calculated in Business Central** | Business Central calculates available stock for the chosen locations and sends it to Centra | Business Central has the correct stock |
+| **Calculated in Business Central** (common setup) | Business Central calculates available stock for the chosen locations and sends it to Centra | Business Central has the correct stock |
 | **From the warehouse system, through Business Central** | Web Connect reads stock from the warehouse system (WMS), applies the rules you want, for example buffers or selected locations, and sends the result to Centra | Stock is managed in a WMS or 3PL, and you want control over what is shown in the web shop |
 | **Directly between the warehouse system and Centra** | Stock goes from the WMS to Centra without Web Connect | The WMS already has a direct connection to Centra |
 
@@ -148,15 +149,13 @@ flowchart LR
     BC["🔄 Business Central"] -.-|Not part of the stock flow| CE
 ```
 
-[ATT FYLLA I: vilket alternativ som är vanligt upplägg.]
-
 ### Products
 
 | Option | How it works | When it fits |
 |---|---|---|
-| **Created in Business Central** | Products, variants and sizes are created in Business Central and sent to Centra. Images, texts and categories are added in Centra | Business Central is where new products start |
+| **Created in Business Central** (common setup) | Products, variants and sizes are created in Business Central and sent to Centra. Images, texts and categories are added in Centra | Business Central is where new products start |
 | **From a PIM or PLM** | A PIM or PLM system is the master for products. How products reach Business Central and Centra is decided in the project | You already maintain products in a PIM or PLM |
-| **Created in Centra** | Products are created in Centra. The items in Business Central are created separately and matched by EAN or SKU | The web team owns the assortment |
+| **Created in Centra** | Products are created in Centra. Web Connect fetches new and updated products from Centra and creates or updates the items in Business Central | The web team owns the assortment |
 
 #### Products created in Business Central
 
@@ -178,17 +177,15 @@ flowchart LR
 
 ```mermaid
 flowchart LR
-    CE["🛒 Centra<br/>product created"] -->|Order lines with EAN or SKU| WC["⚙️ Web Connect"]
-    WC -->|Matched to the item| BC["🔄 Business Central<br/>item created separately"]
+    CE["🛒 Centra<br/>product created"] -->|New and updated products| WC["⚙️ Web Connect"]
+    WC -->|Create or update item| BC["🔄 Business Central"]
 ```
-
-[ATT FYLLA I: vilket alternativ som är vanligt upplägg.]
 
 ### Prices
 
 | Option | How it works | When it fits |
 |---|---|---|
-| **Business Central → Centra** | Prices are maintained in Business Central and set on the matching Centra price lists | Prices are decided in Business Central |
+| **Business Central → Centra** (common setup) | Prices are maintained in Business Central and set on the matching Centra price lists | Prices are decided in Business Central |
 | **Maintained in Centra** | Prices are set in Centra and come into Business Central on each order | Prices and campaigns are run in Centra |
 
 #### Prices from Business Central to Centra
@@ -207,14 +204,12 @@ flowchart LR
     WC -->|Sales order lines| BC["🔄 Business Central"]
 ```
 
-[ATT FYLLA I: vilket alternativ som är vanligt upplägg.]
-
 ### Payment capture
 
 | Option | How it works | When it fits |
 |---|---|---|
 | **Through Centra** | When the shipment is created, Web Connect asks Centra to capture the payment, and Centra's payment provider performs it | Payments are handled by Centra's payment provider |
-| **In Business Central with PSP Connect** | The payment is captured in Business Central, close to the accounting | You use PSP Connect. This is the usual choice then |
+| **In Business Central with PSP Connect** | The payment is captured in Business Central with [PSP Connect](https://appsource.microsoft.com/en-us/product/dynamics-365-business-central/PUBID.n3visionab1614113437854%7CAID.pspconnect%7CPAPPID.3502b030-589b-4d25-a741-5a58b76ea13c) from N3 Vision, close to the accounting. PSP Connect also matches the payment provider's settlements against Business Central | You use PSP Connect. This is the usual choice then |
 | **Outside the integration** | Capture is handled manually or by another system | Payments are handled separately |
 
 #### Payment capture through Centra
@@ -249,7 +244,7 @@ Cancel orders in Business Central, not in Centra. Business Central is where the 
 | Option | How it works | When it fits |
 |---|---|---|
 | **In Business Central, checked with the warehouse system** (recommended) | Customer service cancels in Business Central. A cancellation request is sent to the warehouse system first. If the warehouse accepts, the order or its unshipped lines are cancelled in Centra. If the order has come too far, for example it is being picked, the warehouse system rejects the request and the order is not cancelled | You have a warehouse integration through Web Connect |
-| **In Business Central** | Customer service cancels in Business Central, and the order or its unshipped lines are cancelled in Centra | The warehouse work is done in Business Central |
+| **In Business Central** (common setup) | Customer service cancels in Business Central, and the order or its unshipped lines are cancelled in Centra | The warehouse work is done in Business Central |
 
 #### Cancellation in Business Central, checked with the warehouse system
 
@@ -351,7 +346,7 @@ Not from Business Central. With a warehouse integration, Web Connect sends a can
 
 ### Is the payment captured automatically when we ship?
 
-It can be. Web Connect can ask Centra to capture the payment when the shipment is created, and Centra's payment provider performs it. If you use PSP Connect, capture is usually done in Business Central instead, close to the accounting.
+It can be. Web Connect can ask Centra to capture the payment when the shipment is created, and Centra's payment provider performs it. If you use PSP Connect from N3 Vision, capture is usually done in Business Central instead, close to the accounting.
 
 ## Related
 
