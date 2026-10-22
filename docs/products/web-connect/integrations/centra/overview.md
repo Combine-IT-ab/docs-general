@@ -9,6 +9,7 @@ product: web-connect
 type: integration
 system: "Centra"
 system_category: "e-commerce"
+data_flows: 8
 keywords:
   - business central centra integration
   - centra business central
