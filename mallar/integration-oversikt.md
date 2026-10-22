@@ -9,6 +9,7 @@ product: web-connect
 type: integration
 system: "[SYSTEM]"
 system_category: "[category from the table in mallar/README.md]"
+data_flows: [n, same number as in "At a glance"]
 keywords:
   - business central [system] integration
   - [system] business central

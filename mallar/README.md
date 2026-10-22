@@ -85,6 +85,7 @@ Varje sida har frontmatter. Bygget (docs-internal#50 och #51) använder den till
 | `type` | `integration` eller `integration-flow` | Mall och strukturerad data |
 | `system` | Systemnamnet enligt tabellen | Katalog och filter |
 | `system_category` | Kategorin enligt tabellen | Katalog och filter |
+| `data_flows` | Antalet dataflöden, som tal | Faktarutan överst på sidan |
 | `keywords` | Sökorden från docs-internal#47 som sidan ska ranka på | Granskning, inte metataggar |
 | `faq` | Frågor och svar, se mallen | FAQPage |
 | `last_reviewed` | Datum när fakta senast stämdes av | Visas på sidan |
