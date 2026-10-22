@@ -121,7 +121,7 @@ Each flow has to fit how your business works: which system owns the data, where 
 |---|---|---|
 | **Calculated in Business Central** (common setup) | Business Central calculates available stock for the chosen locations and sends it to Centra | Business Central has the correct stock |
 | **From the warehouse system, through Business Central** | Web Connect reads stock from the warehouse system (WMS), applies the rules you want, for example buffers or selected locations, and sends the result to Centra | Stock is managed in a WMS or 3PL, and you want control over what is shown in the web shop |
-| **Directly between the warehouse system and Centra** | Stock goes from the WMS to Centra without Web Connect | The WMS already has a direct connection to Centra |
+| **Directly between the warehouse system and Centra** | Stock goes between the WMS or 3PL and Centra without Web Connect. Business Central is not part of the stock flow | The warehouse system or 3PL already has a direct connection to Centra |
 
 #### Stock calculated in Business Central
 
@@ -243,7 +243,7 @@ Cancel orders in Business Central, not in Centra. Business Central is where the 
 
 | Option | How it works | When it fits |
 |---|---|---|
-| **In Business Central, checked with the warehouse system** (recommended) | Customer service cancels in Business Central. A cancellation request is sent to the warehouse system first. If the warehouse accepts, the order or its unshipped lines are cancelled in Centra. If the order has come too far, for example it is being picked, the warehouse system rejects the request and the order is not cancelled | You have a warehouse integration through Web Connect |
+| **In Business Central, checked with the warehouse system** (recommended) | Customer service cancels in Business Central. A cancellation request is sent to the warehouse system first. With Ongoing WMS, this is a status update on the order in Ongoing. If the warehouse accepts, the order or its unshipped lines are cancelled in Centra. If the order has come too far, for example it is being picked, the warehouse system rejects the request and the order is not cancelled | You have a warehouse integration through Web Connect |
 | **In Business Central** (common setup) | Customer service cancels in Business Central, and the order or its unshipped lines are cancelled in Centra | The warehouse work is done in Business Central |
 
 #### Cancellation in Business Central, checked with the warehouse system
