@@ -1,0 +1,91 @@
+name: Omdirigeringar i WordPress
+
+# Startas för hand, efter publiceringen till /docs (docs-internal#54).
+# Lägger in 301 för BetterDocs gamla kategori- och taggsidor i WordPress .htaccess.
+# Bara adresser som börjar med /docs-category/ och /docs-tag/ berörs.
+# En kopia av .htaccess sparas på servern och som artefakt här. Svarar inte sajten
+# efteråt läggs kopian tillbaka automatiskt.
+on:
+  workflow_dispatch:
+    inputs:
+      bekrafta:
+        description: 'Skriv OMDIRIGERA för att ändra WordPress .htaccess'
+        required: true
+
+permissions:
+  contents: read
+
+concurrency:
+  group: publicera
+  cancel-in-progress: false
+
+jobs:
+  omdirigera:
+    if: github.event.inputs.bekrafta == 'OMDIRIGERA' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    env:
+      SFTP_USER: ${{ secrets.ONECOM_SFTP_USER }}
+      LFTP_PASSWORD: ${{ secrets.ONECOM_SFTP_PASSWORD }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Skapa reglerna
+        run: |
+          npm ci
+          npm run forbered
+          cat dist-wordpress/htaccess-docs.txt
+
+      - name: Installera lftp
+        run: sudo apt-get update -q && sudo apt-get install -y -q lftp
+
+      - name: Hämta .htaccess
+        run: |
+          mkdir -p ~/.ssh
+          ssh-keyscan -p 22 ssh.combineit.se >> ~/.ssh/known_hosts
+          mkdir -p wp
+          lftp --env-password -u "$SFTP_USER" sftp://ssh.combineit.se -e "set cmd:fail-exit yes; get webroots/www/.htaccess -o wp/htaccess-original; bye"
+          cp wp/htaccess-original wp/htaccess-ny
+          wc -l wp/htaccess-original
+
+      - name: Spara kopian här
+        uses: actions/upload-artifact@v4
+        with:
+          name: htaccess-original
+          path: wp/htaccess-original
+
+      - name: Lägg in reglerna
+        run: |
+          python3 scripts/htaccess.py wp/htaccess-ny dist-wordpress/htaccess-docs.txt
+          diff wp/htaccess-original wp/htaccess-ny || true
+
+      - name: Ladda upp, med kopia på servern
+        run: |
+          kopia=".htaccess.fore-docs-$(date +%Y%m%d%H%M%S)"
+          echo "KOPIA=$kopia" >> "$GITHUB_ENV"
+          lftp --env-password -u "$SFTP_USER" sftp://ssh.combineit.se <<LFTP
+          set cmd:fail-exit yes
+          cd webroots/www
+          put wp/htaccess-original -o $kopia
+          put wp/htaccess-ny -o .htaccess
+          LFTP
+
+      - name: Kontrollera sajten, annars lägg tillbaka kopian
+        run: |
+          fel=0
+          kod=$(curl -s -o /dev/null -w "%{http_code}" "https://www.combineit.se/?kontroll=$RANDOM")
+          echo "startsidan: $kod"; [ "$kod" = 200 ] || fel=1
+          svar=$(curl -s -o /dev/null -w "%{http_code} %{redirect_url}" "https://www.combineit.se/docs-category/web-connect/?kontroll=$RANDOM")
+          echo "docs-category/web-connect: $svar"; case "$svar" in 301*"/docs/introduction/"*) ;; *) fel=1 ;; esac
+          if [ "$fel" = 1 ]; then
+            echo "::error::Sajten svarar inte som väntat, lägger tillbaka kopian"
+            lftp --env-password -u "$SFTP_USER" sftp://ssh.combineit.se -e "set cmd:fail-exit yes; put wp/htaccess-original -o webroots/www/.htaccess; bye"
+            kod=$(curl -s -o /dev/null -w "%{http_code}" "https://www.combineit.se/?kontroll=$RANDOM")
+            echo "startsidan efter återställning: $kod"
+            exit 1
+          fi
+          echo "Klart. Kopian ligger på servern som $KOPIA."
