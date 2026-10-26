@@ -21,9 +21,9 @@ This flow is **optional** and used only when Business Central is the master for 
 | Object | Role |
 |---|---|
 | `CA_PRODUCT` | Creates or updates product in Centra |
-| `CA_VARIANT` | Creates or updates product variant (e.g. color) |
-| `CA_SIZE` | Creates or updates size/dimension (e.g. S, M, L) |
-| `CA_PRICE` | Creates or updates price for the product/variant/size combination |
+| `CA_PRODUCT_VARIANT` | Creates or updates product variant (e.g. color) |
+| `CA_PRODUCT_VARIANT_SIZE` | Creates or updates size/dimension (e.g. S, M, L) |
+| `CA_PRODUCTPRICE` | Sets prices on Centra price lists (`setPrices`) |
 
 **Product Hierarchy in Centra:**
 

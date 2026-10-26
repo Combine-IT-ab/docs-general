@@ -14,7 +14,7 @@ This flow is **optional** and used only when BC initiates order cancellations th
 ## How It Works
 
 **Trigger:** Manual — when an order is cancelled in BC (configurable)
-**API operation:** `cancelOrder` or `cancelOrderLine` mutation in Centra
+**API operation:** `cancelDirectToConsumerOrder` for a whole order, and `updateDirectToConsumerOrder` with cancelled lines for individual lines
 
 **Objects used:**
 
@@ -44,9 +44,13 @@ Order is manually cancelled in BC. Cancellation is sent to Centra immediately.
 
 Triggered automatically based on specific conditions (e.g. item out of stock, order stale).
 
+### Variant B2 — Cancellation Checked with the Warehouse System (Recommended with a WMS)
+
+When Business Central has a warehouse integration through Web Connect, the cancellation is first sent as a request to the warehouse system. With Ongoing WMS, Web Connect updates the order status in Ongoing (`orders/{id}/orderStatus`). If the warehouse has already started on the order, for example picking, Ongoing rejects the change and the order is not cancelled. Contact the warehouse to stop the order. If the warehouse accepts, the cancellation is sent to Centra.
+
 ### Variant C — No Cancellation Support
 
-Cancellations handled directly in Centra; this flow is not enabled.
+Cancellations handled directly in Centra; this flow is not enabled. This is not recommended: cancel in Business Central, so that a warehouse integration can reject the cancellation if the order is already being picked.
 
 ---
 
