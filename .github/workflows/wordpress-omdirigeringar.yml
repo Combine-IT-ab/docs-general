@@ -76,10 +76,21 @@ jobs:
 
       - name: Kontrollera sajten, annars lägg tillbaka kopian
         run: |
+          # 429 betyder att servern begränsar antalet anrop för stunden, inte att sajten är trasig.
+          # Försök igen med paus, upp till sex gånger.
+          hamta() {
+            for forsok in 1 2 3 4 5 6; do
+              svar=$(curl -s -o /dev/null -w "%{http_code} %{redirect_url}" "https://www.combineit.se$1?kontroll=$RANDOM")
+              [ "${svar%% *}" = 429 ] || break
+              echo "429 på $1, väntar och försöker igen ($forsok)" >&2
+              sleep $((forsok * 10))
+            done
+            echo "$svar"
+          }
           fel=0
-          kod=$(curl -s -o /dev/null -w "%{http_code}" "https://www.combineit.se/?kontroll=$RANDOM")
-          echo "startsidan: $kod"; [ "$kod" = 200 ] || fel=1
-          svar=$(curl -s -o /dev/null -w "%{http_code} %{redirect_url}" "https://www.combineit.se/docs-category/web-connect/?kontroll=$RANDOM")
+          svar=$(hamta /)
+          echo "startsidan: $svar"; case "$svar" in 200*) ;; *) fel=1 ;; esac
+          svar=$(hamta /docs-category/web-connect/)
           echo "docs-category/web-connect: $svar"; case "$svar" in 301*"/docs/introduction/"*) ;; *) fel=1 ;; esac
           if [ "$fel" = 1 ]; then
             echo "::error::Sajten svarar inte som väntat, lägger tillbaka kopian"
