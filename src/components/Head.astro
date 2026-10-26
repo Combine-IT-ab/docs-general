@@ -1,0 +1,38 @@
+---
+// Starlights head plus strukturerad data (docs-internal#51).
+import Default from '@astrojs/starlight/components/Head.astro';
+const route = Astro.locals.starlightRoute;
+const { data } = route.entry;
+const url = new URL(Astro.url.pathname, Astro.site).href;
+const forhandsvisning = import.meta.env.BASE_URL.startsWith('/docs-preview');
+
+const utgivare = { '@type': 'Organization', name: 'CombineIT', url: 'https://www.combineit.se/' };
+const artikel = {
+	'@context': 'https://schema.org',
+	'@type': 'TechArticle',
+	headline: data.title,
+	description: data.summary ?? data.description,
+	url,
+	inLanguage: data.lang ?? 'en',
+	publisher: utgivare,
+	author: utgivare,
+	...(data.last_reviewed && { dateModified: data.last_reviewed.toISOString().slice(0, 10) }),
+	...(data.keywords && { keywords: data.keywords.join(', ') }),
+};
+const faq = data.faq?.length
+	? {
+			'@context': 'https://schema.org',
+			'@type': 'FAQPage',
+			mainEntity: data.faq.map((f) => ({
+				'@type': 'Question',
+				name: f.question,
+				acceptedAnswer: { '@type': 'Answer', text: f.answer },
+			})),
+		}
+	: null;
+---
+
+<Default />
+{forhandsvisning && <meta name="robots" content="noindex, nofollow" />}
+<script type="application/ld+json" set:html={JSON.stringify(artikel)} />
+{faq && <script type="application/ld+json" set:html={JSON.stringify(faq)} />}

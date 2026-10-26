@@ -1,0 +1,111 @@
+/* CombineIT Docs: riktning A Precision med faktarutan från C (docs-internal#49).
+   Färger, typsnitt och avstånd ändras här och slår igenom på alla sidor. */
+
+:root {
+	--ci-blck: #0f1720;
+	--ci-text: #374151;
+	--ci-dampad: #4b5563;
+	--ci-linje: #e4e7eb;
+	--ci-marin: #1e4d78;
+	--ci-marin-mork: #123553;
+	--ci-marin-ljus: #eaf0f6;
+	--ci-guld: #d0b080;
+
+	--sl-font: 'Instrument Sans', system-ui, -apple-system, 'Segoe UI', sans-serif;
+	--sl-font-mono: 'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+	--sl-content-width: 48.75rem;
+	--sl-line-height: 1.6;
+	--sl-text-h1: 2.75rem;
+	--sl-text-h2: 1.625rem;
+	--sl-text-h3: 1.1875rem;
+	--sl-text-h4: 1.0625rem;
+}
+
+/* Mörkt läge: samma struktur, ljusare marinblå */
+:root {
+	--sl-color-accent-low: #10263c;
+	--sl-color-accent: #6f9cc8;
+	--sl-color-accent-high: #d5e3f1;
+}
+
+:root[data-theme='light'] {
+	--sl-color-white: var(--ci-blck);
+	--sl-color-gray-1: #1f2933;
+	--sl-color-gray-2: var(--ci-text);
+	--sl-color-gray-3: var(--ci-dampad);
+	--sl-color-gray-4: #9aa3ae;
+	--sl-color-gray-5: #c9ced6;
+	--sl-color-gray-6: var(--ci-linje);
+	--sl-color-gray-7: #f8f9fa;
+	--sl-color-black: #ffffff;
+	--sl-color-accent-low: var(--ci-marin-ljus);
+	--sl-color-accent: var(--ci-marin);
+	--sl-color-accent-high: var(--ci-marin-mork);
+	--sl-color-hairline: var(--ci-linje);
+	--sl-color-hairline-light: var(--ci-linje);
+	--sl-color-bg-nav: #ffffff;
+	--sl-color-bg-sidebar: #ffffff;
+}
+
+h1,
+h2,
+h3 {
+	letter-spacing: -0.02em;
+}
+h1 {
+	letter-spacing: -0.03em;
+}
+
+/* Aktiv sida i menyn: tunn guldlinje, guld är bara dekor */
+:root[data-theme='light'] .sidebar-content a[aria-current='page'] {
+	background: #f1f4f8;
+	color: var(--ci-blck);
+	box-shadow: inset 2px 0 0 var(--ci-guld);
+}
+
+/* Faktaruta: svart linje över och under, mono-etiketter, stor siffra */
+.faktaruta {
+	margin: 1.5rem 0 0;
+	padding: 1.75rem 0;
+	border-top: 1px solid var(--sl-color-white);
+	border-bottom: 1px solid var(--sl-color-white);
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(min(9rem, 100%), 1fr));
+	gap: 1.5rem 2.5rem;
+}
+.faktaruta > div {
+	display: flex;
+	flex-direction: column;
+	gap: 0.25rem;
+}
+.faktaruta dt {
+	font-family: var(--sl-font-mono);
+	font-size: 0.75rem;
+	color: var(--sl-color-gray-3);
+}
+.faktaruta dd {
+	margin: 0;
+	font-size: 1.1875rem;
+	font-weight: 700;
+	line-height: 1.3;
+	color: var(--sl-color-white);
+}
+.faktaruta dd.stor {
+	font-size: 2.75rem;
+	line-height: 1;
+	letter-spacing: -0.03em;
+}
+
+/* Tabeller och diagram får rulla i sidled på mobil */
+.sl-markdown-content table {
+	display: block;
+	overflow-x: auto;
+}
+.sl-markdown-content figure.diagram {
+	margin: 1.5rem 0;
+	overflow-x: auto;
+}
+.sl-markdown-content figure.diagram svg {
+	max-width: 100%;
+	height: auto;
+}

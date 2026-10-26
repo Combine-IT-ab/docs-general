@@ -1,0 +1,24 @@
+{
+  "name": "combineit-docs",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "forbered": "node scripts/forbered.mjs",
+    "dev": "node scripts/forbered.mjs && astro dev",
+    "build": "node scripts/forbered.mjs && astro build",
+    "preview": "astro preview"
+  },
+  "dependencies": {
+    "@astrojs/markdown-remark": "7.3.2",
+    "@astrojs/starlight": "0.42.6",
+    "@fontsource/instrument-sans": "5.3.0",
+    "@fontsource/jetbrains-mono": "5.3.0",
+    "astro": "7.3.7",
+    "sharp": "0.35.5"
+  },
+  "devDependencies": {
+    "@mermaid-js/mermaid-cli": "11.17.0",
+    "gray-matter": "4.0.3",
+    "js-yaml": "^4.1.0"
+  }
+}
