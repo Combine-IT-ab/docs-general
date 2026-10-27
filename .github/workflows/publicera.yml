@@ -1,10 +1,25 @@
 name: Publicera till combineit.se/docs
 
-# Startas för hand. Bygger sajten för /docs, laddar upp den till en ny mapp och byter
+# Körs automatiskt när något som påverkar sajten mergas till main, och kan startas för hand.
+# Bygger sajten för /docs, laddar upp den till en ny mapp och byter
 # in den i ett steg, så att ingen besökare ser en halvfärdig sajt. Rör bara /docs.
 # Första gången tar mappen över /docs från BetterDocs i WordPress (docs-internal#54).
 # Backa: kör flödet "Backa publiceringen", som lägger tillbaka föregående version.
+# llms.txt i WordPress rot uppdateras samtidigt, så att den följer med när sidor läggs till.
 on:
+  push:
+    branches: [main]
+    paths:
+      - docs/**
+      - meny.yml
+      - adresser/**
+      - src/**
+      - public/**
+      - scripts/forbered.mjs
+      - scripts/mermaid.json
+      - astro.config.mjs
+      - package.json
+      - package-lock.json
   workflow_dispatch:
     inputs:
       bekrafta:
@@ -20,7 +35,7 @@ concurrency:
 
 jobs:
   publicera:
-    if: github.event.inputs.bekrafta == 'PUBLICERA' && github.ref == 'refs/heads/main'
+    if: github.ref == 'refs/heads/main' && (github.event_name == 'push' || github.event.inputs.bekrafta == 'PUBLICERA')
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -86,3 +101,14 @@ jobs:
             [ "$kod" = 200 ] || exit 1
             sleep 2
           done
+
+      - name: Uppdatera llms.txt i WordPress rot
+        env:
+          SFTP_USER: ${{ secrets.ONECOM_SFTP_USER }}
+          LFTP_PASSWORD: ${{ secrets.ONECOM_SFTP_PASSWORD }}
+        run: |
+          lftp --env-password -u "$SFTP_USER" sftp://ssh.combineit.se -e "set cmd:fail-exit yes; put dist-wordpress/llms.txt -o webroots/www/llms.txt; bye"
+          sleep 2
+          kod=$(curl -s -m 30 -o llms.txt -w "%{http_code}" "https://www.combineit.se/llms.txt?kontroll=$RANDOM" || true)
+          echo "llms.txt $kod"
+          [ "$kod" = 200 ] && grep -q '^# CombineIT' llms.txt
