@@ -5,3 +5,4 @@ dist-wordpress/
 src/content/docs/
 src/generated/
 public/assets/
+dist-pages/

@@ -1,0 +1,49 @@
+name: Omdirigera docs.combineit.se
+
+# Den gamla dokumentationen på docs.combineit.se (GitHub Pages) skickar varje sida
+# vidare till samma sida på www.combineit.se/docs (docs-internal#54).
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  bygg:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Skapa omdirigeringssidorna
+        run: |
+          npm ci
+          npm run forbered
+          find dist-pages -name index.html | wc -l
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist-pages
+
+  publicera:
+    needs: bygg
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

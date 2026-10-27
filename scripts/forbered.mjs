@@ -148,4 +148,24 @@ mkdirSync(wpDir, { recursive: true });
 const rader = wordpressRader.map(([gammal, fil]) => `RewriteRule ^${gammal.replace(/^\//, '').replace(/\/$/, '')}/?$ ${adress(sidor.get(fil).slug)} [R=301,L]`);
 writeFileSync(join(wpDir, 'htaccess-docs.txt'), ['# Lägg in före WordPress-reglerna i .htaccess', ...rader, ''].join('\n'));
 
+// docs.combineit.se (gamla MkDocs-sajten på GitHub Pages) skickas vidare till samma sida på
+// www.combineit.se/docs. MkDocs-adressen är filens sökväg, README.md blir mappen.
+const pagesDir = join(ROT, 'dist-pages');
+rmSync(pagesDir, { recursive: true, force: true });
+const omdirigering = (mal) =>
+	`<!doctype html><html lang="en"><head><meta charset="utf-8"><title>Moved to www.combineit.se/docs</title>` +
+	`<link rel="canonical" href="${mal}"><meta name="robots" content="noindex"><meta http-equiv="refresh" content="0; url=${mal}">` +
+	`<script>location.replace(${JSON.stringify(mal)} + location.hash)</script></head>` +
+	`<body><p>This page has moved to <a href="${mal}">${mal}</a>.</p></body></html>\n`;
+const PROD = 'https://www.combineit.se/docs';
+for (const [rel, { slug }] of sidor) {
+	const mkdocsVag = rel.replace(/(^|\/)README\.md$/, '$1').replace(/\.md$/, '/');
+	const ut = join(pagesDir, mkdocsVag, 'index.html');
+	mkdirSync(dirname(ut), { recursive: true });
+	writeFileSync(ut, omdirigering(slug ? `${PROD}/${slug}/` : `${PROD}/`));
+}
+writeFileSync(join(pagesDir, '404.html'), omdirigering(`${PROD}/`));
+writeFileSync(join(pagesDir, 'CNAME'), 'docs.combineit.se\n');
+writeFileSync(join(pagesDir, '.nojekyll'), '');
+
 console.log(`${sidor.size} sidor förberedda, ${wordpressRader.length} omdirigeringar för WordPress`);
