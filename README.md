@@ -31,5 +31,6 @@ Bygget är Astro Starlight. `scripts/forbered.mjs` gör om `docs/` till sidor i 
 | Publicera till combineit.se/docs | Startas för hand, skriv PUBLICERA | Bygger, laddar upp till en ny mapp och byter in den på /docs |
 | Backa publiceringen | Startas för hand, skriv BACKA | Lägger tillbaka föregående version |
 | Omdirigeringar i WordPress | Startas för hand efter publiceringen, skriv OMDIRIGERA | Lägger in 301 för BetterDocs kategori- och taggsidor i WordPress `.htaccess`, med kopia och automatisk återställning |
+| Rotfiler i WordPress | Startas för hand, skriv ROTFILER | Lägger `robots.txt` och `llms.txt` i roten på www.combineit.se. Kör igen när sidor har lagts till, så att llms.txt följer med |
 
 Kategori- och taggadresserna från BetterDocs ligger utanför /docs. Deras 301-regler skrivs till `dist-wordpress/htaccess-docs.txt` vid bygget och läggs in i WordPress `.htaccess` av flödet ovan. Bara adresser som börjar med /docs-category/ och /docs-tag/ berörs.
