@@ -75,8 +75,14 @@ jobs:
       - name: Kontrollera att sajten svarar
         run: |
           sleep 5
+          # Servern kan svara långsamt eller med 429 direkt efter uppladdningen, så varje adress får några försök
           for adress in /docs/ /docs/introduction/ /docs/web-connect-objects/; do
-            kod=$(curl -s -o /dev/null -w "%{http_code}" "https://www.combineit.se$adress")
-            echo "$adress $kod"
+            for forsok in 1 2 3 4 5; do
+              kod=$(curl -s -o /dev/null -m 30 -w "%{http_code}" "https://www.combineit.se$adress" || true)
+              echo "$adress $kod (försök $forsok)"
+              [ "$kod" = 200 ] && break
+              sleep 15
+            done
             [ "$kod" = 200 ] || exit 1
+            sleep 2
           done
