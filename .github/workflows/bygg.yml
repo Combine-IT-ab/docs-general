@@ -37,6 +37,9 @@ jobs:
       - name: Kontrollera gamla adresser i bygget
         run: python3 adresser/kolla.py --strikt --bygge dist
 
+      - name: Kontrollera interna länkar
+        run: python3 scripts/kolla_lankar.py dist /docs
+
       - name: Bygg förhandsvisningen
         if: github.event_name != 'pull_request'
         env:
