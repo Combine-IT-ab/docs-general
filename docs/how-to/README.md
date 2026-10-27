@@ -17,6 +17,8 @@ Step-by-step guides for common tasks and troubleshooting across Combine IT produ
 - [Prevent endless retries when content creation fails](web-connect/limit-content-creation-retries.md)
 - [Order fails: customer template not found because Billing Country is empty](web-connect/customer-template-not-found-missing-billing-country.md)
 - [A Ready Integrations field is not visible or not editable](web-connect/integration-field-not-visible-enable-feature.md)
+- [Outgoing triggers do not fire: no entry in Outgoing Data](web-connect/outgoing-triggers-missing-permission.md)
+- [Nothing downloads to Business Central](web-connect/nothing-downloads-to-business-central.md)
 
 ## Easy Connect
 
