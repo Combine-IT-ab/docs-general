@@ -148,6 +148,54 @@ mkdirSync(wpDir, { recursive: true });
 const rader = wordpressRader.map(([gammal, fil]) => `RewriteRule ^${gammal.replace(/^\//, '').replace(/\/$/, '')}/?$ ${adress(sidor.get(fil).slug)} [R=301,L]`);
 writeFileSync(join(wpDir, 'htaccess-docs.txt'), ['# Lägg in före WordPress-reglerna i .htaccess', ...rader, ''].join('\n'));
 
+// robots.txt och llms.txt i WordPress rot, läggs upp med workflowet "Rotfiler i WordPress" (docs-internal#51).
+// robots.txt ersätter den som WordPress skapar själv och pekar även på sitemapen för /docs.
+// llms.txt är en innehållsförteckning för AI-assistenter, se llmstxt.org.
+const SAJT = 'https://www.combineit.se';
+writeFileSync(join(wpDir, 'robots.txt'), [
+	'User-agent: *',
+	'Disallow: /wp-admin/',
+	'Allow: /wp-admin/admin-ajax.php',
+	'',
+	`Sitemap: ${SAJT}/wp-sitemap.xml`,
+	`Sitemap: ${SAJT}/docs/sitemap-index.xml`,
+	'',
+].join('\n'));
+// Första stycket i brödtexten blir sidans beskrivning, om frontmatter saknar description
+const beskrivning = ({ data, body }) => {
+	if (data.description) return data.description;
+	// Hoppar över rubriker, tabeller, listor, kod och korta fältrader som "Direction: ..." eller svenskt vynamn
+	const text = body.split(/\n\s*\n/)
+		.map((s) => s.trim())
+		.filter((s) => s && !/^[#|<>`!-]/.test(s) && !/^\d+\./.test(s))
+		.map((s) => s.replace(/\[([^\]]+)\]\([^)]+\)/g, '$1').replace(/[*_`]/g, '').replace(/\s+/g, ' '))
+		.find((s) => !/^(Direction|Error message|Swedish Business Central view name):/.test(s));
+	if (!text) return '';
+	return text.length > 200 ? `${text.slice(0, 197).replace(/\s\S*$/, '')}...` : text;
+};
+const llmsRader = (post, vag = []) => {
+	const [etikett, varde] = Object.entries(post)[0];
+	if (typeof varde !== 'string') return varde.flatMap((p) => llmsRader(p, [...vag, etikett]));
+	const sida = sidor.get(varde);
+	const namn = [...vag.slice(1), etikett].filter((d) => d !== 'Overview').join(' / ') || sida.data.title;
+	const text = beskrivning(sida);
+	return [`- [${namn}](${SAJT}/docs/${sida.slug ? `${sida.slug}/` : ''})${text ? `: ${text}` : ''}`];
+};
+const start = sidor.get('README.md');
+const llms = [
+	'# CombineIT',
+	'',
+	`> ${beskrivning(start)}`,
+	'',
+	`CombineIT AB builds apps for Microsoft Dynamics 365 Business Central. Full documentation: ${SAJT}/docs/`,
+	...meny.filter((p) => typeof Object.values(p)[0] !== 'string').flatMap((p) => {
+		const [etikett, varde] = Object.entries(p)[0];
+		return ['', `## ${etikett}`, '', ...varde.flatMap((u) => llmsRader(u, [etikett]))];
+	}),
+	'',
+];
+writeFileSync(join(wpDir, 'llms.txt'), llms.join('\n'));
+
 // docs.combineit.se (gamla MkDocs-sajten på GitHub Pages) skickas vidare till samma sida på
 // www.combineit.se/docs. MkDocs-adressen är filens sökväg, README.md blir mappen.
 const pagesDir = join(ROT, 'dist-pages');

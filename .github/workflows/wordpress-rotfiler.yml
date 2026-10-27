@@ -1,0 +1,91 @@
+name: Rotfiler i WordPress
+
+# Startas för hand (docs-internal#51). Lägger robots.txt och llms.txt i roten på
+# www.combineit.se. Inga andra filer i WordPress berörs.
+# robots.txt ersätter den som WordPress skapar själv och pekar även på sitemapen för /docs.
+# Fanns filerna sedan tidigare sparas en kopia på servern. Svarar inte sajten efteråt
+# läggs kopian tillbaka, eller tas filen bort om den inte fanns innan.
+on:
+  workflow_dispatch:
+    inputs:
+      bekrafta:
+        description: 'Skriv ROTFILER för att lägga upp robots.txt och llms.txt'
+        required: true
+
+permissions:
+  contents: read
+
+concurrency:
+  group: publicera
+  cancel-in-progress: false
+
+jobs:
+  rotfiler:
+    if: github.event.inputs.bekrafta == 'ROTFILER' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    env:
+      SFTP_USER: ${{ secrets.ONECOM_SFTP_USER }}
+      LFTP_PASSWORD: ${{ secrets.ONECOM_SFTP_PASSWORD }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Skapa filerna
+        run: |
+          npm ci
+          npm run forbered
+          cat dist-wordpress/robots.txt
+          head -20 dist-wordpress/llms.txt
+
+      - name: Installera lftp
+        run: sudo apt-get update -q && sudo apt-get install -y -q lftp
+
+      - name: Ladda upp, med kopia på servern om filen fanns
+        run: |
+          mkdir -p ~/.ssh
+          ssh-keyscan -p 22 ssh.combineit.se >> ~/.ssh/known_hosts
+          tid=$(date +%Y%m%d%H%M%S)
+          for fil in robots.txt llms.txt; do
+            if lftp --env-password -u "$SFTP_USER" sftp://ssh.combineit.se -e "set cmd:fail-exit yes; cls webroots/www/$fil; bye" >/dev/null 2>&1; then
+              echo "$fil fanns, sparar kopia som $fil.fore-$tid"
+              lftp --env-password -u "$SFTP_USER" sftp://ssh.combineit.se -e "set cmd:fail-exit yes; mv webroots/www/$fil webroots/www/$fil.fore-$tid; bye"
+              echo "$fil=$fil.fore-$tid" >> kopior.txt
+            else
+              echo "$fil fanns inte tidigare"
+            fi
+          done
+          lftp --env-password -u "$SFTP_USER" sftp://ssh.combineit.se -e "set cmd:fail-exit yes; put dist-wordpress/robots.txt -o webroots/www/robots.txt; put dist-wordpress/llms.txt -o webroots/www/llms.txt; bye"
+
+      - name: Kontrollera, annars backa
+        run: |
+          # 429 betyder att servern begränsar antalet anrop för stunden, inte att sajten är trasig
+          hamta() {
+            for forsok in 1 2 3 4 5 6; do
+              kod=$(curl -s -m 30 -o svar.txt -w "%{http_code}" "https://www.combineit.se$1?kontroll=$RANDOM" || true)
+              [ "$kod" = 429 ] || break
+              sleep $((forsok * 10))
+            done
+            echo "$1 $kod" >&2
+            echo "$kod"
+          }
+          fel=0
+          [ "$(hamta /)" = 200 ] || fel=1
+          [ "$(hamta /robots.txt)" = 200 ] && grep -q 'docs/sitemap-index.xml' svar.txt || fel=1
+          [ "$(hamta /llms.txt)" = 200 ] && grep -q '^# CombineIT' svar.txt || fel=1
+          if [ "$fel" = 1 ]; then
+            echo "::error::Sajten svarar inte som väntat, backar"
+            for fil in robots.txt llms.txt; do
+              kopia=$(grep "^$fil=" kopior.txt 2>/dev/null | cut -d= -f2 || true)
+              if [ -n "$kopia" ]; then
+                lftp --env-password -u "$SFTP_USER" sftp://ssh.combineit.se -e "rm webroots/www/$fil; mv webroots/www/$kopia webroots/www/$fil; bye" || true
+              else
+                lftp --env-password -u "$SFTP_USER" sftp://ssh.combineit.se -e "rm webroots/www/$fil; bye" || true
+              fi
+            done
+            exit 1
+          fi
+          echo "Klart. Töm cachen i WP Admin om robots.txt fortfarande visar den gamla versionen."
