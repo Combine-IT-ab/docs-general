@@ -134,7 +134,8 @@ const tillMeny = (post) => {
 	if (typeof varde === 'string') {
 		const sida = sidor.get(varde);
 		if (!sida) throw new Error(`meny.yml pekar på ${varde}, som inte finns`);
-		return { label: etikett, link: adress(sida.slug) };
+		// Starlight lägger själv till basen (/docs) framför menylänkar
+		return { label: etikett, link: sida.slug ? `/${sida.slug}/` : '/' };
 	}
 	return { label: etikett, collapsed: true, items: varde.map(tillMeny) };
 };
