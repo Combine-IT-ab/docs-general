@@ -18,3 +18,5 @@
 - [Prevent endless retries when content creation fails](limit-content-creation-retries.md)
 - [Order fails: customer template not found because Billing Country is empty](customer-template-not-found-missing-billing-country.md)
 - [A Ready Integrations field is not visible or not editable](integration-field-not-visible-enable-feature.md)
+- [Outgoing triggers do not fire: no entry in Outgoing Data](outgoing-triggers-missing-permission.md)
+- [Nothing downloads to Business Central](nothing-downloads-to-business-central.md)
