@@ -27,7 +27,7 @@ Platform-specific documentation for each external system connected via Web Conne
 |---|---|
 | [Centra](integrations/centra/overview.md) | E-commerce platform — orders, stock, products, shipments |
 | [Virtual Stock](integrations/virtual-stock/overview.md) | Dropship marketplace platform |
-| [Shopify](integrations/shopify/README.md) | E-commerce platform *(coming soon)* |
+| [Shopify](integrations/shopify/README.md) | E-commerce platform: orders, products, prices, stock and shipments |
 
 ---
 
