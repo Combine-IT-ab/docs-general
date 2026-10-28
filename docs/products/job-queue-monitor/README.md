@@ -7,7 +7,7 @@ type: product
 
 ## Overview
 
-Job Queue Monitor is a Combine IT extension for Microsoft Business Central that continuously monitors and manages background jobs running in Job Queue Entries.
+Job Queue Monitor is a CombineIT extension for Microsoft Business Central that continuously monitors and manages background jobs running in Job Queue Entries.
 
 ## What Job Queue Monitor Does
 

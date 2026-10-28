@@ -1,5 +1,7 @@
 # How do I resend an outgoing message from Web Connect Outgoing Data?
 
+Open Web Connect Outgoing Data, select the row, run Set Marked to Non-Synced and then Generate Web Entry of Marked. The Job Queue sends the message again on its next run.
+
 > ⚠️ Changes to Web Connect in a production environment are sensitive and may cause integrations to stop working if configured incorrectly. We strongly recommend testing all changes in a test/sandbox environment first. If you are unsure, contact us before making changes.
 
 ## When Is This Used?

@@ -1,6 +1,6 @@
-# Combine IT Documentation
+# CombineIT Documentation
 
-Welcome to the official documentation for Combine IT's products for Microsoft Business Central.
+Documentation for CombineIT's apps for Microsoft Dynamics 365 Business Central: Web Connect for integrations with e-commerce, WMS, POS and other systems, Easy Connect for intercompany flows and Job Queue Monitor for background jobs. All three are installed in your own Business Central and configured there.
 
 ## Products
 

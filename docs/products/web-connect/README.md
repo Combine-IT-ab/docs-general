@@ -7,7 +7,7 @@ appsource: "https://marketplace.microsoft.com/sv-se/product/PUBID.martitab163395
 ---
 # Web Connect
 
-**Web Connect** is Combine-IT's integration engine for Microsoft Dynamics 365 Business Central. It handles authentication, data mapping, triggers, conditions, and error handling for all connected external platforms.
+**Web Connect** is CombineIT's integration engine for Microsoft Dynamics 365 Business Central. It handles authentication, data mapping, triggers, conditions, and error handling for all connected external platforms.
 
 ---
 

@@ -2,7 +2,7 @@
 
 _Swedish Business Central view name: Web Connect Logistikinställningar_
 
-This page defines how Microsoft Business Central communicates with external logistics systems such as Warehouse Management Systems, Point-of-Sale systems, and Return & Exchange platforms.\
+Web Connect Logistics Setup defines how Microsoft Business Central communicates with external logistics systems such as Warehouse Management Systems, Point-of-Sale systems, and Return & Exchange platforms.\
 It builds on the foundation created in **Web Connect Integrations** and the structure defined in **Web Connect Objects**.
 
 _As always: we recommend modifying object structure through [Web Connect Incoming Data](incoming-data/README.md) or [Web Connect Outgoing Data](outgoing-mapping/outgoing-data-web.md) not manually on the object tree._
