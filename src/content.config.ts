@@ -19,6 +19,7 @@ export const collections = {
 				keywords: z.array(z.string()).optional(),
 				lang: z.string().optional(),
 				translation_key: z.string().optional(),
+				appsource: z.string().url().optional(),
 				faq: z.array(z.object({ question: z.string(), answer: z.string() })).optional(),
 			}),
 		}),

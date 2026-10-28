@@ -1,3 +1,8 @@
+---
+summary: "Easy Connect by CombineIT is an extension for Microsoft Dynamics 365 Business Central that automates intercompany flows between companies in the same group: order synchronization, central master data distribution and intercompany pricing. It is installed in your own Business Central and configured there."
+product: easy-connect
+type: product
+---
 # Easy Connect
 
 ## Overview

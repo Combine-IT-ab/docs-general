@@ -1,3 +1,8 @@
+---
+summary: "Job Queue Monitor by CombineIT is an extension for Microsoft Dynamics 365 Business Central that monitors Job Queue Entries, detects jobs that fail, run too long or stop responding, restarts them automatically and sends email notifications. It is installed in your own Business Central and configured there."
+product: job-queue-monitor
+type: product
+---
 # Job Queue Monitor
 
 ## Overview

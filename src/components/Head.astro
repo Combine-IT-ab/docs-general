@@ -30,9 +30,25 @@ const faq = data.faq?.length
 			})),
 		}
 	: null;
+// Produktsidor (type: product) beskrivs också som programvara
+const produkt =
+	data.type === 'product'
+		? {
+				'@context': 'https://schema.org',
+				'@type': 'SoftwareApplication',
+				name: data.title,
+				description: data.summary ?? data.description,
+				url,
+				applicationCategory: 'BusinessApplication',
+				operatingSystem: 'Microsoft Dynamics 365 Business Central',
+				publisher: utgivare,
+				...(data.appsource && { downloadUrl: data.appsource, sameAs: data.appsource }),
+			}
+		: null;
 ---
 
 <Default />
 {forhandsvisning && <meta name="robots" content="noindex, nofollow" />}
 <script type="application/ld+json" set:html={JSON.stringify(artikel)} />
+{produkt && <script type="application/ld+json" set:html={JSON.stringify(produkt)} />}
 {faq && <script type="application/ld+json" set:html={JSON.stringify(faq)} />}
