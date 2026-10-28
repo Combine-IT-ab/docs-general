@@ -24,6 +24,10 @@ Step-by-step guides for common tasks and troubleshooting across CombineIT produc
 
 - [Orders are not being handled automatically](easy-connect/orders-not-handled-automatically.md)
 
+## Orderly Trust
+
+- [How to create or edit an order status and its conditions](orderly-trust/create-or-edit-order-status.md)
+
 ## Job Queue Monitor
 
 - [How to configure and activate Job Queue Monitor](../products/job-queue-monitor/how-to-configure.md)

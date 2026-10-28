@@ -81,6 +81,9 @@ nav:
     - Easy Connect:
       - Overview: how-to/easy-connect/README.md
       - Orders Not Handled Automatically: how-to/easy-connect/orders-not-handled-automatically.md
+    - Orderly Trust:
+      - Overview: how-to/orderly-trust/README.md
+      - Create or Edit an Order Status: how-to/orderly-trust/create-or-edit-order-status.md
     - Job Queue Monitor:
       - How to Configure and Activate: products/job-queue-monitor/how-to-configure.md
 
