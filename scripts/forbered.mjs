@@ -111,12 +111,26 @@ const ritaMermaid = (kod) => {
 };
 const ritaDiagram = (body) => body.replace(/^```mermaid\s*\n([\s\S]*?)^```\s*$/gm, (_, kod) => ritaMermaid(kod));
 
+// Första stycket i brödtexten blir sidans beskrivning, om frontmatter saknar description
+const beskrivning = ({ data, body }) => {
+	if (data.description) return data.description;
+	// Hoppar över rubriker, tabeller, listor, kod och korta fältrader som "Direction: ..." eller svenskt vynamn
+	const text = body.split(/\n\s*\n/)
+		.map((s) => s.trim())
+		.filter((s) => s && !/^[#|<>`!-]/.test(s) && !/^\d+\./.test(s))
+		.map((s) => s.replace(/\[([^\]]+)\]\([^)]+\)/g, '$1').replace(/[*_`]/g, '').replace(/\s+/g, ' '))
+		.find((s) => !/^(Direction|Error message|Swedish Business Central view name):/.test(s));
+	if (!text) return '';
+	return text.length > 200 ? `${text.slice(0, 197).replace(/\s\S*$/, '')}...` : text;
+};
+
 rmSync(MAL, { recursive: true, force: true });
 for (const [rel, { slug, data, body }] of sidor) {
 	const malRel = rel.replace(/(^|\/)README\.md$/, '$1index.md');
 	const ut = join(MAL, malRel);
 	mkdirSync(dirname(ut), { recursive: true });
-	const nyData = { ...data, slug: slug || undefined };
+	// Utan egen beskrivning får alla sidor sajtens standardtext i Google (docs-internal#51)
+	const nyData = { ...data, slug: slug || undefined, description: beskrivning({ data, body }) || undefined };
 	if (slug === '') delete nyData.slug;
 	const text = ritaDiagram(skrivOmBilder(rel, skrivOmLankar(rel, body)));
 	writeFileSync(ut, matter.stringify(text, JSON.parse(JSON.stringify(nyData))));
@@ -161,18 +175,6 @@ writeFileSync(join(wpDir, 'robots.txt'), [
 	`Sitemap: ${SAJT}/docs/sitemap-index.xml`,
 	'',
 ].join('\n'));
-// Första stycket i brödtexten blir sidans beskrivning, om frontmatter saknar description
-const beskrivning = ({ data, body }) => {
-	if (data.description) return data.description;
-	// Hoppar över rubriker, tabeller, listor, kod och korta fältrader som "Direction: ..." eller svenskt vynamn
-	const text = body.split(/\n\s*\n/)
-		.map((s) => s.trim())
-		.filter((s) => s && !/^[#|<>`!-]/.test(s) && !/^\d+\./.test(s))
-		.map((s) => s.replace(/\[([^\]]+)\]\([^)]+\)/g, '$1').replace(/[*_`]/g, '').replace(/\s+/g, ' '))
-		.find((s) => !/^(Direction|Error message|Swedish Business Central view name):/.test(s));
-	if (!text) return '';
-	return text.length > 200 ? `${text.slice(0, 197).replace(/\s\S*$/, '')}...` : text;
-};
 const llmsRader = (post, vag = []) => {
 	const [etikett, varde] = Object.entries(post)[0];
 	if (typeof varde !== 'string') return varde.flatMap((p) => llmsRader(p, [...vag, etikett]));
