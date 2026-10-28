@@ -1,5 +1,7 @@
 # How to Split Cash Payment Method per Store
 
+You can split the incoming payment method CASH into one payment method per store, for example CASH-STORE1 and CASH-STORE2, with a mapping line, a condition and a text mapping in Web Connect. Other payment methods are not affected.
+
 > ⚠️ Changes to Web Connect in a production environment are sensitive and may cause integrations to stop working if configured incorrectly. We strongly recommend testing all changes in a test/sandbox environment first. If you are unsure, contact us before making changes.
 
 ## Goal

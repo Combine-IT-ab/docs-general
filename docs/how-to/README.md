@@ -1,6 +1,6 @@
 # How-to Guides
 
-Step-by-step guides for common tasks and troubleshooting across Combine IT products.
+Step-by-step guides for common tasks and troubleshooting across CombineIT products.
 
 ## Web Connect
 
