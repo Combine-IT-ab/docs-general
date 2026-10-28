@@ -39,9 +39,9 @@ Web Connect by CombineIT connects Microsoft Dynamics 365 Business Central with S
 |---|---|
 | **System** | Shopify (e-commerce for consumers and B2B) |
 | **Integration product** | Web Connect for Microsoft Dynamics 365 Business Central |
-| **Runs in** | Your own Business Central environment, as an extension. When an order is created, Shopify notifies Web Connect with a webhook. The webhook is received by an Azure endpoint that only passes it on to Web Connect, which then fetches the full order from Shopify. Changes in Business Central are sent to Shopify when they happen. All processing and configuration stays in Business Central. |
+| **Runs in** | Your own Business Central environment, as an extension. Web Connect fetches new orders from Shopify on a schedule in the Business Central job queue and sends changes to Shopify when they happen. No external integration platform is involved. |
 | **Configured by** | You, in Business Central: mappings, conditions, triggers and flows. You can do all of it yourself. If you want, CombineIT takes part in any step, as a sounding board or by doing the work. |
-| **Connection** | Shopify GraphQL Admin API and Shopify webhooks |
+| **Connection** | Shopify GraphQL Admin API |
 | **Shopify API** | [Shopify GraphQL Admin API](https://shopify.dev/docs/api/admin-graphql) |
 | **Data flows** | 4: orders (with customers), products and prices, stock and shipments |
 | **Business Central editions** | Essentials and Premium |
@@ -62,7 +62,7 @@ The order flow is part of every integration. The other flows are chosen when the
 
 ## How it works
 
-When an order is created in Shopify, a webhook tells Web Connect which order it is. Web Connect fetches the full order with a GraphQL query: lines, prices, discounts, taxes, shipping lines, transactions, addresses and, for B2B orders, the company. It identifies the customer, creates the sales order in Business Central and fetches the order's fulfillment orders from Shopify, so that shipments can later be reported line by line. When something changes in Business Central (a product is released, stock moves, a shipment is posted), an outgoing sync trigger in Web Connect sends the change to Shopify. Every message in both directions is logged in Web Connect Entries, where it can be inspected and resent.
+Web Connect asks Shopify for new orders on a schedule, using a GraphQL query. For each order it fetches the full order: lines, prices, discounts, taxes, shipping lines, transactions, addresses and, for B2B orders, the company. It identifies the customer, creates the sales order in Business Central and fetches the order's fulfillment orders from Shopify, so that shipments can later be reported line by line. When something changes in Business Central (a product is released, stock moves, a shipment is posted), an outgoing sync trigger in Web Connect sends the change to Shopify. Every message in both directions is logged in Web Connect Entries, where it can be inspected and resent.
 
 ```mermaid
 graph LR
@@ -70,8 +70,7 @@ graph LR
     B["⚙️ Web Connect<br/>(Business Central extension)"]
     C["🔄 Business Central<br/>(ERP)"]
 
-    A -->|Webhook: order created| B
-    B -->|Fetch full order| A
+    B -->|Fetch new orders on a schedule| A
     B -->|Create sales order and customer| C
     C -->|Product, price or stock changed| B
     B -->|Create or update product, adjust stock| A
@@ -129,12 +128,12 @@ Customer and shipping information on the order is always taken from Shopify.
 3. Install the Web Connect Ready Integrations app in the same environment and activate the Shopify integration.
 4. Create the app in Shopify and store its credentials in Web Connect [Secret Value Storage](../../general/secret-value-storage.md).
 5. Fetch the Shopify locations into Web Connect and map them to Business Central locations.
-6. Set up the configuration choices below, and the order webhook in Shopify.
+6. Set up the configuration choices below, and the job queue entry that fetches orders.
 7. Test the whole order flow in a Business Central sandbox against a Shopify development store before going live.
 
 ## Configure it yourself in Business Central
 
-All configuration and logic in the integration is visible and editable in Business Central. There is no external integration platform where the logic is hidden. The Azure endpoint that receives webhooks only passes the call on to Web Connect.
+All configuration and logic in the integration is visible and editable in Business Central. There is no external integration platform where the logic is hidden.
 
 | What you can change | Where in Web Connect | Example |
 |---|---|---|
