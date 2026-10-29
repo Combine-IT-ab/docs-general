@@ -115,6 +115,26 @@ Orders from department stores or third-party marketplaces sold through Centra. E
 - **Item matching:** Configure how items in Centra orders are matched to BC items (typically via EAN or product ID)
 - **Shipping fee mapping:** Inbound orders include a shipping cost from Centra. Configure how this is posted in BC via the Web Connect Codeunit Setup Card (Shipping Fee Type + Shipping Fee No.). Options include posting to a G/L account, creating a shipping item line, or using BC Item Charges.
 - **Fetch schedule:** how often the job queue entry fetches new orders from Centra
+- **Discounts and vouchers:** see [Discounts Applied](#discounts-applied) below
+
+### Discounts Applied
+
+Centra sends order-level discounts, vouchers and gift card redemptions as `discountsApplied` on the order (object `CA_DISCOUNTSAPPLIED` with `CA_VALUE1`). Without a mapping, these amounts do not reach the Sales Order and the order total in BC will not match Centra.
+
+Map `CA_VALUE1` to a Sales Line (table 37). Two common setups:
+
+| Setup | Line Type | No. | Use when |
+|---|---|---|---|
+| G/L account | G/L Account | The discount account, for example a revenue deduction account | Discount codes and vouchers that are a pure price reduction |
+| Item | Item | A dedicated item, for example a gift card item | Gift cards, or when the customer wants to follow up redemptions per item |
+
+Set the **VAT Prod. Posting Group** on the line explicitly.
+
+Things to know:
+
+- **VAT on gift cards.** Centra sends the purchase of a gift card without VAT, but the redemption as an amount plus VAT and expects a VAT amount on the discount. If all products carry the same VAT rate, a fixed VAT setup on the discount line is enough.
+- **Discounts without a value.** A line discount in Centra also produces a `discountsApplied` entry, but without a value. Ignore entries without a value, otherwise they create empty lines.
+- **Different discount types.** If Centra sends several kinds of values (gift card, voucher, discount code) that should be posted differently, extend the GraphQL query to include the type and add a condition per type.
 
 ---
 

@@ -38,6 +38,19 @@ Field| Description
 **Return Fee Condition**| Condition that must evaluate TRUE for fee to be added.
 **Special Return Item**| Specific Business Central Item No. to use for fee lines. If blank uses “Add Item On Return” from Logistics Setup.
 
+### Tip: Use the External Value as the Code
+
+Set **Code** to exactly the value the external system sends, including numeric IDs such as `1001`. Web Connect then matches the incoming value directly, and no [Text Mapping](text-mapping.md) is needed on the incoming side. Use **Description** for the readable name.
+
+Example: a WMS sends `ReturnRowDeviationId` with the values `1001` (other reason) and `1002` (complaint).
+
+Code| Description| Return Reason Code| Location Code
+---|---|---|---
+1001| Other reason| RETURN| MAIN
+1002| Complaint| COMPLAINT| SCRAP
+
+If the external system later introduces new IDs, add new rows and keep the old ones until no returns with the old IDs remain.
+
 ### Behaviour and Return Flow Examples
 
 #### Example: WMS Return “DAMAGED”
