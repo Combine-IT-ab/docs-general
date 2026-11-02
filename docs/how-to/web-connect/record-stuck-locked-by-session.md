@@ -16,6 +16,15 @@ Recent versions of Web Connect have a **Locked by Session** field on incoming da
 2. Run the action **Reset to Mark Content**. This clears the session ID.
 3. The record is processed on the next job queue run.
 
+## Retry a Record That Failed
+
+The same action is used to retry an incoming record that failed with an error, once the cause is fixed. A common case is an order or invoice that stopped because a dimension value did not exist in Business Central.
+
+1. Fix the cause, for example create the missing dimension value.
+2. Open **Web Connect Incoming Data** and select the record with the error.
+3. Run **Reset to Mark Content**.
+4. The record is processed again on the next job queue run.
+
 ## Related
 
 - [Web Connect Incoming Data](../../products/web-connect/general/incoming-data/README.md)
