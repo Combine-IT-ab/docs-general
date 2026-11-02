@@ -78,6 +78,7 @@ nav:
       - Ready Integrations Field Not Visible: how-to/web-connect/integration-field-not-visible-enable-feature.md
       - "Outgoing Triggers Do Not Fire: Missing Permission": how-to/web-connect/outgoing-triggers-missing-permission.md
       - Nothing Downloads to Business Central: how-to/web-connect/nothing-downloads-to-business-central.md
+      - "Filter Not Valid: Excluding a Range": how-to/web-connect/filter-not-valid-exclude-range.md
     - Easy Connect:
       - Overview: how-to/easy-connect/README.md
       - Orders Not Handled Automatically: how-to/easy-connect/orders-not-handled-automatically.md

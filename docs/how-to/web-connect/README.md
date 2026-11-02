@@ -20,3 +20,4 @@
 - [A Ready Integrations field is not visible or not editable](integration-field-not-visible-enable-feature.md)
 - [Outgoing triggers do not fire: no entry in Outgoing Data](outgoing-triggers-missing-permission.md)
 - [Nothing downloads to Business Central](nothing-downloads-to-business-central.md)
+- ["The filter is not valid for the field" when excluding a range](filter-not-valid-exclude-range.md)
