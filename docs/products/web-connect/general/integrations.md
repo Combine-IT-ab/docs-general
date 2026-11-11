@@ -36,6 +36,7 @@ All [Web Connect Objects](objects.md), incoming flows and outgoing flows belong 
 | **HTTP Method Delete** | The method used when a record is deleted, usually `DELETE`, or `POST` for GraphQL. |
 | **HTTP Content Type** | The `Content-Type` header on requests, for example `application/json`. |
 | **Accept HTTP Content Type** | The `Accept` header on requests, for example `application/json`. |
+| **Data Array Jpath** | The path to the list of records when the external system wraps them in a response object, for example `Items`. Leave it empty when the response is the list itself. |
 
 Individual [objects](objects.md) can override the HTTP methods when one endpoint needs another method than the rest of the integration.
 
@@ -67,7 +68,7 @@ Individual [objects](objects.md) can override the HTTP methods when one endpoint
 
 ### Fields not used in standard setups
 
-The card also has the fields **Shared External ID**, **Swagger / API Definition**, **Port Number**, **Data Array Jpath**, **Acknowledge Link Jpath**, **Web URL Authentication**, **Authentication Token Download** and **Authentication Token Upload**. They are not used in the standard integrations and can be left empty. Authentication is set up through **Authentication Code**.
+The card also has the fields **Shared External ID**, **Swagger / API Definition**, **Port Number**, **Acknowledge Link Jpath**, **Web URL Authentication**, **Authentication Token Download** and **Authentication Token Upload**. They are not used in the standard integrations and can be left empty. Authentication is set up through **Authentication Code**.
 
 ## Configure it yourself in Business Central
 
