@@ -4,9 +4,9 @@
 
 ## Overview
 
-Web Connect Integrations are the top-level configuration objects that define a connection to an external system. Each integration represents one endpoint — for example, a specific e-commerce platform, POS system, or marketplace.
+A Web Connect Integration is the connection to one external system, for example Centra, Shopify or a WMS such as Ongoing. It holds the addresses, HTTP methods, data format and authentication that every object in the integration uses.
 
-All Web Connect Objects, incoming flows, and outgoing flows are configured under an integration.
+All [Web Connect Objects](objects.md), incoming flows and outgoing flows belong to an integration. The integration card is configured in your own Business Central, and you can change every field yourself.
 
 ## Integration Card
 
@@ -14,41 +14,82 @@ All Web Connect Objects, incoming flows, and outgoing flows are configured under
 
 | Field | Description |
 |-------|-------------|
-| **Code** | Unique identifier for the integration. |
-| **Description** | Human-readable name for the integration. |
+| **Integration Source** | The code of the integration. Objects, mappings and entries refer to it. |
+| **Description** | A readable name, for example `Centra GraphQL Integration` or `Ongoing WMS Integration`. |
 | **Enabled** | Whether the integration is active. |
-| **Base URL** | The base URL for the external system's API. |
-| **Timeout (ms)** | HTTP timeout in milliseconds for this integration. Overrides the general setup default. |
+| **Source Type** | How Web Connect reaches the external system. `HTTP Server` is used for API integrations. File exchange through Azure Blob Storage uses the storage fields below. |
+| **Data Type** | The format of the messages, for example `Json`, `GraphQL` or XML. |
+| **Fixed Source Value** | A fixed source that is set on all incoming data from the integration, for example `Centra` or `Ongoing`. Mappings and conditions can be filtered on the source, so that different flows can be handled differently. Use it when the external system does not say in the message where the data comes from. |
+| **Source Identifier JPath** | ATT FYLLA I (Martin): reads the source from the message instead of using a fixed value? |
+| **Web Object Prefix** | ATT FYLLA I (Martin): what the prefix is used for. Examples in use: `CA_`, `ONGOING-`. |
+| **Shared External ID** | ATT FYLLA I (Martin): what changes when this is turned on. |
+| **Comment** | Free text for your own notes. |
+| **Swagger / API Definition** | ATT FYLLA I (Martin): how the API definition is used. |
 
-### HTTP Server Settings
+### Addresses and HTTP methods
 
 | Field | Description |
 |-------|-------------|
-| **HTTP Method** | Default HTTP method used for outgoing requests (POST, PUT, PATCH, etc.). |
-| **Content Type** | The Content-Type header sent with requests (e.g. `application/json`). |
-| **Accept** | The Accept header for incoming responses. |
-| **Additional Headers** | Any extra HTTP headers to include in all requests. |
+| **Web URL Download** | The address that data is downloaded from, for example the GraphQL endpoint of the platform. |
+| **Web URL Upload** | The address that data is sent to. It is often the same as the download address. |
+| **HTTP Method Download** | The method used when downloading, usually `GET`. GraphQL APIs use `POST`. |
+| **HTTP Method Create** | The method used when a new record is created in the external system, usually `POST`. |
+| **HTTP Method Update** | The method used when an existing record is updated, usually `PUT`, or `POST` for GraphQL. |
+| **HTTP Method Delete** | The method used when a record is deleted, usually `DELETE`, or `POST` for GraphQL. |
+| **HTTP Content Type** | The `Content-Type` header on requests, for example `application/json`. |
+| **Accept HTTP Content Type** | The `Accept` header on requests, for example `application/json`. |
+| **Port Number** | ATT FYLLA I (Martin): when a port is needed. `0` is used when the address alone is enough. |
+| **Data Array Jpath** | ATT FYLLA I (Martin): path to the list of records in a downloaded response. |
+| **Acknowledge Link Jpath** | ATT FYLLA I (Martin): path to an acknowledge link in the response. |
+
+Individual [objects](objects.md) can override the HTTP methods when one endpoint needs another method than the rest of the integration.
 
 ### Authentication
 
 | Field | Description |
 |-------|-------------|
-| **Auth Type** | Authentication method: None, Basic, Bearer Token, OAuth 2.0, or API Key. |
-| **Username / Client ID** | Used for Basic or OAuth authentication. |
-| **Password / Client Secret** | Used for Basic or OAuth authentication. Stored encrypted. |
-| **Token URL** | OAuth 2.0 token endpoint. |
-| **API Key Header** | Header name for API key authentication (e.g. `X-Api-Key`). |
-| **API Key Value** | The API key value. Stored encrypted. See [Web Connect Secret Value Storage](secret-value-storage.md). |
+| **Authentication Code** | The authentication setup that the integration uses. Keys and passwords are stored in [Secret Value Storage](secret-value-storage.md), not on the integration card. |
+| **Web URL Authentication** | ATT FYLLA I (Martin): address used to fetch a token. |
+| **Authentication Token Download** | ATT FYLLA I (Martin): token used when downloading. |
+| **Authentication Token Upload** | ATT FYLLA I (Martin): token used when sending. |
+| **Client Certificate** | A client certificate for integrations that require certificate authentication. |
+| **Client Certificate Password** | The password of the client certificate. |
 
-### Content Processing
+### Azure Blob Storage
 
 | Field | Description |
 |-------|-------------|
-| **Format** | Data format used: JSON, XML, EDIFACT, or custom. |
-| **Encoding** | Character encoding (default: UTF-8). |
-| **Compress Request** | Whether to GZIP-compress outgoing payloads. |
-| **Root Element** | Root XML element name (XML integrations only). |
-| **Namespace** | XML namespace (XML integrations only). |
+| **ABS Storage Account** | The Azure storage account used for file exchange. |
+| **ABS Container** | The container in the storage account. |
+| **Delete Blob after Process** | Whether a file is deleted from the container after it has been processed. |
+
+### Processing
+
+These fields are only needed when an integration requires special handling. `0` means that the standard handling in Web Connect is used.
+
+| Field | Description |
+|-------|-------------|
+| **Envelope Object** | ATT FYLLA I (Martin): the object that wraps outgoing messages. |
+| **Create Envelope Codeunit** | ATT FYLLA I (Martin): codeunit that builds the envelope. |
+| **Process Codeunit** | ATT FYLLA I (Martin): codeunit that processes incoming data. |
+| **Check New Codeunit** | ATT FYLLA I (Martin): codeunit that checks for new data. |
+| **Authenticate Codeunit** | ATT FYLLA I (Martin): codeunit for authentication that the standard does not cover. |
+| **Web Entry Upload Codeunit** | ATT FYLLA I (Martin): codeunit that sends entries. |
+
+### Monitoring
+
+| Field | Description |
+|-------|-------------|
+| **Monitor E-Mail List** | E-mail addresses that are notified when the integration has errors. |
+
+## Configure it yourself in Business Central
+
+| What you can change | Where | Example |
+|---|---|---|
+| Point the integration to a test or production system | **Web URL Download** and **Web URL Upload** | Switch from the sandbox to the live store after go-live |
+| Handle flows differently per source | **Fixed Source Value** together with [Condition List](condition-list.md) | Map wholesale and retail orders differently |
+| Who is told about errors | **Monitor E-Mail List** | Add the support mailbox |
+| Pause the integration | **Enabled** | Stop all traffic during a planned change in the external system |
 
 ## Related
 
