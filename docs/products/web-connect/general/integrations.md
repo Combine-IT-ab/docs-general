@@ -57,16 +57,7 @@ Individual [objects](objects.md) can override the HTTP methods when one endpoint
 
 ### Processing
 
-These fields are only needed when an integration requires special handling. `0` means that the standard handling in Web Connect is used.
-
-| Field | Description |
-|-------|-------------|
-| **Envelope Object** | ATT FYLLA I (Martin): the object that wraps outgoing messages. |
-| **Create Envelope Codeunit** | ATT FYLLA I (Martin): codeunit that builds the envelope. |
-| **Process Codeunit** | ATT FYLLA I (Martin): codeunit that processes incoming data. |
-| **Check New Codeunit** | ATT FYLLA I (Martin): codeunit that checks for new data. |
-| **Authenticate Codeunit** | ATT FYLLA I (Martin): codeunit for authentication that the standard does not cover. |
-| **Web Entry Upload Codeunit** | ATT FYLLA I (Martin): codeunit that sends entries. |
+**Envelope Object**, **Create Envelope Codeunit**, **Process Codeunit**, **Check New Codeunit**, **Authenticate Codeunit** and **Web Entry Upload Codeunit** are advanced settings for integrations that need special handling. In most integrations they are empty or `0`, and Web Connect uses its standard handling. Leave them as they are unless CombineIT has set them up for your integration.
 
 ### Monitoring
 
