@@ -20,11 +20,9 @@ All [Web Connect Objects](objects.md), incoming flows and outgoing flows belong 
 | **Source Type** | How Web Connect reaches the external system. `HTTP Server` is used for API integrations. File exchange through Azure Blob Storage uses the storage fields below. |
 | **Data Type** | The format of the messages, for example `Json`, `GraphQL` or XML. |
 | **Fixed Source Value** | A fixed source that is set on all incoming data from the integration, for example `Centra` or `Ongoing`. Mappings and conditions can be filtered on the source, so that different flows can be handled differently. Use it when the external system does not say in the message where the data comes from. |
-| **Source Identifier JPath** | ATT FYLLA I (Martin): reads the source from the message instead of using a fixed value? |
-| **Web Object Prefix** | ATT FYLLA I (Martin): what the prefix is used for. Examples in use: `CA_`, `ONGOING-`. |
-| **Shared External ID** | ATT FYLLA I (Martin): what changes when this is turned on. |
+| **Source Identifier JPath** | A path in the message that the source is read from, instead of using **Fixed Source Value**. |
+| **Web Object Prefix** | The prefix that the codes of the integration's [objects](objects.md) start with, for example `CA_` for Centra (`CA_ALLOCATIONS`) or `ONGOING-` for Ongoing. |
 | **Comment** | Free text for your own notes. |
-| **Swagger / API Definition** | ATT FYLLA I (Martin): how the API definition is used. |
 
 ### Addresses and HTTP methods
 
@@ -38,9 +36,6 @@ All [Web Connect Objects](objects.md), incoming flows and outgoing flows belong 
 | **HTTP Method Delete** | The method used when a record is deleted, usually `DELETE`, or `POST` for GraphQL. |
 | **HTTP Content Type** | The `Content-Type` header on requests, for example `application/json`. |
 | **Accept HTTP Content Type** | The `Accept` header on requests, for example `application/json`. |
-| **Port Number** | ATT FYLLA I (Martin): when a port is needed. `0` is used when the address alone is enough. |
-| **Data Array Jpath** | ATT FYLLA I (Martin): path to the list of records in a downloaded response. |
-| **Acknowledge Link Jpath** | ATT FYLLA I (Martin): path to an acknowledge link in the response. |
 
 Individual [objects](objects.md) can override the HTTP methods when one endpoint needs another method than the rest of the integration.
 
@@ -49,9 +44,6 @@ Individual [objects](objects.md) can override the HTTP methods when one endpoint
 | Field | Description |
 |-------|-------------|
 | **Authentication Code** | The authentication setup that the integration uses. Keys and passwords are stored in [Secret Value Storage](secret-value-storage.md), not on the integration card. |
-| **Web URL Authentication** | ATT FYLLA I (Martin): address used to fetch a token. |
-| **Authentication Token Download** | ATT FYLLA I (Martin): token used when downloading. |
-| **Authentication Token Upload** | ATT FYLLA I (Martin): token used when sending. |
 | **Client Certificate** | A client certificate for integrations that require certificate authentication. |
 | **Client Certificate Password** | The password of the client certificate. |
 
@@ -81,6 +73,10 @@ These fields are only needed when an integration requires special handling. `0` 
 | Field | Description |
 |-------|-------------|
 | **Monitor E-Mail List** | E-mail addresses that are notified when the integration has errors. |
+
+### Fields not used in standard setups
+
+The card also has the fields **Shared External ID**, **Swagger / API Definition**, **Port Number**, **Data Array Jpath**, **Acknowledge Link Jpath**, **Web URL Authentication**, **Authentication Token Download** and **Authentication Token Upload**. They are not used in the standard integrations and can be left empty. Authentication is set up through **Authentication Code**.
 
 ## Configure it yourself in Business Central
 
