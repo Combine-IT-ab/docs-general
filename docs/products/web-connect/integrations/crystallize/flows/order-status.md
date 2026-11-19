@@ -35,11 +35,11 @@ As an order is handled in Business Central, Web Connect moves it between stages 
 |---|---|---|
 | In BC | When the sales order has been created from the Crystallize order | Sales order |
 | Confirmed | When the promised delivery date is set on the sales order or on a sales line | Sales order and sales line |
-| Shipment Booked | [ATT FYLLA I: what triggers it, the export has no outgoing sync trigger for this object] | Sales order |
-| Shipped | [ATT FYLLA I: what triggers it, the export has no outgoing sync trigger for this object] | Posted sales shipment |
-| Cancelled | [ATT FYLLA I: what triggers it, for example when the sales order is deleted. The export has no outgoing sync trigger for this object] | Sales order |
+| Shipment Booked | An outgoing sync trigger set per integration, for example when the shipment is booked with the carrier | Sales order |
+| Shipped | An outgoing sync trigger set per integration, for example when the sales shipment is posted | Posted sales shipment |
+| Cancelled | An outgoing sync trigger set per integration, for example when the sales order is cancelled in Business Central | Sales order |
 
-Only sales orders that have a Crystallize order ID are sent.
+Outgoing sync triggers are set per integration after what the business needs, and they are flexible. Usually the fields that are sent to Crystallize are the trigger fields, so a change in one of them sends the record again. Only sales orders that have a Crystallize order ID are sent.
 
 ## Step by step
 
