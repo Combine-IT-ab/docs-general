@@ -25,7 +25,7 @@ Web Connect fetches a contact from Voyado by the Voyado contact ID stored on the
 | | |
 |---|---|
 | **Direction** | Voyado → Business Central |
-| **Trigger** | [ATT FYLLA I: Vad startar hämtningen? Exporten har ingen trigger och ingen jobbkökod på VOYADO_GET_CONTACT.] |
+| **Trigger** | Set up per implementation. The standard configuration has no fixed schedule or trigger for the fetch |
 | **Result** | The e-mail and SMS consent fields on the contact have the values from Voyado |
 | **Part of** | [Business Central and Voyado loyalty and CRM integration](../overview.md) |
 

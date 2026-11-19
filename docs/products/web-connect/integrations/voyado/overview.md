@@ -156,10 +156,10 @@ Points, offers, vouchers and member levels are always maintained in Voyado.
 ## Setting it up
 
 1. Decide which flows to use, see [Choose your setup](#choose-your-setup).
-2. Install Web Connect in Business Central, activate the license and give your approval. [ATT FYLLA I: Installera den färdiga Voyado-integrationen, eller sätt upp objekt, mappningar och triggers i Web Connect som en del av implementationen?]
+2. Install Web Connect in Business Central, activate the license and give your approval. The Voyado integration is not part of the Ready Integrations app. CombineIT goes through your needs, and when another Web Connect customer already uses the same flows, their setup is imported as a configuration file and adjusted to your Business Central. Flows that no other customer uses yet are set up for you, as far as the Voyado API supports them.
 3. Store the Voyado API key in Web Connect [Secret Value Storage](../../general/secret-value-storage.md) and set up the authentication with the `apikey` header.
 4. Map the contact fields, the language codes, the store IDs and the order statuses, see [Configuration choices](#configuration-choices).
-5. Test with a few contacts and orders, with a Business Central sandbox against a Voyado test environment, before going live. [ATT FYLLA I: Bekräfta att testet görs mot en testmiljö i Voyado.]
+5. Test with a few contacts and orders, with a Business Central sandbox against a Voyado test environment, before going live.
 
 ## Configure it yourself in Business Central
 
@@ -194,7 +194,7 @@ All configuration and logic in the integration is visible and editable in Busine
 - **An order needs a Voyado contact ID.** Orders whose contact has not been sent to Voyado are not sent.
 - **Discounts are not sent separately.** The order lines carry the amount paid including VAT. Discount codes and discount amounts are not sent as Voyado discounts in the standard setup.
 - **Payment, delivery and tracking are not sent as Voyado objects.** The payment method, delivery address, shipping agent and contact details of the order are sent in `extraData`. Tracking numbers are not sent.
-- **Returns and credit memos are not part of the integration.** [ATT FYLLA I: Stämmer det att returer inte skickas till Voyado?]
+- **Returns and credit memos are not part of the integration.** Returns are not sent to Voyado in the standard setup.
 - **Points, offers, vouchers and member levels are not synchronized.** They are maintained in Voyado.
 - **The consent fields are not standard.** Business Central has no standard fields for e-mail and SMS consent or for the Voyado contact ID. They come from an extension.
 
