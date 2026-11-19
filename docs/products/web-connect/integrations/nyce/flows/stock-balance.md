@@ -56,7 +56,7 @@ sequenceDiagram
 | `Balance` | Not used for the reconciliation | Excludes locked locations |
 | `InboundAllocatedQuantity`, `OutboundAllocatedQuantity`, `QuantityInOrders` | Not used for the reconciliation | |
 
-[ATT FYLLA I: confirm the field mapping in a current configuration export]
+The balance object only reads these fields. It has no field mapping of its own: the Logistics Setup turns the balance into Item Balance and the physical inventory journal.
 
 ## Web Connect objects
 

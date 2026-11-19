@@ -62,7 +62,7 @@ sequenceDiagram
 | `RequestedDeliveryDate`, `ShipDate` | Shipment date | Left out when blank |
 | `OrderCustomer` | Sell-to customer number, name, address and contact | |
 | `DeliveryCustomer`, `DeliveryCustomerAddress` | Ship-to name and address | |
-| `MainContact` | Ship-to e-mail and phone | |
+| `MainContact` | Ship-to e-mail and phone | When the ship-to phone is blank, the contact's mobile phone is sent instead |
 | `YourReference`, `OrderReference` | Your Reference, order reference | |
 | `Currency` | Currency code | |
 | `OrderType`, `DeliveryWay`, `DeliveryTerm`, `Priority` | Nyce codes | Set with conditions, for example per sales order or transfer order |
