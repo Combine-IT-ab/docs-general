@@ -57,6 +57,7 @@ Mallarna bygger på nulägesmätningen i Combine-IT-ab/docs-internal#47: sökord
 | Plytix | Plytix PIM | PIM |
 | Milient | Milient (formerly Milltime) | time and project management |
 | Keen | Keen member portal | membership |
+| Resourced | Resourced PLM | PLM |
 | Provet Cloud | Provet Cloud | veterinary practice management |
 | Peppol | Peppol | e-invoicing |
 | EDI | EDIFACT EDI | EDI |
