@@ -24,7 +24,7 @@ faq:
   - question: "Why is a purchase order not received in Business Central although the warehouse has put the goods away?"
     answer: "Web Connect only posts the receipt when the purchase order gets one of the statuses set in the logistics setup, for example Lagerlagd or Avvikelse. Ongoing tells Web Connect about the status change with a webhook. If the webhook from Ongoing has stopped, nothing is received. Check Web Connect Entries for incoming status messages, and ask the 3PL to check the webhook in Ongoing."
   - question: "Can we send a customer return to Ongoing?"
-    answer: "Yes. A sales return order in Business Central can be sent to Ongoing. Ongoing only accepts a return order when the original order was shipped from Ongoing, so returns can also be sent as an inbound purchase order. When the warehouse receives the goods, the return receipt is posted in Business Central."
+    answer: "Yes. A sales return order in Business Central can be sent to Ongoing as a return order linked to the original order. Ongoing only accepts a return order when the original order was shipped from Ongoing, so returns can also be sent as an inbound order. When the warehouse receives the goods, the return receipt is posted in Business Central."
   - question: "Can we change what is sent between Business Central and Ongoing ourselves?"
     answer: "Yes. Field mappings, status rules, triggers and which document types are integrated are configured in Web Connect inside your own Business Central. You can see and change them without asking a supplier to change an external platform."
 last_reviewed: 2026-11-19
@@ -60,7 +60,7 @@ Web Connect has nine data flows between Business Central and Ongoing WMS.
 | [Shipments](flows/shipment.md) | Ongoing → Business Central | When the order is shipped in Ongoing, the shipment is posted in Business Central with picked quantities and tracking |
 | [Purchase orders](flows/purchase-order.md) | Business Central → Ongoing | A released purchase order is sent to Ongoing as an inbound order |
 | [Receipts](flows/receipt.md) | Ongoing → Business Central | Received quantities come back from Ongoing, and the receipt can be posted automatically |
-| [Returns](flows/returns.md) | Business Central ↔ Ongoing | A sales return order is sent to Ongoing, and the return receipt is posted when the goods arrive |
+| [Returns](flows/returns.md) | Business Central ↔ Ongoing | A sales return order is sent to Ongoing as a return order or inbound order, and the return receipt is posted when the goods arrive |
 | [Stock adjustments](flows/stock-adjustment.md) | Ongoing → Business Central | Adjustments made in the warehouse are written to an item journal in Business Central |
 | [Stock reconciliation](flows/stock-reconciliation.md) | Ongoing → Business Central | Stock per item is read from Ongoing and differences are put in a physical inventory journal |
 
@@ -187,7 +187,10 @@ flowchart LR
 | Option | How it works | When it fits |
 |---|---|---|
 | **Not integrated** (common setup) | Returns are handled outside the integration | Few returns, or returns go to another location |
-| **Sales return order sent to Ongoing as an inbound order** | The sales return order is created in Business Central from the posted shipment or invoice and sent to Ongoing as an inbound order. When the goods are received, the return receipt is posted in Business Central | You want the return, refund and VAT to follow the original sale in Business Central |
+| **Return order in Ongoing, linked to the original order** | The sales return order is created in Business Central from the posted shipment or invoice and sent to Ongoing as a return order, with the Ongoing ID of the original order and its lines. When the goods are received, the return receipt is posted in Business Central | Every order ships from Ongoing, and you want the warehouse to see which order the return belongs to |
+| **Inbound order in Ongoing** | The sales return order is sent to Ongoing as an inbound order, the same way as a purchase order. When the goods are received, the return receipt is posted in Business Central | Some orders ship from another warehouse or are drop shipped, so Ongoing cannot link the return to an order |
+
+Return orders linked to the original order are set up in a test environment so far. Inbound orders are used in production.
 
 #### Returns not integrated
 
@@ -196,7 +199,17 @@ flowchart LR
     R["👤 Return handled outside the integration"] -.-> BC["🔄 Business Central"]
 ```
 
-#### Sales return order sent to Ongoing
+#### Returns as return orders in Ongoing
+
+```mermaid
+flowchart LR
+    BC["🔄 Business Central<br/>sales return order<br/>copied from the original sale"] --> WC["⚙️ Web Connect"]
+    WC -->|Return order with original order ID| OG["📦 Ongoing WMS"]
+    OG -->|Goods received| WC2["⚙️ Web Connect"]
+    WC2 -->|Post return receipt| BC2["🔄 Business Central"]
+```
+
+#### Returns as inbound orders in Ongoing
 
 ```mermaid
 flowchart LR
@@ -323,7 +336,7 @@ Web Connect only posts the receipt when the purchase order gets one of the statu
 
 ### Can we send a customer return to Ongoing?
 
-Yes. A sales return order in Business Central can be sent to Ongoing. Ongoing only accepts a return order when the original order was shipped from Ongoing, so returns can also be sent as an inbound purchase order. When the warehouse receives the goods, the return receipt is posted in Business Central.
+Yes. A sales return order in Business Central can be sent to Ongoing as a return order linked to the original order. Ongoing only accepts a return order when the original order was shipped from Ongoing, so returns can also be sent as an inbound order. When the warehouse receives the goods, the return receipt is posted in Business Central.
 
 ### Can we change what is sent between Business Central and Ongoing ourselves?
 
