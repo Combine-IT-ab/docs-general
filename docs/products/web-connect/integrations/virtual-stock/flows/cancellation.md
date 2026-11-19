@@ -24,14 +24,14 @@ When order lines from Virtualstock cannot be delivered, for example back-ordered
 | | |
 |---|---|
 | **Direction** | Business Central → Virtualstock |
-| **Trigger** | [ATT FYLLA I: how the cancellation is started. The standard configuration has no outgoing sync trigger for it] |
+| **Trigger** | Outgoing sync triggers, set per integration when the flow is used. Usually the fields that are sent to Virtualstock are the trigger fields, so a change in one of them sends the record again |
 | **Result** | The lines are registered as cancelled in Virtualstock |
 | **Part of** | [Business Central and Virtualstock integration](../overview.md) |
 
 ## Step by step
 
 1. Some or all lines on a Virtualstock sales order cannot be delivered.
-2. The cancellation is sent for the sales order. [ATT FYLLA I: the action or event in Business Central that sends it]
+2. The outgoing sync trigger set up for the integration fires for the sales order.
 3. Web Connect builds the message from the sales lines of type Item, with the quantity that is still outstanding.
 4. The cancellation is sent to Virtualstock for the stored Virtualstock order ID.
 

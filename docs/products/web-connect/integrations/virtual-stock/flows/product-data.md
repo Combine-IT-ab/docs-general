@@ -24,7 +24,7 @@ The standard Web Connect configuration for Virtualstock contains a product objec
 | | |
 |---|---|
 | **Direction** | Business Central → Virtualstock |
-| **Trigger** | [ATT FYLLA I: how product creation is started. The standard configuration has no outgoing sync trigger for it] |
+| **Trigger** | Outgoing sync triggers, set per integration when the flow is used. Usually the fields that are sent to Virtualstock are the trigger fields, so a change in one of them sends the record again |
 | **Result** | The item exists as a product in Virtualstock |
 | **Part of** | [Business Central and Virtualstock integration](../overview.md) |
 

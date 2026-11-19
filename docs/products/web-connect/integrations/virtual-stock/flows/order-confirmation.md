@@ -24,7 +24,7 @@ When a Virtualstock order has been created as a sales order in Business Central,
 | | |
 |---|---|
 | **Direction** | Business Central → Virtualstock |
-| **Trigger** | Outgoing sync trigger on the sales order. [ATT FYLLA I: which event in Business Central sends the acknowledgement: when the order is created and released, or when it is posted] |
+| **Trigger** | Outgoing sync trigger on the sales order, set per integration. Usually the fields that are sent to Virtualstock are the trigger fields, so a change in one of them sends the record again |
 | **Result** | The order is acknowledged in Virtualstock and is no longer fetched as a new order |
 | **Part of** | [Business Central and Virtualstock integration](../overview.md) |
 
