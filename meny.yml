@@ -108,6 +108,78 @@ nav:
         - Variants and Barcodes: products/web-connect/integrations/resourced/flows/variants-and-barcodes.md
         - Sales Prices: products/web-connect/integrations/resourced/flows/sales-prices.md
         - Purchase Prices and Costs: products/web-connect/integrations/resourced/flows/purchase-prices-and-costs.md
+      - Shelfless:
+        - Overview: products/web-connect/integrations/shelfless/overview.md
+        - Product Data: products/web-connect/integrations/shelfless/flows/product-data.md
+        - Inbound Deliveries: products/web-connect/integrations/shelfless/flows/inbound-delivery.md
+        - Goods Receipts: products/web-connect/integrations/shelfless/flows/goods-receipt.md
+        - Outbound Deliveries: products/web-connect/integrations/shelfless/flows/outbound-delivery.md
+        - Shipment Confirmations: products/web-connect/integrations/shelfless/flows/shipment-confirmation.md
+        - Returns: products/web-connect/integrations/shelfless/flows/returns.md
+        - Stock Count: products/web-connect/integrations/shelfless/flows/stock-reconciliation.md
+      - Nowaste:
+        - Overview: products/web-connect/integrations/nowaste/overview.md
+        - Items: products/web-connect/integrations/nowaste/flows/items.md
+        - Outbound Orders: products/web-connect/integrations/nowaste/flows/order-outbound.md
+        - Shipments: products/web-connect/integrations/nowaste/flows/shipment.md
+        - Inbound Deliveries: products/web-connect/integrations/nowaste/flows/purchase-order.md
+        - Receipts: products/web-connect/integrations/nowaste/flows/receipt.md
+        - Stock Adjustments: products/web-connect/integrations/nowaste/flows/stock-adjustment.md
+        - Stock Reconciliation: products/web-connect/integrations/nowaste/flows/stock-reconciliation.md
+      - Sitoo POS:
+        - Overview: products/web-connect/integrations/sitoo/overview.md
+        - Product Data: products/web-connect/integrations/sitoo/flows/product-data.md
+        - Prices: products/web-connect/integrations/sitoo/flows/prices.md
+        - Sales: products/web-connect/integrations/sitoo/flows/sales-inbound.md
+        - Shipments to Stores: products/web-connect/integrations/sitoo/flows/shipment-to-store.md
+        - Store Receipts: products/web-connect/integrations/sitoo/flows/store-receipt.md
+        - Store Orders from Central Warehouse: products/web-connect/integrations/sitoo/flows/store-order-delivery.md
+        - Returns from Stores: products/web-connect/integrations/sitoo/flows/returns-from-store.md
+        - Online Orders for Store Returns: products/web-connect/integrations/sitoo/flows/online-orders-for-store-returns.md
+        - Stock Adjustments: products/web-connect/integrations/sitoo/flows/stock-adjustment.md
+        - Stock Balances: products/web-connect/integrations/sitoo/flows/stock-balance.md
+      - WooCommerce:
+        - Overview: products/web-connect/integrations/woocommerce/overview.md
+        - Order Inbound: products/web-connect/integrations/woocommerce/flows/order-inbound.md
+        - Customer Inbound: products/web-connect/integrations/woocommerce/flows/customer-inbound.md
+        - Order Completion: products/web-connect/integrations/woocommerce/flows/order-completion.md
+        - Stock Update: products/web-connect/integrations/woocommerce/flows/stock-update.md
+        - Price Update: products/web-connect/integrations/woocommerce/flows/price-update.md
+        - Product Matching: products/web-connect/integrations/woocommerce/flows/product-matching.md
+      - Boots marketplace:
+        - Overview: products/web-connect/integrations/boots/overview.md
+        - Stock: products/web-connect/integrations/boots/flows/stock-update.md
+      - Sello:
+        - Overview: products/web-connect/integrations/sello/overview.md
+        - Return Orders: products/web-connect/integrations/sello/flows/return-orders.md
+      - Voyado:
+        - Overview: products/web-connect/integrations/voyado/overview.md
+        - Contacts: products/web-connect/integrations/voyado/flows/contacts.md
+        - Contact Consent: products/web-connect/integrations/voyado/flows/contact-preferences.md
+        - Orders: products/web-connect/integrations/voyado/flows/orders.md
+      - Addimotion:
+        - Overview: products/web-connect/integrations/addimotion/overview.md
+        - Sales Orders: products/web-connect/integrations/addimotion/flows/order-outbound.md
+      - Global-e returns:
+        - Overview: products/web-connect/integrations/global-e/overview.md
+        - Returns: products/web-connect/integrations/global-e/flows/returns.md
+        - Refunds: products/web-connect/integrations/global-e/flows/refunds.md
+      - Inretrn:
+        - Overview: products/web-connect/integrations/inretrn/overview.md
+        - Invoiced Orders: products/web-connect/integrations/inretrn/flows/invoiced-orders.md
+        - Return Orders: products/web-connect/integrations/inretrn/flows/return-orders.md
+      - Reclaimit:
+        - Overview: products/web-connect/integrations/reclaimit/overview.md
+        - Purchase Lookup: products/web-connect/integrations/reclaimit/flows/purchase-lookup.md
+        - Return Orders: products/web-connect/integrations/reclaimit/flows/return-orders.md
+        - Return Status: products/web-connect/integrations/reclaimit/flows/return-status.md
+      - Milient:
+        - Overview: products/web-connect/integrations/milient/overview.md
+        - Projects: products/web-connect/integrations/milient/flows/projects.md
+        - Customers: products/web-connect/integrations/milient/flows/customers.md
+        - Supplier Costs: products/web-connect/integrations/milient/flows/supplier-costs.md
+        - Customer Invoices and Credit Notes: products/web-connect/integrations/milient/flows/invoice-inbound.md
+        - Posted Invoice Numbers: products/web-connect/integrations/milient/flows/posted-invoice-number.md
   - Easy Connect:
     - Overview: products/easy-connect/README.md
     - Setup: products/easy-connect/setup.md
