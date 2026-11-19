@@ -46,7 +46,7 @@ Web Connect by CombineIT connects Microsoft Dynamics 365 Business Central with N
 | **Norce Commerce API** | [Norce Commerce documentation](https://docs.norce.io/) |
 | **Data flows** | 10: orders, order status, shipments, stock, products, product images, categories, price lists, prices, customers and companies |
 | **Business Central editions** | All editions, Essentials and Premium, including the latest version |
-| **Available from** | [Web Connect on Microsoft AppSource](https://marketplace.microsoft.com/sv-se/product/PUBID.martitab1633951001710%7CAID.webconnect%7CPAPPID.9f3a7223-19db-4ac7-832f-cf8e4699186f?tab=Overview). The Norce Commerce integration is not part of the Web Connect Ready Integrations app. It is set up as a configuration in Web Connect |
+| **Available from** | [Web Connect on Microsoft AppSource](https://marketplace.microsoft.com/sv-se/product/PUBID.martitab1633951001710%7CAID.webconnect%7CPAPPID.9f3a7223-19db-4ac7-832f-cf8e4699186f?tab=Overview). The Norce Commerce integration is included in the Web Connect Ready Integrations app |
 
 ## What can be synchronized
 
@@ -199,6 +199,7 @@ Product enrichment (images, texts beyond what Business Central sends, category s
 
 - Microsoft Dynamics 365 Business Central, any edition (Essentials or Premium), including the latest version
 - Web Connect installed from Microsoft AppSource, with an activated Web Connect license
+- The Web Connect Ready Integrations app installed in the same Business Central environment. The Norce Commerce integration is included in it
 - Your approval for Web Connect to be installed and to act in your Business Central environment
 - An API client in Norce Commerce for the OAuth 2.0 client credentials flow (client ID and client secret), and the application ID and account ID that the Connect API needs. These are created in Norce Commerce.
 - An order export in Norce Commerce that sends new orders to the Web Connect webhook address. The order export is set up in Norce Commerce.
@@ -207,7 +208,7 @@ Product enrichment (images, texts beyond what Business Central sends, category s
 ## Setting it up
 
 1. Decide which flows to use and which option to choose for each, see [Choose your setup](#choose-your-setup).
-2. Install Web Connect in Business Central, activate the license and give your approval. The Norce Commerce integration is set up as a configuration in Web Connect, not installed from the Ready Integrations app.
+2. Install Web Connect in Business Central, activate the license and give your approval. Install the Web Connect Ready Integrations app in the same environment and activate the Norce Commerce integration.
 3. Create the API client in Norce Commerce and store the client secret in Web Connect [Secret Value Storage](../../general/secret-value-storage.md). Web Connect fetches and renews the access token itself.
 4. Point the Norce Commerce order export at the Web Connect webhook address.
 5. Set up the configuration choices below, including the Connect API headers for each import.
