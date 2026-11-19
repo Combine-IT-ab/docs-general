@@ -44,7 +44,7 @@ Web Connect by CombineIT connects Microsoft Dynamics 365 Business Central with N
 | **Nowaste API** | [Nowaste order API (Swagger)](https://api.nowaste.se/NowasteOrder/swagger/index.html) |
 | **Data flows** | 7: items, outbound orders, inbound deliveries, shipments, receipts, stock adjustments and stock reconciliation |
 | **Business Central editions** | All editions, Essentials and Premium, including the latest version |
-| **Available from** | [Web Connect on Microsoft AppSource](https://marketplace.microsoft.com/sv-se/product/PUBID.martitab1633951001710%7CAID.webconnect%7CPAPPID.9f3a7223-19db-4ac7-832f-cf8e4699186f?tab=Overview). [ATT FYLLA I: whether the Nowaste integration is part of the Web Connect Ready Integrations app or set up as a configuration in Web Connect] |
+| **Available from** | [Web Connect on Microsoft AppSource](https://marketplace.microsoft.com/sv-se/product/PUBID.martitab1633951001710%7CAID.webconnect%7CPAPPID.9f3a7223-19db-4ac7-832f-cf8e4699186f?tab=Overview). The Nowaste integration is not part of the Web Connect Ready Integrations app. It is set up as a configuration in Web Connect |
 
 ## What can be synchronized
 
