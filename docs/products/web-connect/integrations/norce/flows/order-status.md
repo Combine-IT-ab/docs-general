@@ -77,7 +77,7 @@ The translation is a text mapping in Web Connect and can be changed.
 | Situation | What happens | What to do |
 |---|---|---|
 | Norce Commerce rejects the status | The error is logged in Entries | Check the error text, correct the cause and [resend the message](../../../../../how-to/web-connect/resend-outgoing-message.md) |
-| The order is set to delivered right after partly delivered | Norce Commerce can have its own status logic | [ATT FYLLA I: confirm whether Norce Commerce sets Delivered by itself after PartlyDelivered, and how to turn it off] |
+| The order shows a different status in Norce Commerce than expected | Web Connect always sends a status in each message, so the latest message decides the status | Check the latest order status message in Entries, and that the status mapping is correct |
 
 ## Frequently asked questions
 

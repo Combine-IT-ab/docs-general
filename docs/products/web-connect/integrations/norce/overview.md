@@ -241,15 +241,14 @@ All configuration and logic in the integration is visible and editable in Busine
 
 ## Limitations
 
-- **Only fields listed in the header are updated.** Norce Commerce Connect ignores fields that are sent but not listed in the header. Fields that are listed but sent empty can clear the value in Norce Commerce. Flags are only set when flags are listed.
+- **Every import has to list which fields are set.** The Norce Commerce Connect API needs a header that lists the numeric ID of each field the import may update. Web Connect cannot just send the fields, as it does with many other e-commerce platforms, so a new field means both a mapping and a change in the header. Norce Commerce Connect ignores fields that are sent but not listed in the header. Fields that are listed but sent empty can clear the value in Norce Commerce. Flags are only set when flags are listed.
 - **The headers differ between environments.** Account ID and application key are not the same in test and production, so the configuration has to be adjusted when it is moved.
 - **Duplicate customers can be created** when the fields used to match a customer differ between Business Central and the order, for example a company that has no VAT number in Business Central. Fill in the matching fields before orders start arriving.
 - **Merge duplicate customers in Norce Commerce, not in Business Central.** Merging in Business Central does not reach Norce Commerce. Changing the customer number in Business Central updates the same company in Norce Commerce, since it is matched on the company ID.
 - **Product images are fetched once.** A new image in Norce Commerce is not fetched again by itself, and the image import has to be resent for the item.
-- **Norce Commerce can have its own product and status logic,** for example deactivating products with zero stock or setting an order to delivered by itself. Decide which system controls status, and turn the other logic off.
-- **Cancellations and returns are not part of the integration today.** [ATT FYLLA I: whether cancellation and return flows exist for Norce Commerce; none is found in the configuration exports]
+- **Norce Commerce can have its own product logic,** for example deactivating products with zero stock. Decide which system controls product status, and turn the other logic off.
+- **Cancellations and returns are not part of the integration today.** The Norce Commerce Connect API can cancel an order and has the status Cancelled, so a cancellation flow can be built in Web Connect. Returns are not handled in Norce Commerce, but a payment can be credited through Norce Commerce when the payment provider supports it.
 - **Products are imported one at a time** to Norce Commerce, and stock in batches of up to 75 rows per call.
-- [ATT FYLLA I: other known limitations confirmed by CombineIT]
 
 ## Frequently asked questions
 
