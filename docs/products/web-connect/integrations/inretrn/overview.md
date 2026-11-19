@@ -118,13 +118,13 @@ The return portal, the customer's choice of return, exchange or compensation, an
 - Web Connect installed from Microsoft AppSource, with an activated Web Connect license
 - Your approval for Web Connect to be installed and to act in your Business Central environment
 - An API key for the Inretrn API, created in Inretrn
-- A webhook in Inretrn for new return orders, pointing to the Web Connect endpoint. [ATT FYLLA I: is the webhook registered by Inretrn, by the customer in Inretrn or by CombineIT?]
+- A webhook in Inretrn for new return orders, pointing to the Web Connect endpoint. The webhook is registered in Inretrn, by Inretrn or by you
 - A seller reference in Inretrn that the orders from Business Central are sent with
 
 ## Setting it up
 
 1. Decide which invoices to send to Inretrn and how returns should be handled in Business Central, see [Choose your setup](#choose-your-setup).
-2. Install Web Connect in Business Central, activate the license and give your approval.
+2. Install Web Connect in Business Central, activate the license and give your approval. The Inretrn integration is not part of the Ready Integrations app, so it is set up as a configuration in Web Connect.
 3. Store the Inretrn API key in Web Connect [Secret Value Storage](../../general/secret-value-storage.md) and set up the authentication.
 4. Set the seller reference in the Web Connect integration variable, and the filter that decides which posted invoices are sent.
 5. Set up [Logistics Setup](../../general/logistics-setup.md) for Inretrn, which decides how return orders are created from the WMS documents.
@@ -162,8 +162,8 @@ All configuration and logic in the integration is visible and editable in Busine
 - **Only posted sales invoices are sent.** An order is not in Inretrn until it has been invoiced in Business Central, so a customer cannot register a return before that.
 - **One invoice per message.** Each posted invoice is sent to Inretrn as its own order.
 - **Return reasons are not mapped.** Inretrn sends a reason code per row, but the standard setup does not map it to a Business Central return reason code.
-- **Exchange details are not read.** The exchange information on a return row is not processed in the standard setup. [ATT FYLLA I: how exchanges and replacement orders from Inretrn are handled in Business Central]
-- **Refunds are made outside the integration.** Web Connect stores the refund value per row on the WMS document but does not refund the customer. [ATT FYLLA I: confirm where the refund to the customer is made]
+- **Exchanges are not created by this integration.** The exchange information on a return row is not processed. A replacement order is normally created by Inretrn in the e-commerce platform, and reaches Business Central as a sales order through the integration with that platform.
+- **The refund is made where the payment was captured.** Web Connect stores the refund value per row on the WMS document but does not refund the customer through Inretrn. The standard is to capture payments in Business Central through a payment service provider, and the refund is then made in Business Central. If the payment is captured in another system, for example the e-commerce platform, the refund is made there.
 
 ## Frequently asked questions
 
