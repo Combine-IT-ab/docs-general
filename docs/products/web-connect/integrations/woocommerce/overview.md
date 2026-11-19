@@ -58,6 +58,8 @@ Web Connect has six data flows between Business Central and WooCommerce.
 | [Stock](flows/stock-update.md) | Business Central → WooCommerce | Available stock is set on the product |
 | [Order completion](flows/order-completion.md) | Business Central → WooCommerce | When the shipment is posted, the order is set to completed in WooCommerce |
 
+The six flows are the ones that have been used in production. Web Connect works with the WooCommerce REST API, so other data the API supports, for example creating products, sale prices, tracking numbers or refunds, can be added with configuration. What is sent, and when, is decided per integration.
+
 Orders are part of every WooCommerce integration. Product matching is needed for prices and stock, since they are sent to the WooCommerce product ID. See [Choose your setup](#choose-your-setup).
 
 ## How it works
@@ -203,6 +205,7 @@ All configuration and logic in the integration is visible and editable in Busine
 ## Configuration choices
 
 - **Order statuses to import:** which WooCommerce statuses are fetched. Processing and completed are used, so unpaid orders are not imported.
+- **Discounts, coupons and shipping cost:** how they are posted on the sales order.
 - **Starting point:** the date and time from which orders are fetched. Web Connect moves it forward after each imported order.
 - **Customer on the order:** the WooCommerce customer ID is looked up among the customers fetched from WooCommerce.
 - **Customer number:** which Business Central customer number a WooCommerce customer gets. It can be read from a meta data field on the WooCommerce customer.
@@ -214,10 +217,7 @@ All configuration and logic in the integration is visible and editable in Busine
 
 ## Limitations
 
-The flows on this page are the ones that have been used in production. Web Connect works with the WooCommerce REST API, so other data the API supports, for example creating products, sale prices, tracking numbers or refunds, can be added with configuration. What is sent, and when, is decided per integration.
-
-- **Totals must match.** If the order total or the VAT amount differs from WooCommerce, the order stops in Incoming Data with an error message, as in every Web Connect integration. How discounts, coupons and shipping cost are posted on the sales order is decided when the integration is set up.
-- **Unpaid orders are not imported.** Orders on hold or pending payment are fetched only once they reach processing.
+- **Totals must match.** If the order total or the VAT amount differs from WooCommerce, the order stops in Incoming Data with an error message, as in every Web Connect integration.
 - **Products without a SKU cannot be matched** to an item in Business Central.
 
 ## Frequently asked questions

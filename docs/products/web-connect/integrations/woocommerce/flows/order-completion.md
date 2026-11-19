@@ -56,9 +56,9 @@ sequenceDiagram
 |---|---|
 | `WOC-UPDATE-ORDER-TO-SHIPPPED` | Sets the order to completed |
 
-## Limitations
+## Options
 
-- In the setup used in production, only the status is sent, and the first posted shipment sets the order to completed. Tracking numbers and when an order counts as completed can be set per integration.
+In the setup used in production, only the status is sent, and the first posted shipment sets the order to completed. A tracking number can also be sent, and when an order counts as completed can be set per integration.
 
 ## Related
 
