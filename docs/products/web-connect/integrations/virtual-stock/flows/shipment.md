@@ -67,7 +67,7 @@ sequenceDiagram
 | Sales Shipment Header: Package Tracking No. | `items[].tracking_number` | |
 | Sales Shipment Header: Shipping Agent Code | `items[].carrier` | |
 
-The carrier is sent as the shipping agent code in Business Central. On incoming orders, the Virtualstock delivery code is mapped to a shipping agent service with a [text mapping](../../../general/text-mapping.md). [ATT FYLLA I: whether the shipping agent codes must match carrier codes that Virtualstock recognises]
+The carrier is sent as the shipping agent code in Business Central. On incoming orders, the Virtualstock delivery code is mapped to a shipping agent service with a [text mapping](../../../general/text-mapping.md). The carrier must be a code Virtualstock recognises. If your shipping agent codes differ, they can be mapped to the Virtualstock codes with a text mapping in Web Connect.
 
 ## Web Connect objects
 

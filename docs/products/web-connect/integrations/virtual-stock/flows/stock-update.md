@@ -71,7 +71,7 @@ You can add or remove triggers yourself in [Outgoing Sync Triggers](../../../gen
 | Business Central field | Virtualstock field | Note |
 |---|---|---|
 | Item Inventory: calculated stock | `supplier_free_stock` | Sent as 0 when the value is below zero |
-| Virtualstock product ID for the item | Product ID in the address of the call | [ATT FYLLA I: where the Virtualstock product ID for each item is stored in Business Central or Web Connect] |
+| Virtualstock product ID for the item | Product ID in the address of the call | Stored on the item card or as an item reference in Business Central |
 
 ## Web Connect objects
 
@@ -85,7 +85,7 @@ You can add or remove triggers yourself in [Outgoing Sync Triggers](../../../gen
 
 | Situation | What happens | What to do |
 |---|---|---|
-| The item has no Virtualstock product ID | The update cannot reach a product in Virtualstock | Register the product ID for the item. [ATT FYLLA I: where and how] |
+| The item has no Virtualstock product ID | The update cannot reach a product in Virtualstock | Register the Virtualstock product ID on the item card or as an item reference in Business Central |
 | Stock shows 0 in Virtualstock | The calculated stock in Business Central is 0 or negative | Check the item's stock and the locations included in Item Inventory |
 | Stock does not update at all | The item is outside the filter on the stock object, or the job queue is not running | Check the filter and see [Send inventory to external systems](../../../../../how-to/web-connect/outgoing-inventory-to-external-systems.md) |
 | Virtualstock rejects or does not answer | The entry gets an error in Web Connect Entries | Correct the cause and [resend the message](../../../../../how-to/web-connect/resend-outgoing-message.md) |

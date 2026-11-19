@@ -1,7 +1,7 @@
 ---
 title: "Business Central to Virtualstock: product data"
 description: "Web Connect can create items from Business Central as products in Virtualstock, with part number and unit of measure. The flow is not in production use today."
-summary: "The standard Web Connect configuration for Virtualstock contains a product object that creates items from Business Central as products in Virtualstock, with item number as part number and the base unit of measure. No Web Connect customer uses it in production today, so products are set up in Virtualstock outside the integration."
+summary: "The standard Web Connect configuration for Virtualstock contains a product object that creates items from Business Central as products in Virtualstock, with item number as part number and the base unit of measure. No Web Connect customer uses it in production today. Instead, the supplier creates the products in Virtualstock and links them manually by registering the Virtualstock product ID on the item card or as an item reference in Business Central."
 lang: en
 translation_key: integration-virtual-stock-product-data
 product: web-connect
@@ -13,13 +13,13 @@ keywords:
   - virtualstock product sync business central
 faq:
   - question: "Do we have to create products in Virtualstock from Business Central?"
-    answer: "No. Products can be set up in Virtualstock outside the integration, which is how Web Connect customers work today. Orders and stock work the same either way, as long as each item has its EAN and Virtualstock product ID."
+    answer: "No. The supplier can create the products in Virtualstock and register each Virtualstock product ID on the item card or as an item reference in Business Central, which is how Web Connect customers work today. Orders and stock work the same either way, as long as each item has its EAN and Virtualstock product ID."
 last_reviewed: 2026-11-19
 ---
 
 # Business Central to Virtualstock: product data
 
-The standard Web Connect configuration for Virtualstock contains a product object that creates items from Business Central as products in Virtualstock, with item number as part number and the base unit of measure. No Web Connect customer uses it in production today, so products are set up in Virtualstock outside the integration.
+The standard Web Connect configuration for Virtualstock contains a product object that creates items from Business Central as products in Virtualstock, with item number as part number and the base unit of measure. No Web Connect customer uses it in production today. Instead, the supplier creates the products in Virtualstock and links them manually by registering the Virtualstock product ID on the item card or as an item reference in Business Central.
 
 | | |
 |---|---|
@@ -33,7 +33,7 @@ The standard Web Connect configuration for Virtualstock contains a product objec
 1. An item that should be sold through Virtualstock is selected in Business Central.
 2. Web Connect builds the product with the item number, the base unit of measure and the links to the Virtualstock category, client and supplier.
 3. The product is created in Virtualstock.
-4. [ATT FYLLA I: how the product ID Virtualstock returns is stored, so that stock updates reach the product]
+4. Virtualstock answers with the new product ID, and Web Connect stores it, so that stock updates reach the product.
 
 ```mermaid
 sequenceDiagram
@@ -45,7 +45,8 @@ sequenceDiagram
     WC->>WC: Build product
     WC->>VS: Create product
     alt Accepted
-        VS-->>WC: Product created
+        VS-->>WC: Product created, with product ID
+        WC->>BC: Store the product ID
     else Rejected
         VS-->>WC: Error, shown in Entries ⚠️
     end
@@ -78,7 +79,7 @@ sequenceDiagram
 
 ### Do we have to create products in Virtualstock from Business Central?
 
-No. Products can be set up in Virtualstock outside the integration, which is how Web Connect customers work today. Orders and stock work the same either way, as long as each item has its EAN and Virtualstock product ID.
+No. The supplier can create the products in Virtualstock and register each Virtualstock product ID on the item card or as an item reference in Business Central, which is how Web Connect customers work today. Orders and stock work the same either way, as long as each item has its EAN and Virtualstock product ID.
 
 ## Related
 

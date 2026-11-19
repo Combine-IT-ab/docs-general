@@ -52,7 +52,7 @@ sequenceDiagram
         WC->>BC: Create and release sales order
         BC-->>WC: Sales order created
     else No item for the EAN
-        WC-->>WC: Line gets no item number, see Entries ⚠️
+        WC-->>WC: Whole order stops, see Entries ⚠️
     end
 ```
 
@@ -97,7 +97,7 @@ The customer the order is created on is set per retailer in the mapping.
 
 | Situation | What happens | What to do |
 |---|---|---|
-| The EAN on a line has no match in Item References | The lookup returns no item number, and the line cannot be created as an item line | Add the EAN as an Item Reference on the item, then run the record again from [Entries](../../../general/entries.md). [ATT FYLLA I: confirm that the whole order stops, not only the line] |
+| The EAN on a line has no match in Item References | The whole order stops and is not created, so that no order is created with lines missing. The error is shown in Web Connect Entries | Add the EAN as an Item Reference on the item, then run the record again from [Entries](../../../general/entries.md) |
 | Nothing is fetched | The job queue entry is not running, or the token cannot be fetched | See [Integrations not running](../../../../../how-to/web-connect/integration-not-running.md) and [Nothing downloads to Business Central](../../../../../how-to/web-connect/nothing-downloads-to-business-central.md) |
 | Calls fail with 401 Unauthorized | The API password has changed or the token has expired | Update the password in Secret Value Storage. See [401 after job queue stopped](../../../../../how-to/web-connect/unauthorized-after-job-queue-stopped.md) |
 | The sales order fails validation in Business Central | The error is shown on the entry in Web Connect Entries | Correct the setup, for example the customer or a shipping agent service, and run the record again |

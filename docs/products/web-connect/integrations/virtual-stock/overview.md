@@ -42,7 +42,7 @@ Web Connect by CombineIT connects Microsoft Dynamics 365 Business Central with V
 | **Virtualstock API** | [Virtualstock API documentation](https://api-docs.virtualstock.com) |
 | **Data flows** | 6: orders, order acknowledgements, dispatches, stock, cancellations and product data |
 | **Business Central editions** | All editions, Essentials and Premium, including the latest version |
-| **Available from** | [Web Connect on Microsoft AppSource](https://marketplace.microsoft.com/sv-se/product/PUBID.martitab1633951001710%7CAID.webconnect%7CPAPPID.9f3a7223-19db-4ac7-832f-cf8e4699186f?tab=Overview). [ATT FYLLA I: whether the Virtualstock integration is included in the Web Connect Ready Integrations app] |
+| **Available from** | [Web Connect on Microsoft AppSource](https://marketplace.microsoft.com/sv-se/product/PUBID.martitab1633951001710%7CAID.webconnect%7CPAPPID.9f3a7223-19db-4ac7-832f-cf8e4699186f?tab=Overview). The Virtualstock integration is not part of the Web Connect Ready Integrations app |
 
 ## What can be synchronized
 
@@ -129,14 +129,14 @@ flowchart LR
 
 | Option | How it works | When it fits |
 |---|---|---|
-| **Maintained in Virtualstock** (common setup) | Products are set up in Virtualstock outside the integration. [ATT FYLLA I: confirm how products are created in Virtualstock today, by the supplier or by the retailer] | The product range sold through the retailer is small or set up by the retailer |
+| **Created in Virtualstock** (common setup) | The supplier creates the products in Virtualstock and then links each one to its item in Business Central by registering the Virtualstock product ID on the item card or as an item reference in Business Central | The product range sold through the retailer is small, or you want full control of the product data in Virtualstock |
 
-#### Products maintained in Virtualstock
+#### Products created in Virtualstock
 
 ```mermaid
 flowchart LR
-    U["👤 Supplier or retailer"] -->|Sets up products| VS["🛒 Virtualstock"]
-    BC["🔄 Business Central"] -.-|Not part of the product flow| VS
+    U["👤 Supplier"] -->|Creates products| VS["🛒 Virtualstock"]
+    U -->|Registers the Virtualstock product ID| BC["🔄 Business Central<br/>item card or item reference"]
 ```
 
 Retailer data, retailer prices and the order itself are always maintained in Virtualstock.
@@ -153,7 +153,7 @@ Retailer data, retailer prices and the order itself are always maintained in Vir
 ## Setting it up
 
 1. Decide which flows to use and which option to choose for each, see [Choose your setup](#choose-your-setup).
-2. Install Web Connect in Business Central, activate the license and give your approval. [ATT FYLLA I: how the Virtualstock integration is installed, from the Ready Integrations app or as an imported configuration]
+2. Install Web Connect in Business Central, activate the license and give your approval. The Virtualstock integration is not part of the Ready Integrations app. It is set up as a Web Connect configuration in your Business Central.
 3. Store the Virtualstock API password in Web Connect [Secret Value Storage](../../general/secret-value-storage.md) and set up the authentication with the user name and the Virtualstock token endpoint.
 4. Set up the configuration choices below.
 5. Test the whole order flow in a Business Central sandbox against the Virtualstock sandbox before going live.
@@ -176,17 +176,17 @@ All configuration and logic in the integration is visible and editable in Busine
 
 - **Customer per retailer:** which Business Central customer the orders from each retailer are created on. The retailer name from Virtualstock is stored on each order.
 - **Item matching:** which Item References the EAN lookup uses, and whether it is limited to some items.
-- **Delivery services:** how the Virtualstock delivery codes map to shipping agent services in Business Central.
+- **Delivery services and carriers:** how the Virtualstock delivery codes map to shipping agent services in Business Central, and, if your shipping agent codes differ from the carrier codes Virtualstock recognises, how they are mapped on the way out with a text mapping.
 - **Stock calculation:** which items and locations are included. Negative stock is sent as 0.
 - **Items in the stock flow:** stock can be limited to the items sold through Virtualstock with a filter on the stock object.
 - **Cancellations and product data:** whether these flows are used, see their flow pages.
 
 ## Limitations
 
-- **Every item needs an EAN in Item References.** An order line whose EAN has no match in Business Central gets no item number.
-- **Each item needs its Virtualstock product ID** for stock updates to reach the right product. [ATT FYLLA I: where the Virtualstock product ID for each item is stored in Business Central or Web Connect]
-- **Only orders with status `ORDER` are fetched.** Changes the retailer makes to an order after it has been acknowledged, for example a cancellation request, are not read by the integration. [ATT FYLLA I: confirm how retailer cancellations are handled]
-- **Product data is not in production use.** The standard configuration contains a product object, but no Web Connect customer uses it in production today.
+- **Every item needs an EAN in Item References.** If the EAN on any line has no match in Business Central, the whole order stops, so that no order is created with lines missing.
+- **Each item needs its Virtualstock product ID** for stock updates to reach the right product. It is stored on the item card or as an item reference in Business Central.
+- **Only orders with status `ORDER` are fetched.** Changes the retailer makes to an order after it has been acknowledged, for example a cancellation request, are not read by the integration today. It can be built if Virtualstock supports it.
+- **Product data from Business Central is not in production use.** The standard configuration can create products in Virtualstock and store the product ID that comes back, but Web Connect customers create their products in Virtualstock today.
 - **Retailer prices are not changed from Business Central.** The unit cost price on the order comes from Virtualstock.
 
 ## Frequently asked questions

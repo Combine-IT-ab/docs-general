@@ -73,7 +73,7 @@ sequenceDiagram
 
 | Situation | What happens | What to do |
 |---|---|---|
-| Virtualstock rejects the cancellation | The entry gets an error in Web Connect Entries | Check the order status in Virtualstock. [ATT FYLLA I: which order statuses Virtualstock accepts a cancellation in] |
+| Virtualstock rejects the cancellation | The entry gets an error in Web Connect Entries | Check the order status in Virtualstock, for example that the lines have not already been dispatched |
 | Calls fail with 401 Unauthorized | The token could not be fetched | Check the API password in Secret Value Storage |
 
 ## Frequently asked questions
