@@ -102,6 +102,12 @@ nav:
         - Shipment Tickets: products/web-connect/integrations/chess/flows/shipment-ticket.md
         - Safety Data Sheets: products/web-connect/integrations/chess/flows/safety-data-sheets.md
         - Documents Marked as Printed: products/web-connect/integrations/chess/flows/set-to-printed.md
+      - Resourced PLM:
+        - Overview: products/web-connect/integrations/resourced/overview.md
+        - Product Data: products/web-connect/integrations/resourced/flows/product-data.md
+        - Variants and Barcodes: products/web-connect/integrations/resourced/flows/variants-and-barcodes.md
+        - Sales Prices: products/web-connect/integrations/resourced/flows/sales-prices.md
+        - Purchase Prices and Costs: products/web-connect/integrations/resourced/flows/purchase-prices-and-costs.md
   - Easy Connect:
     - Overview: products/easy-connect/README.md
     - Setup: products/easy-connect/setup.md
