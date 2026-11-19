@@ -9,7 +9,7 @@ product: web-connect
 type: integration
 system: "Sitoo POS"
 system_category: "POS"
-data_flows: 9
+data_flows: 10
 keywords:
   - business central sitoo integration
   - sitoo business central
@@ -42,13 +42,13 @@ Web Connect by CombineIT connects Microsoft Dynamics 365 Business Central with S
 | **Configured by** | You, in Business Central: mappings, conditions, triggers and flows. You can do all of it yourself. If you want, CombineIT takes part in any step, as a sounding board or by doing the work. |
 | **Connection** | REST API with JSON: the Sitoo REST API for sales, products, prices and stock, and the Sitoo Shipments API for shipments. Basic authentication. Webhooks for shipment events |
 | **Sitoo API** | [Sitoo API reference](https://developer.sitoo.com/api-reference/overview) |
-| **Data flows** | 9: sales, store orders delivered from the central warehouse, product data, prices, shipments to stores, store receipts, returns from stores, stock adjustments and stock balances |
+| **Data flows** | 10: sales, store orders delivered from the central warehouse, product data, prices, shipments to stores, store receipts, returns from stores, stock adjustments, stock balances and online orders for returns in store |
 | **Business Central editions** | All editions, Essentials and Premium, including the latest version |
 | **Available from** | [Web Connect on Microsoft AppSource](https://marketplace.microsoft.com/sv-se/product/PUBID.martitab1633951001710%7CAID.webconnect%7CPAPPID.9f3a7223-19db-4ac7-832f-cf8e4699186f?tab=Overview). [ATT FYLLA I: is the Sitoo POS integration part of the Web Connect Ready Integrations app, or set up as a configuration in Web Connect?] |
 
 ## What can be synchronized
 
-Web Connect has nine data flows between Business Central and Sitoo POS.
+Web Connect has ten data flows between Business Central and Sitoo POS.
 
 | Data | Direction | What happens |
 |---|---|---|
@@ -61,6 +61,7 @@ Web Connect has nine data flows between Business Central and Sitoo POS.
 | [Returns from stores](flows/returns-from-store.md) | Sitoo POS → Business Central | A shipment created in a store becomes a transfer order from the store location, and the shipment is posted |
 | [Stock adjustments](flows/stock-adjustment.md) | Sitoo POS → Business Central | Stock transactions made in the stores are written to an item journal |
 | [Stock balances](flows/stock-balance.md) | Sitoo POS → Business Central | The stock balance per store warehouse is read on a schedule and put in a physical inventory journal |
+| [Online orders for returns in store](flows/online-orders-for-store-returns.md) | Business Central → Sitoo POS | Posted invoices for online orders are created as delivered orders in Sitoo, so a customer can buy online and return in a store. Available, not yet activated for any customer |
 
 Sales from the stores are part of every Sitoo POS integration. The other flows are chosen at setup, see [Choose your setup](#choose-your-setup).
 
@@ -192,6 +193,8 @@ flowchart LR
     WC -->|Physical inventory journal| BC["🔄 Business Central"]
 ```
 
+Buy online, return in store is not listed here, since no customer has it activated yet. See [Online orders for returns in store](flows/online-orders-for-store-returns.md).
+
 Stores, registers, staff and the stock in each store warehouse are always maintained in Sitoo POS.
 
 ## What you need
@@ -275,7 +278,7 @@ Yes. When a store creates a shipment in Sitoo, for example a return to the centr
 
 ## Related
 
-- Flows: [Sales](flows/sales-inbound.md) · [Store orders delivered from the central warehouse](flows/store-order-delivery.md) · [Product data](flows/product-data.md) · [Prices](flows/prices.md) · [Shipments to stores](flows/shipment-to-store.md) · [Store receipts](flows/store-receipt.md) · [Returns from stores](flows/returns-from-store.md) · [Stock adjustments](flows/stock-adjustment.md) · [Stock balances](flows/stock-balance.md)
+- Flows: [Sales](flows/sales-inbound.md) · [Store orders delivered from the central warehouse](flows/store-order-delivery.md) · [Product data](flows/product-data.md) · [Prices](flows/prices.md) · [Shipments to stores](flows/shipment-to-store.md) · [Store receipts](flows/store-receipt.md) · [Returns from stores](flows/returns-from-store.md) · [Stock adjustments](flows/stock-adjustment.md) · [Stock balances](flows/stock-balance.md) · [Online orders for returns in store](flows/online-orders-for-store-returns.md)
 - How-to: [Split cash payment per store](../../../../how-to/web-connect/split-cash-payment-per-store.md) · [WMS request not sent](../../../../how-to/web-connect/wms-request-not-sent-error.md) · [Resend an outgoing message](../../../../how-to/web-connect/resend-outgoing-message.md) · [Nothing downloads to Business Central](../../../../how-to/web-connect/nothing-downloads-to-business-central.md)
 - Web Connect: [Logistics Setup](../../general/logistics-setup.md) · [WMS documents](../../general/wms-documents.md) · [Webhooks](../../general/webhooks.md) · [Secret Value Storage](../../general/secret-value-storage.md)
 - [Web Connect general documentation](../../general/README.md)
