@@ -41,7 +41,7 @@ Web Connect by CombineIT connects Microsoft Dynamics 365 Business Central with t
 | **Runs in** | Your own Business Central environment, as an extension. Web Connect sends member changes to the portal's Keycloak when trigger fields on a contact change. The portal calls Web Connect as webhooks when it needs data from Business Central or has changes to write back. The webhooks are received by an Azure endpoint that only passes them on to Web Connect. All processing and configuration stays in Business Central. |
 | **Configured by** | You, in Business Central: mappings, conditions, triggers and flows. You can do all of it yourself. If you want, CombineIT takes part in any step, as a sounding board or by doing the work. |
 | **Connection** | REST: Keycloak Admin REST API with OAuth 2.0 client credentials, and incoming webhooks from the portal |
-| **Keen member portal API** | [Keycloak Admin REST API](https://www.keycloak.org/docs-api/latest/rest-api/index.html). [ATT FYLLA I: link to Keen's own website or API documentation for the portal] |
+| **Keen member portal API** | [Keycloak Admin REST API](https://www.keycloak.org/docs-api/latest/rest-api/index.html) for the user accounts. The portal is built by [keeen](https://keeen.net/), a TYPO3 agency, and has no public API documentation of its own. The webhook calls to Web Connect are agreed with keeen in each project |
 | **Data flows** | 5: members, profile updates, newsletter subscriptions, event catalogue and a member's events |
 | **Business Central editions** | All editions, Essentials and Premium, including the latest version. The event flows also need the event tables from an event management extension in Business Central |
 | **Available from** | [Web Connect on Microsoft AppSource](https://marketplace.microsoft.com/sv-se/product/PUBID.martitab1633951001710%7CAID.webconnect%7CPAPPID.9f3a7223-19db-4ac7-832f-cf8e4699186f?tab=Overview). [ATT FYLLA I: is the Keen integration part of the Web Connect Ready Integrations app?] |
@@ -217,6 +217,7 @@ Yes. The fields sent to the portal, the fields that start a sync and the rule fo
 - [Web Connect webhooks](../../general/webhooks.md)
 - [Web Connect general documentation](../../general/README.md)
 - [Keycloak Admin REST API](https://www.keycloak.org/docs-api/latest/rest-api/index.html)
+- [keeen](https://keeen.net/), the agency that builds the portal
 
 ## About Web Connect
 
