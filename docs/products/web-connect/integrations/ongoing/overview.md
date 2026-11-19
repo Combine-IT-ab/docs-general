@@ -46,7 +46,7 @@ Web Connect by CombineIT connects Microsoft Dynamics 365 Business Central with O
 | **Ongoing API** | [Ongoing WMS REST API](https://developer.ongoingwarehouse.com/REST/v1/index.html) and [Ongoing webhooks](https://developer.ongoingwarehouse.com/webhooks) |
 | **Data flows** | 9: items, outbound orders, order changes and cancellations, shipments, purchase orders, receipts, returns, stock adjustments and stock reconciliation |
 | **Business Central editions** | All editions, Essentials and Premium, including the latest version |
-| **Available from** | [Web Connect on Microsoft AppSource](https://marketplace.microsoft.com/sv-se/product/PUBID.martitab1633951001710%7CAID.webconnect%7CPAPPID.9f3a7223-19db-4ac7-832f-cf8e4699186f?tab=Overview). |
+| **Available from** | [Web Connect on Microsoft AppSource](https://marketplace.microsoft.com/sv-se/product/PUBID.martitab1633951001710%7CAID.webconnect%7CPAPPID.9f3a7223-19db-4ac7-832f-cf8e4699186f?tab=Overview). The Ongoing WMS integration is not part of the Web Connect Ready Integrations app. It is set up as a configuration in Web Connect |
 
 ## What can be synchronized
 
