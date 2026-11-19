@@ -43,10 +43,10 @@ Web Connect by CombineIT connects Microsoft Dynamics 365 Business Central with M
 | **Runs in** | Your own Business Central environment, as an extension. Web Connect fetches reserved invoices and changed projects from Milient on a schedule in the Business Central job queue, and sends customers, posted invoice numbers and supplier costs to Milient when they change or are posted in Business Central. No webhooks and no external integration platform are involved. |
 | **Configured by** | You, in Business Central: mappings, conditions, triggers and flows. You can do all of it yourself. If you want, CombineIT takes part in any step, as a sounding board or by doing the work. |
 | **Connection** | Milient REST API (version 3), with OAuth 2.0 |
-| **Milient API** | [ATT FYLLA I: name and link to Milient's API documentation] |
+| **Milient API** | [Milient documentation](https://docs.milientsoftware.com/help/my-pages) |
 | **Data flows** | 5: customer invoices and credit notes, posted invoice numbers, customers, projects and supplier costs on projects |
 | **Business Central editions** | All editions, Essentials and Premium, including the latest version |
-| **Available from** | [Web Connect on Microsoft AppSource](https://marketplace.microsoft.com/sv-se/product/PUBID.martitab1633951001710%7CAID.webconnect%7CPAPPID.9f3a7223-19db-4ac7-832f-cf8e4699186f?tab=Overview). [ATT FYLLA I: whether the Milient integration is included in the Web Connect Ready Integrations app] |
+| **Available from** | [Web Connect on Microsoft AppSource](https://marketplace.microsoft.com/sv-se/product/PUBID.martitab1633951001710%7CAID.webconnect%7CPAPPID.9f3a7223-19db-4ac7-832f-cf8e4699186f?tab=Overview). The Milient integration is not part of the Web Connect Ready Integrations app. It is set up in Web Connect, by you or together with CombineIT |
 
 ## What can be synchronized
 
@@ -162,14 +162,14 @@ Time reporting, invoice preparation and the invoice date are always handled in M
 - Microsoft Dynamics 365 Business Central, any edition (Essentials or Premium), including the latest version
 - Web Connect installed from Microsoft AppSource, with an activated Web Connect license
 - Your approval for Web Connect to be installed and to act in your Business Central environment
-- API access to your Milient environment: a client ID and client secret for OAuth 2.0. [ATT FYLLA I: where the API client is created in Milient, or whether Milient support creates it]
+- API access to your Milient environment: a client ID and client secret for OAuth 2.0. The API client is created in Milient, either by Milient or by you.
 - A dimension in Business Central for projects, and dimension values for any other dimensions the invoice lines should get
 - For the customer flow: every customer that already exists in both systems linked to its Milient customer before the flow is started
 
 ## Setting it up
 
 1. Decide which flows to use and which option to choose for each, see [Choose your setup](#choose-your-setup).
-2. Install Web Connect in Business Central, activate the license and give your approval. [ATT FYLLA I: how the ready Milient integration is installed]
+2. Install Web Connect in Business Central, activate the license and give your approval. The Milient integration is not part of the Ready Integrations app, so its objects, mappings and triggers are set up in Web Connect.
 3. Store the Milient client secret in Web Connect [Secret Value Storage](../../general/secret-value-storage.md). Web Connect fetches a temporary access token with it and renews the token automatically.
 4. Set up the configuration choices below.
 5. Link existing customers to Milient before the customer flow is started, so that no duplicates are created.
@@ -236,7 +236,7 @@ Yes. Field mappings, text mappings, conditions and triggers are configured in We
 - Flows: [Customer invoices](flows/invoice-inbound.md) · [Posted invoice numbers](flows/posted-invoice-number.md) · [Customers](flows/customers.md) · [Projects](flows/projects.md) · [Supplier costs on projects](flows/supplier-costs.md)
 - How-to: [Resend an outgoing message](../../../../how-to/web-connect/resend-outgoing-message.md) · [Entity already exists: update with external ID](../../../../how-to/web-connect/entity-already-exists-update-with-external-id.md) · [Nothing downloads to Business Central](../../../../how-to/web-connect/nothing-downloads-to-business-central.md) · [401 after job queue stopped](../../../../how-to/web-connect/unauthorized-after-job-queue-stopped.md)
 - [Web Connect general documentation](../../general/README.md)
-- [ATT FYLLA I: Milient API documentation link]
+- [Milient documentation](https://docs.milientsoftware.com/help/my-pages)
 
 ## About Web Connect
 
