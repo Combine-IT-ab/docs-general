@@ -43,7 +43,7 @@ Web Connect by CombineIT connects Microsoft Dynamics 365 Business Central with P
 | **Plytix API** | [Plytix API documentation](https://docs.plytix.com/) |
 | **Data flows** | 2: product data and product matching by SKU |
 | **Business Central editions** | All editions, Essentials and Premium, including the latest version |
-| **Available from** | [Web Connect on Microsoft AppSource](https://marketplace.microsoft.com/sv-se/product/PUBID.martitab1633951001710%7CAID.webconnect%7CPAPPID.9f3a7223-19db-4ac7-832f-cf8e4699186f?tab=Overview). [ATT FYLLA I: whether the Plytix integration is included in the Web Connect Ready Integrations app] |
+| **Available from** | [Web Connect on Microsoft AppSource](https://marketplace.microsoft.com/sv-se/product/PUBID.martitab1633951001710%7CAID.webconnect%7CPAPPID.9f3a7223-19db-4ac7-832f-cf8e4699186f?tab=Overview). The Plytix integration is not part of the Web Connect Ready Integrations app. It is set up in Web Connect as part of the implementation |
 
 ## What can be synchronized
 
@@ -135,11 +135,11 @@ Images, documents, product relationships and other enrichment are always maintai
 ## Setting it up
 
 1. Decide which data Business Central owns and which is maintained in Plytix, see [Choose your setup](#choose-your-setup).
-2. Install Web Connect in Business Central, activate the license and give your approval. [ATT FYLLA I: how the ready Plytix integration is installed]
+2. Install Web Connect in Business Central, activate the license and give your approval. The Plytix integration is not part of the Ready Integrations app, so its objects, mappings and triggers are set up in Web Connect as part of the implementation.
 3. Store the Plytix API password in Web Connect [Secret Value Storage](../../general/secret-value-storage.md) and set up the OAuth authentication with the API key.
 4. Create the attributes in Plytix and map them to Business Central fields in the outgoing mapping.
 5. Match the products that already exist in Plytix by SKU.
-6. Test with a few items in a Business Central sandbox before going live. [ATT FYLLA I: whether Plytix offers a separate test account, or whether testing is done in the production account with test products]
+6. Test with a few items, with a Business Central sandbox against a Plytix test account, before going live.
 
 ## Configure it yourself in Business Central
 
@@ -168,7 +168,7 @@ All configuration and logic in the integration is visible and editable in Busine
 - **Items, not variants.** The standard setup sends items. Item variants are not sent as separate Plytix products or Plytix variants.
 - **Plytix categories are not maintained from Business Central.** The item category is sent as an attribute value. Assigning the product to categories in the Plytix category tree is done in Plytix.
 - **Prices and stock are not part of the integration.**
-- **Attributes must exist in Plytix first.** The attributes are created in Plytix before they are mapped in Web Connect. [ATT FYLLA I: what happens to the update when a mapped attribute is missing in Plytix]
+- **Attributes must exist in Plytix first.** The attributes are created in Plytix before they are mapped in Web Connect. If Plytix rejects an update, the message stops in Web Connect Entries with the error from Plytix, and it can be resent once the attribute exists.
 - **Matching requires the SKU to be the item number.** A product in Plytix with another SKU is not matched, and a new product is created.
 
 ## Frequently asked questions

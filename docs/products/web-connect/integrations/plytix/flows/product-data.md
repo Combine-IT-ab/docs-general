@@ -75,7 +75,7 @@ The names of the Plytix attributes are set in the mapping and differ between Ply
 | `attributes` (translated description) | Item Translation, Description | The language is set on the table relation, for example ENU |
 | `attributes` (translated description 2) | Item Translation, Description 2 | Same language as above |
 | `attributes` (unit) | Base Unit of Measure | |
-| `attributes` (translated unit) | Unit of Measure | Looked up from the item's base unit of measure. [ATT FYLLA I: which field on Unit of Measure is sent] |
+| `attributes` (translated unit) | Unit of Measure | Looked up from the item's base unit of measure. A standard field on Unit of Measure, for example International Standard Code. You choose the field in the mapping |
 | `attributes` (barcode) | Item Reference, Reference No. | Item references of type bar code |
 | `attributes` (gross weight) | Gross Weight | Sent as a decimal |
 | `attributes` (net weight) | Net Weight | Sent as a decimal |
