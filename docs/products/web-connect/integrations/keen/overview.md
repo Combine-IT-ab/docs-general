@@ -43,7 +43,7 @@ Web Connect by CombineIT connects Microsoft Dynamics 365 Business Central with t
 | **Connection** | REST: Keycloak Admin REST API with OAuth 2.0 client credentials, and incoming webhooks from the portal |
 | **Keen member portal API** | [Keycloak Admin REST API](https://www.keycloak.org/docs-api/latest/rest-api/index.html). [ATT FYLLA I: link to Keen's own website or API documentation for the portal] |
 | **Data flows** | 5: members, profile updates, newsletter subscriptions, event catalogue and a member's events |
-| **Business Central editions** | [ATT FYLLA I: Essentials and Premium? The event flows need the event tables from an event management extension, confirm which] |
+| **Business Central editions** | All editions, Essentials and Premium, including the latest version. The event flows also need the event tables from an event management extension in Business Central |
 | **Available from** | [Web Connect on Microsoft AppSource](https://marketplace.microsoft.com/sv-se/product/PUBID.martitab1633951001710%7CAID.webconnect%7CPAPPID.9f3a7223-19db-4ac7-832f-cf8e4699186f?tab=Overview). [ATT FYLLA I: is the Keen integration part of the Web Connect Ready Integrations app?] |
 
 ## What can be synchronized
@@ -143,7 +143,7 @@ Passwords, login and multi factor authentication are always handled in Keycloak 
 
 ## What you need
 
-- Microsoft Dynamics 365 Business Central [ATT FYLLA I: edition and version]
+- Microsoft Dynamics 365 Business Central, any edition (Essentials or Premium), including the latest version
 - Web Connect installed from Microsoft AppSource, with an activated Web Connect license
 - Your approval for Web Connect to be installed and to act in your Business Central environment
 - A Keycloak client for Web Connect in the portal's realm, with client credentials and permission to read and update users [ATT FYLLA I: the exact Keycloak roles the client needs]
