@@ -36,14 +36,14 @@ nav:
         - Stock Update: products/web-connect/integrations/centra/flows/stock-update.md
         - Shipment: products/web-connect/integrations/centra/flows/shipment.md
         - Cancellation: products/web-connect/integrations/centra/flows/cancellation.md
-      - Virtual Stock:
+      - Virtualstock:
         - Overview: products/web-connect/integrations/virtual-stock/overview.md
-        - Order Inbound: products/web-connect/integrations/virtual-stock/flows/order-inbound.md
-        - Product Data: products/web-connect/integrations/virtual-stock/flows/product-data.md
-        - Stock Update: products/web-connect/integrations/virtual-stock/flows/stock-update.md
-        - Shipment: products/web-connect/integrations/virtual-stock/flows/shipment.md
-        - Order Confirmation: products/web-connect/integrations/virtual-stock/flows/order-confirmation.md
+        - Orders: products/web-connect/integrations/virtual-stock/flows/order-inbound.md
+        - Order Acknowledgement: products/web-connect/integrations/virtual-stock/flows/order-confirmation.md
+        - Dispatch: products/web-connect/integrations/virtual-stock/flows/shipment.md
+        - Stock: products/web-connect/integrations/virtual-stock/flows/stock-update.md
         - Cancellation: products/web-connect/integrations/virtual-stock/flows/cancellation.md
+        - Product Data: products/web-connect/integrations/virtual-stock/flows/product-data.md
       - Norce Commerce:
         - Overview: products/web-connect/integrations/norce/overview.md
         - Order Inbound: products/web-connect/integrations/norce/flows/order-inbound.md
@@ -66,6 +66,26 @@ nav:
         - Stock Reconciliation: products/web-connect/integrations/ongoing/flows/stock-reconciliation.md
       - Shopify:
         - Overview: products/web-connect/integrations/shopify/README.md
+      - Crystallize:
+        - Overview: products/web-connect/integrations/crystallize/overview.md
+        - Order Inbound: products/web-connect/integrations/crystallize/flows/order-inbound.md
+        - Order Status: products/web-connect/integrations/crystallize/flows/order-status.md
+        - Stock Update: products/web-connect/integrations/crystallize/flows/stock-update.md
+        - Prices: products/web-connect/integrations/crystallize/flows/prices.md
+        - Product Matching: products/web-connect/integrations/crystallize/flows/product-matching.md
+      - Astro WMS:
+        - Overview: products/web-connect/integrations/astro/overview.md
+        - Items: products/web-connect/integrations/astro/flows/items.md
+        - Outbound Orders: products/web-connect/integrations/astro/flows/order-outbound.md
+        - Purchase Orders: products/web-connect/integrations/astro/flows/purchase-order.md
+        - Shipments: products/web-connect/integrations/astro/flows/shipment.md
+        - Receipts: products/web-connect/integrations/astro/flows/receipt.md
+        - Stock Adjustments: products/web-connect/integrations/astro/flows/stock-adjustment.md
+        - Stock Reconciliation: products/web-connect/integrations/astro/flows/stock-reconciliation.md
+      - Plytix PIM:
+        - Overview: products/web-connect/integrations/plytix/overview.md
+        - Product Data: products/web-connect/integrations/plytix/flows/product-data.md
+        - Product Matching: products/web-connect/integrations/plytix/flows/product-matching.md
   - Easy Connect:
     - Overview: products/easy-connect/README.md
     - Setup: products/easy-connect/setup.md
