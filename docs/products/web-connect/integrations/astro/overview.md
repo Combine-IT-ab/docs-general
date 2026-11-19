@@ -43,7 +43,7 @@ Web Connect by CombineIT connects Microsoft Dynamics 365 Business Central with A
 | **Connection** | REST API with JSON, provided by the 3PL in front of Astro WMS. OAuth 2.0 client credentials, with tokens from Microsoft Entra ID |
 | **Astro WMS API** | Astro WMS has no public API documentation. The API and its documentation come from the 3PL that runs the warehouse |
 | **Data flows** | 7: items, outbound orders, purchase orders, shipments, receipts, stock adjustments and stock reconciliation |
-| **Business Central editions** | [ATT FYLLA I: vilka utgåvor av Business Central som stöds (Essentials, Premium)] |
+| **Business Central editions** | All editions, Essentials and Premium, including the latest version |
 | **Available from** | [Web Connect on Microsoft AppSource](https://marketplace.microsoft.com/sv-se/product/PUBID.martitab1633951001710%7CAID.webconnect%7CPAPPID.9f3a7223-19db-4ac7-832f-cf8e4699186f?tab=Overview). The Astro WMS integration is not part of the Web Connect Ready Integrations app. It is set up as a configuration in Web Connect |
 
 ## What can be synchronized
@@ -161,7 +161,7 @@ Warehouse locations, picking, packing and carrier booking are always maintained 
 
 ## What you need
 
-- Microsoft Dynamics 365 Business Central [ATT FYLLA I: utgåva och lägsta version]
+- Microsoft Dynamics 365 Business Central, any edition (Essentials or Premium), including the latest version
 - Web Connect installed from Microsoft AppSource, with an activated Web Connect license
 - Your approval for Web Connect to be installed and to act in your Business Central environment
 - API access from the 3PL: a client ID and client secret registered in the 3PL's Microsoft Entra ID, the API scope, and your partner ID in the warehouse API
