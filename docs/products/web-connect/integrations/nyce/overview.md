@@ -40,7 +40,7 @@ Web Connect by CombineIT connects Microsoft Dynamics 365 Business Central with N
 | **Runs in** | Your own Business Central environment, as an extension. Web Connect sends items when they change and orders when they are released in Business Central. Shipments, receipts, returns, stock adjustments and stock balances are fetched from Nyce on a schedule in the Business Central job queue. No webhooks and no external integration platform are involved. |
 | **Configured by** | You, in Business Central: mappings, conditions, triggers and flows. You can do all of it yourself. If you want, CombineIT takes part in any step, as a sounding board or by doing the work. |
 | **Connection** | Nyce REST API (JSON), with a token from the Nyce authenticate endpoint |
-| **Nyce API** | [ATT FYLLA I: name of and link to the Nyce Logic WMS API documentation] |
+| **Nyce API** | Nyce REST API. The API documentation is not public: your Nyce supplier gives access to it once you are a customer |
 | **Data flows** | 9: items, item dimensions and weights, outbound orders, shipments, inbound orders, receipts, customer returns, stock adjustments and stock balance |
 | **Business Central editions** | [ATT FYLLA I: Essentials and Premium, confirm] |
 | **Available from** | [Web Connect on Microsoft AppSource](https://marketplace.microsoft.com/sv-se/product/PUBID.martitab1633951001710%7CAID.webconnect%7CPAPPID.9f3a7223-19db-4ac7-832f-cf8e4699186f?tab=Overview). [ATT FYLLA I: whether the Nyce integration is included in the Web Connect Ready Integrations app] |
@@ -201,7 +201,6 @@ Reversals in the WMS are not integrated. If a receipt is reversed and posted aga
 - Flows: [Items](flows/item-data.md) · [Item dimensions and weights](flows/item-dimensions.md) · [Outbound orders](flows/order-outbound.md) · [Shipments](flows/shipment.md) · [Inbound orders](flows/purchase-order.md) · [Receipts](flows/receipt.md) · [Customer returns](flows/customer-return.md) · [Stock adjustments](flows/stock-adjustment.md) · [Stock balance](flows/stock-balance.md)
 - How-to: [A WMS request is not sent](../../../../how-to/web-connect/wms-request-not-sent-error.md) · [Resend an outgoing message](../../../../how-to/web-connect/resend-outgoing-message.md) · [Nothing downloads to Business Central](../../../../how-to/web-connect/nothing-downloads-to-business-central.md) · [Integrations not running](../../../../how-to/web-connect/integration-not-running.md)
 - [Web Connect general documentation](../../general/README.md)
-- [ATT FYLLA I: link to the Nyce Logic WMS documentation]
 
 ## About Web Connect
 
