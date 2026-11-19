@@ -197,7 +197,7 @@ flowchart LR
 
 | Option | How it works | When it fits |
 |---|---|---|
-| **Online invoices created as delivered orders in Sitoo** | Posted invoices for orders from the online store are created in Sitoo as orders, marked as delivered and archived, so a store can find the order and take a return | Customers buy online and return in a store. Two of four customers use this |
+| **Online invoices created as delivered orders in Sitoo** | Posted invoices for orders from the online store are created in Sitoo as orders, marked as delivered and archived, so a store can find the order and take a return | Customers buy online and return in a store. Without the order in Sitoo, the store staff cannot take the return. One of four customers uses this |
 
 #### Online orders created in Sitoo for returns in store
 

@@ -1,7 +1,7 @@
 ---
 title: "Business Central to Sitoo POS: online orders for returns in store"
 description: "Web Connect creates posted invoices for online orders in Sitoo POS as delivered and archived orders, so a customer can return an online purchase in a store."
-summary: "Web Connect sends posted sales invoices for orders from the online store to Sitoo POS as orders. The order is then marked as delivered and archived in Sitoo, so a store can find the online order and take a return on it in the register."
+summary: "A store can only take a return on a purchase that Sitoo POS knows about. That is why Web Connect sends posted sales invoices for orders from the online store to Sitoo as orders. The order is then marked as delivered and archived in Sitoo, so the store staff can find the online order and take the return in the register."
 slug: integrations/business-central-sitoo/online-orders-for-store-returns
 lang: en
 translation_key: integration-sitoo-online-orders-for-store-returns
@@ -20,12 +20,12 @@ last_reviewed: 2026-11-19
 
 # Business Central to Sitoo POS: online orders for returns in store
 
-Web Connect sends posted sales invoices for orders from the online store to Sitoo POS as orders. The order is then marked as delivered and archived in Sitoo, so a store can find the online order and take a return on it in the register.
+A store can only take a return on a purchase that Sitoo POS knows about. That is why Web Connect sends posted sales invoices for orders from the online store to Sitoo as orders. The order is then marked as delivered and archived in Sitoo, so the store staff can find the online order and take the return in the register.
 
 | | |
 |---|---|
 | **Direction** | Business Central → Sitoo POS |
-| **Trigger** | [ATT FYLLA I: what starts the send. The configurations in use have no outgoing sync trigger for these objects] |
+| **Trigger** | Chosen by you in the [Outgoing Sync Triggers](../../../general/outgoing-mapping/outgoing-sync-triggers.md), usually when the invoice is posted |
 | **Result** | A paid, delivered and archived order in Sitoo for each online invoice |
 | **Part of** | [Business Central and Sitoo POS integration](../overview.md) |
 
