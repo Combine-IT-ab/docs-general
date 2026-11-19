@@ -44,7 +44,7 @@ Web Connect by CombineIT connects Microsoft Dynamics 365 Business Central with S
 | **Sitoo API** | [Sitoo API reference](https://developer.sitoo.com/api-reference/overview) |
 | **Data flows** | 10: sales, store orders delivered from the central warehouse, product data, prices, shipments to stores, store receipts, returns from stores, stock adjustments, stock balances and online orders for returns in store |
 | **Business Central editions** | All editions, Essentials and Premium, including the latest version |
-| **Available from** | [Web Connect on Microsoft AppSource](https://marketplace.microsoft.com/sv-se/product/PUBID.martitab1633951001710%7CAID.webconnect%7CPAPPID.9f3a7223-19db-4ac7-832f-cf8e4699186f?tab=Overview). [ATT FYLLA I: is the Sitoo POS integration part of the Web Connect Ready Integrations app, or set up as a configuration in Web Connect?] |
+| **Available from** | [Web Connect on Microsoft AppSource](https://marketplace.microsoft.com/sv-se/product/PUBID.martitab1633951001710%7CAID.webconnect%7CPAPPID.9f3a7223-19db-4ac7-832f-cf8e4699186f?tab=Overview). The Sitoo POS integration is included in the Web Connect Ready Integrations app |
 
 ## What can be synchronized
 
@@ -201,6 +201,7 @@ Stores, registers, staff and the stock in each store warehouse are always mainta
 
 - Microsoft Dynamics 365 Business Central, any edition (Essentials or Premium), including the latest version
 - Web Connect installed from Microsoft AppSource, with an activated Web Connect license
+- The Web Connect Ready Integrations app installed in the same Business Central environment. The Sitoo POS integration is included in it
 - Your approval for Web Connect to be installed and to act in your Business Central environment
 - API credentials for Sitoo, created in Sitoo
 - Access to the Sitoo Shipments API, and a webhook in Sitoo for shipment events, if shipments to and from the stores are used
@@ -212,7 +213,7 @@ Stores, registers, staff and the stock in each store warehouse are always mainta
 
 1. Decide which flows to use and which option to choose for each, see [Choose your setup](#choose-your-setup).
 2. Install Web Connect in Business Central, activate the license and give your approval.
-3. Import the Sitoo POS configuration with the integration turned off.
+3. Install the Web Connect Ready Integrations app in the same environment and activate the Sitoo POS integration, with the integration turned off until the mappings are set.
 4. Store the Sitoo API credentials in [Secret Value Storage](../../general/secret-value-storage.md).
 5. Map each Sitoo store to a customer, each Sitoo warehouse to a location, the Sitoo payment types to payment methods and the VAT groups to Sitoo VAT groups.
 6. Set up the shipment webhook in Sitoo and the [logistics setup](../../general/logistics-setup.md) for the store locations.
