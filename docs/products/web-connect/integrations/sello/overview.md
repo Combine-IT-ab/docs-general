@@ -41,10 +41,10 @@ Web Connect by CombineIT connects Microsoft Dynamics 365 Business Central with S
 | **Runs in** | Your own Business Central environment, as an extension. Web Connect fetches accepted returns from the Sello API on a schedule in the Business Central job queue. Sello does not call Business Central. All processing and configuration stays in Business Central. |
 | **Configured by** | You, in Business Central: mappings, conditions, triggers and flows. You can do all of it yourself. If you want, CombineIT takes part in any step, as a sounding board or by doing the work. |
 | **Connection** | Sello REST API (version 5, JSON). The API credentials are created in Sello |
-| **Sello API** | [ATT FYLLA I: name and link to Sello's API documentation] |
+| **Sello API** | [Sello API documentation](https://docs.sello.io/) |
 | **Data flows** | 1: return orders |
 | **Business Central editions** | All editions, Essentials and Premium, including the latest version |
-| **Available from** | [Web Connect on Microsoft AppSource](https://marketplace.microsoft.com/sv-se/product/PUBID.martitab1633951001710%7CAID.webconnect%7CPAPPID.9f3a7223-19db-4ac7-832f-cf8e4699186f?tab=Overview). [ATT FYLLA I: whether the Sello integration is part of the Web Connect Ready Integrations app] |
+| **Available from** | [Web Connect on Microsoft AppSource](https://marketplace.microsoft.com/sv-se/product/PUBID.martitab1633951001710%7CAID.webconnect%7CPAPPID.9f3a7223-19db-4ac7-832f-cf8e4699186f?tab=Overview). The Sello integration is not part of the Web Connect Ready Integrations app. It is set up as a configuration in Web Connect |
 
 ## What can be synchronized
 
