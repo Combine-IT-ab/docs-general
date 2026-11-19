@@ -25,13 +25,13 @@ When a CHESS ticket in Business Central is marked as sent, Web Connect sends one
 | | |
 |---|---|
 | **Direction** | Business Central → CHESS |
-| **Trigger** | A field on the CHESS ticket changes when the ticket is marked as sent. The trigger is set on the ticket and sends each of its lines. [ATT FYLLA I: the name of the field and what sets it] |
+| **Trigger** | The ticket is marked as sent in Business Central when the safety data sheets have been e-mailed to the customer. The trigger is set on that field of the ticket and sends each of its lines |
 | **Result** | Every document on the ticket is printed in CHESS, and the ticket is marked as printed in Business Central |
 | **Part of** | [Business Central and CHESS chemical management integration](../overview.md) |
 
 ## Step by step
 
-1. The ticket is marked as sent in Business Central (Business Central).
+1. The safety data sheets are e-mailed to the customer, and the ticket is marked as sent (Business Central).
 2. The change on the ticket starts one call for each ticket line, through the relation between ticket and ticket line (Web Connect).
 3. Each call sends `setToPrinted` to the CHESS DocMan and SDS service, with the login, the ticket ID from the ticket and the document ID and document type from the line (Web Connect).
 4. CHESS marks the document as printed and answers (CHESS).

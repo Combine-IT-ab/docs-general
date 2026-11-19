@@ -1,7 +1,7 @@
 ---
 title: "CHESS to Business Central: safety data sheets"
-description: "When CHESS has returned a ticket ID, Web Connect fetches the ticket's safety data sheets and stores them in Business Central, one ticket line per document."
-summary: "When CHESS has returned a ticket ID, Web Connect asks CHESS for the documents to print for that ticket. CHESS answers with the safety data sheets it holds for the items on the shipment. The answer is stored on the ticket in Business Central, with one ticket line per document, holding the document ID and the document type."
+description: "When CHESS has returned a ticket ID, Web Connect fetches the safety data sheets and writes each one to its shipment line on the ticket in Business Central."
+summary: "When CHESS has returned a ticket ID, Web Connect asks CHESS for the documents to print for that ticket. CHESS answers with the safety data sheets it holds for the items on the shipment. The answer is stored on the ticket in Business Central, and each document ID and document type is written to the ticket line for its shipment line."
 slug: integrations/business-central-chess/safety-data-sheets
 lang: en
 translation_key: integration-chess-safety-data-sheets
@@ -14,19 +14,19 @@ keywords:
   - business central sds integration
 faq:
   - question: "What if an item on the shipment has no safety data sheet?"
-    answer: "CHESS only returns the documents it holds for the item numbers on the ticket. An item without a safety data sheet in CHESS gives no document line on the ticket."
+    answer: "CHESS only returns the documents it holds for the item numbers on the ticket. An item without a safety data sheet in CHESS gets no document ID on its ticket line."
 last_reviewed: 2026-11-19
 ---
 
 # CHESS to Business Central: safety data sheets
 
-When CHESS has returned a ticket ID, Web Connect asks CHESS for the documents to print for that ticket. CHESS answers with the safety data sheets it holds for the items on the shipment. The answer is stored on the ticket in Business Central, with one ticket line per document, holding the document ID and the document type.
+When CHESS has returned a ticket ID, Web Connect asks CHESS for the documents to print for that ticket. CHESS answers with the safety data sheets it holds for the items on the shipment. The answer is stored on the ticket in Business Central, and each document ID and document type is written to the ticket line for its shipment line.
 
 | | |
 |---|---|
 | **Direction** | CHESS → Business Central |
 | **Trigger** | The ticket ID is written to the CHESS ticket in Business Central (outgoing sync trigger on that field) |
-| **Result** | The document list on the ticket, the ticket marked as having content, and one ticket line per safety data sheet with document ID and document type |
+| **Result** | The document list on the ticket, the ticket marked as having content, and the document ID and document type on the ticket line for each shipment line |
 | **Part of** | [Business Central and CHESS chemical management integration](../overview.md) |
 
 ## Step by step
@@ -35,7 +35,7 @@ When CHESS has returned a ticket ID, Web Connect asks CHESS for the documents to
 2. The change starts a `getPathsToPrint` call to the CHESS DocMan and SDS service, with the login and the ticket ID (Web Connect).
 3. CHESS answers with the documents for the ticket, encoded in Base64 (CHESS).
 4. Web Connect decodes the answer, stores it on the ticket and marks the ticket as having content (Web Connect).
-5. The document list is processed into ticket lines, one per document, with document ID and document type (Web Connect).
+5. The ticket lines are the lines of the shipment. Each document in the answer is written to its line, with document ID and document type (Web Connect).
 
 ```mermaid
 sequenceDiagram
@@ -48,7 +48,7 @@ sequenceDiagram
     alt Documents found
         CH-->>WC: getPathsToPrintResult (Base64)
         WC->>BC: Document list on the ticket, has content
-        WC->>BC: One ticket line per document
+        WC->>BC: Document ID and type on each ticket line
     else Request rejected
         CH-->>WC: SOAP fault
         WC-->>WC: Error in Entries ⚠️
@@ -71,23 +71,21 @@ sequenceDiagram
 | Object | Role |
 |---|---|
 | `CHE_PATHSTOPRINT` | The `getPathsToPrint` call, started when the ticket ID is written |
-| `CHE_ENVELOPE_PATHTOPRINT` | Reads the answer and passes the document list on for processing into ticket lines |
+| `CHE_ENVELOPE_PATHTOPRINT` | Reads the answer and passes the document list on to the ticket lines |
 | `CHE_LOGIN` | The login XML, shared with the other CHESS calls |
-
-[ATT FYLLA I: the object that turns the document list into ticket lines (CHE_PDFINFO) is not in the configuration exports. Confirm how the ticket lines are created.]
 
 ## Error handling
 
 | Situation | What happens | What to do |
 |---|---|---|
-| CHESS answers with a SOAP fault | The call is logged as an error in Entries, and the ticket gets no document lines | Check the login and the ticket ID, then [resend the message](../../../../../how-to/web-connect/resend-outgoing-message.md) |
-| No item on the shipment has a safety data sheet in CHESS | The ticket gets no document lines | Connect the safety data sheet to the item number in CHESS, or leave such shipments out of the selection |
+| CHESS answers with a SOAP fault | The call is logged as an error in Entries, and the ticket lines get no document IDs | Check the login and the ticket ID, then [resend the message](../../../../../how-to/web-connect/resend-outgoing-message.md) |
+| No item on the shipment has a safety data sheet in CHESS | The ticket lines get no document IDs | Connect the safety data sheet to the item number in CHESS, or leave such shipments out of the selection |
 
 ## Frequently asked questions
 
 ### What if an item on the shipment has no safety data sheet?
 
-CHESS only returns the documents it holds for the item numbers on the ticket. An item without a safety data sheet in CHESS gives no document line on the ticket.
+CHESS only returns the documents it holds for the item numbers on the ticket. An item without a safety data sheet in CHESS gets no document ID on its ticket line.
 
 ## Related
 

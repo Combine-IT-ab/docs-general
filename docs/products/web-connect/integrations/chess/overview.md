@@ -41,10 +41,10 @@ Web Connect by CombineIT connects Microsoft Dynamics 365 Business Central with C
 | **Runs in** | Your own Business Central environment, as an extension. Every call starts in Business Central: a new CHESS ticket for a posted shipment is sent at once, the safety data sheets are fetched when CHESS has returned the ticket ID, and Set to Printed is sent when the ticket is marked as sent. There are no incoming webhooks. All processing and configuration stays in Business Central. |
 | **Configured by** | You, in Business Central: mappings, conditions, triggers and flows. You can do all of it yourself. If you want, CombineIT takes part in any step, as a sounding board or by doing the work. |
 | **Connection** | SOAP web services with XML on DGOffice.net: the client validation service for tickets, and the DocMan and SDS service for documents |
-| **CHESS API** | [ATT FYLLA I: whether Bureau Veritas publishes documentation for the DocMan web services, or only gives the service description to customers] |
+| **CHESS API** | There is no published API guide. The web services list their operations and their service description (WSDL) openly: [DocMan and SDS service](https://www.dgoffice.net/webservice/DGMDocManAndSDS/DocManAndSDS.asmx) and [client validation service](https://www.dgoffice.net/webservice/RemoteValidater/DGMclientvalidate.asmx). The XML format of the ticket data is described in the [DgXML documentation](https://www.dgoffice.net/download/software/dgoffice/webremote/XML_Dg_documentation.htm) |
 | **Data flows** | 3: shipment tickets, safety data sheets and documents marked as printed |
 | **Business Central editions** | All editions, Essentials and Premium, including the latest version |
-| **Available from** | [Web Connect on Microsoft AppSource](https://marketplace.microsoft.com/sv-se/product/PUBID.martitab1633951001710%7CAID.webconnect%7CPAPPID.9f3a7223-19db-4ac7-832f-cf8e4699186f?tab=Overview). [ATT FYLLA I: whether CHESS is part of the Web Connect Ready Integrations app] |
+| **Available from** | [Web Connect on Microsoft AppSource](https://marketplace.microsoft.com/sv-se/product/PUBID.martitab1633951001710%7CAID.webconnect%7CPAPPID.9f3a7223-19db-4ac7-832f-cf8e4699186f?tab=Overview). The CHESS integration is not part of the Web Connect Ready Integrations app. It is set up as a configuration in Web Connect |
 
 ## What can be synchronized
 
@@ -53,14 +53,14 @@ Web Connect has three data flows between Business Central and CHESS.
 | Data | Direction | What happens |
 |---|---|---|
 | [Shipment tickets](flows/shipment-ticket.md) | Business Central → CHESS | A posted sales shipment is sent to CHESS as a ticket, with the customer, the recipient's e-mail address, the document language and the item numbers. CHESS returns a ticket ID |
-| [Safety data sheets](flows/safety-data-sheets.md) | CHESS → Business Central | The documents CHESS holds for the items on the ticket are fetched and stored on the ticket in Business Central, one line per document |
+| [Safety data sheets](flows/safety-data-sheets.md) | CHESS → Business Central | The documents CHESS holds for the items on the ticket are fetched, and each document is written to its shipment line on the ticket in Business Central |
 | [Documents marked as printed](flows/set-to-printed.md) | Business Central → CHESS | When the ticket is marked as sent, each document on it is reported to CHESS as printed, and the ticket in Business Central is marked as printed |
 
 The three flows work as one chain, and all three are used in the one CHESS integration in production today. See [Choose your setup](#choose-your-setup).
 
 ## How it works
 
-Web Connect keeps a CHESS ticket in Business Central for each posted sales shipment that should have safety data sheets. When a ticket is created, Web Connect sends the shipment to CHESS and stores the ticket ID that CHESS returns. The new ticket ID starts the next call, which fetches the list of documents for the ticket. When the ticket has been marked as sent, Web Connect tells CHESS that each document is printed, so the ticket leaves the queue in CHESS. Every call and answer is logged in Web Connect [Entries](../../general/entries.md), where it can be inspected and resent.
+Web Connect keeps a CHESS ticket in Business Central for each posted sales shipment that should have safety data sheets. When a ticket is created, Web Connect sends the shipment to CHESS and stores the ticket ID that CHESS returns. The new ticket ID starts the next call, which fetches the list of documents for the ticket. The safety data sheets are e-mailed to the customer from Business Central, and the ticket is marked as sent. Web Connect then tells CHESS that each document is printed, so the ticket leaves the queue in CHESS. Every call and answer is logged in Web Connect [Entries](../../general/entries.md), where it can be inspected and resent.
 
 ```mermaid
 graph LR
@@ -73,7 +73,7 @@ graph LR
     A -->|Ticket ID| B
     B -->|Fetch documents for the ticket| A
     A -->|Safety data sheets| B
-    B -->|Document lines on the ticket| C
+    B -->|Documents on the ticket lines| C
     C -->|Ticket marked as sent| B
     B -->|Set to Printed per document| A
 ```
@@ -169,15 +169,14 @@ All configuration and logic in the integration is visible and editable in Busine
 - **Language:** how each ship-to country is translated to a document language in CHESS.
 - **Sender:** the company name shown as sender on the delivery note information in CHESS.
 - **Item numbers:** characters that are removed from item numbers so they match the item numbers in CHESS.
-- **Sending of documents:** [ATT FYLLA I: whether the safety data sheets are e-mailed to the customer from Business Central or by CHESS DocMan, and what the user does to mark a ticket as sent]
+- **Sending of documents:** the safety data sheets are e-mailed to the customer from Business Central, and the ticket is marked as sent there. That is what starts Set to Printed.
 
 ## Limitations
 
 - **The ticket tables are not part of Web Connect itself.** They come from a separate extension from CombineIT, which is installed with the integration.
 - **Tickets are only created for posted sales shipments.** Orders, invoices and returns do not get safety data sheets through the integration.
-- **CHESS returns only the documents it holds for the item numbers.** An item that has no safety data sheet in CHESS gives no document line.
+- **CHESS returns only the documents it holds for the item numbers.** An item that has no safety data sheet in CHESS gets no document.
 - **No webhooks.** CHESS does not tell Business Central about changes. A new version of a safety data sheet is only fetched for new tickets.
-- **The login details for the CHESS web services are part of the mapping**, not stored in Secret Value Storage. [ATT FYLLA I: confirm whether the CHESS login can be moved to Secret Value Storage]
 
 ## Frequently asked questions
 

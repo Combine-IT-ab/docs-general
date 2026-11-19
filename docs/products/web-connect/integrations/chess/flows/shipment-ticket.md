@@ -61,7 +61,7 @@ sequenceDiagram
 |---|---|---|
 | `LoginXML` | Fixed values | The CHESS login for the web services, sent as CDATA |
 | `DOCMANCUSTOMERID` | Sell-to Customer No. (posted sales shipment) | |
-| `DOCMANPRINTERNAME` | Sell-to E-Mail (posted sales shipment) | The recipient of the documents |
+| `DOCMANPRINTERNAME` | Sell-to E-Mail (posted sales shipment) | The DocMan element for where the documents go. The integration sends the e-mail address |
 | `DOCMANLANGUAGE` | Ship-to Country/Region Code (posted sales shipment) | Translated with a mapping, for example SE to sv-SE, DK to da-DK, FI to fi-FI and NO to no-NO |
 | `DELIVERNOTEFROMCOMPANY` | Fixed value | Your company name as sender |
 | `CMDDOCUMENT` | Fixed value | The DocMan command for the ticket |
@@ -83,7 +83,6 @@ sequenceDiagram
 | Situation | What happens | What to do |
 |---|---|---|
 | CHESS answers with a SOAP fault | The call is logged as an error in Entries and the ticket gets no ticket ID, so no documents are fetched | Check the login and the data in the request, then [resend the message](../../../../../how-to/web-connect/resend-outgoing-message.md) |
-| A ship-to country is not in the language mapping | [ATT FYLLA I: what CHESS does when the ticket has no document language] | Add the country to the mapping |
 
 ## Frequently asked questions
 
