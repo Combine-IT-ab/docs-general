@@ -179,7 +179,7 @@ Products, variants, product content and the order pipeline with its stages are a
 - Microsoft Dynamics 365 Business Central, any edition (Essentials or Premium), including the latest version
 - Web Connect installed from Microsoft AppSource, with an activated Web Connect license
 - Your approval for Web Connect to be installed and to act in your Business Central environment
-- A Crystallize access token (token ID and secret) with access to orders and products, created in Crystallize. [ATT FYLLA I: where in Crystallize the token is created and which permissions it needs]
+- A Crystallize access token (token ID and secret), created in Crystallize
 - A Crystallize order pipeline with the stages the integration uses, and the tenant ID of your Crystallize tenant
 - Stock locations and price variants in Crystallize that match what is sent from Business Central
 - Items in Business Central with the same SKUs as the product variants in Crystallize
@@ -192,7 +192,7 @@ Products, variants, product content and the order pipeline with its stages are a
 4. Enter the tenant ID, the pipeline ID and the ID of each pipeline stage as integration variables.
 5. Set up the configuration choices below.
 6. Run product matching so every SKU has its Crystallize product ID.
-7. Test the whole order flow in a Business Central sandbox before going live. [ATT FYLLA I: which Crystallize tenant or environment is used for test]
+7. Test the whole order flow in a Business Central sandbox against a Crystallize test environment before going live.
 
 ## Configure it yourself in Business Central
 
@@ -213,6 +213,7 @@ All configuration and logic in the integration is visible and editable in Busine
 ## Configuration choices
 
 - **Pipeline and stages:** which Crystallize pipeline is used, which stage new orders are fetched from, and which stages Web Connect moves orders to.
+- **Fetch schedule:** how often the job queue fetches new orders from Crystallize. It can be adjusted to what your business needs.
 - **Orders per run:** how many orders are fetched each time the job runs.
 - **Customer handling:** customers are found by the customer identifier in Crystallize. Whether an order is from a company is decided by whether the company name is filled in, and new customers get a customer template based on the delivery country.
 - **Item matching:** the SKU on the order line is looked up in Web Connect Item SKU, which gives the item number and the variant code.

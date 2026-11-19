@@ -25,7 +25,7 @@ Web Connect fetches the orders that are in a chosen stage of the Crystallize ord
 | | |
 |---|---|
 | **Direction** | Crystallize → Business Central |
-| **Trigger** | Schedule in the Business Central job queue. [ATT FYLLA I: how often the job runs] |
+| **Trigger** | Schedule in the Business Central job queue. How often it runs can be adjusted to what your business needs |
 | **Result** | A customer and a sales order in Business Central. The order is in the stage "In BC" in Crystallize |
 | **Part of** | [Business Central and Crystallize integration](../overview.md) |
 
