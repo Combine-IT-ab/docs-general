@@ -55,6 +55,7 @@ Mallarna bygger på nulägesmätningen i Combine-IT-ab/docs-internal#47: sökord
 | Sello | Sello | marketplaces |
 | Voyado | Voyado | loyalty and CRM |
 | Plytix | Plytix PIM | PIM |
+| Chess | CHESS | chemical management |
 | Milient | Milient (formerly Milltime) | time and project management |
 | Keen | Keen member portal | membership |
 | Resourced | Resourced PLM | PLM |
