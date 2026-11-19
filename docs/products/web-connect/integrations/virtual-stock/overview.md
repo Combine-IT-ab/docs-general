@@ -41,7 +41,7 @@ Web Connect by CombineIT connects Microsoft Dynamics 365 Business Central with V
 | **Connection** | Virtualstock REST API (V4), JSON, with a token from the Virtualstock token endpoint |
 | **Virtualstock API** | [Virtualstock API documentation](https://api-docs.virtualstock.com) |
 | **Data flows** | 6: orders, order acknowledgements, dispatches, stock, cancellations and product data |
-| **Business Central editions** | Essentials and Premium |
+| **Business Central editions** | All editions, Essentials and Premium, including the latest version |
 | **Available from** | [Web Connect on Microsoft AppSource](https://marketplace.microsoft.com/sv-se/product/PUBID.martitab1633951001710%7CAID.webconnect%7CPAPPID.9f3a7223-19db-4ac7-832f-cf8e4699186f?tab=Overview). [ATT FYLLA I: whether the Virtualstock integration is included in the Web Connect Ready Integrations app] |
 
 ## What can be synchronized
@@ -143,7 +143,7 @@ Retailer data, retailer prices and the order itself are always maintained in Vir
 
 ## What you need
 
-- Microsoft Dynamics 365 Business Central, Essentials or Premium
+- Microsoft Dynamics 365 Business Central, any edition (Essentials or Premium), including the latest version
 - Web Connect installed from Microsoft AppSource, with an activated Web Connect license
 - Your approval for Web Connect to be installed and to act in your Business Central environment
 - An API user from Virtualstock (user name and password) for each retailer connection, for both the sandbox and production. [ATT FYLLA I: where the supplier gets the API user, from Virtualstock or from the retailer]
