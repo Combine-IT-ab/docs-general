@@ -45,7 +45,7 @@ Web Connect by CombineIT connects Microsoft Dynamics 365 Business Central with O
 | **Connection** | Ongoing REST API and webhooks, with Basic authentication |
 | **Ongoing API** | [Ongoing WMS REST API](https://developer.ongoingwarehouse.com/REST/v1/index.html) and [Ongoing webhooks](https://developer.ongoingwarehouse.com/webhooks) |
 | **Data flows** | 9: items, outbound orders, order changes and cancellations, shipments, purchase orders, receipts, returns, stock adjustments and stock reconciliation |
-| **Business Central editions** | [ATT FYLLA I: vilka utgåvor av Business Central som stöds (Essentials, Premium)] |
+| **Business Central editions** | All editions, Essentials and Premium, including the latest version |
 | **Available from** | [Web Connect on Microsoft AppSource](https://marketplace.microsoft.com/sv-se/product/PUBID.martitab1633951001710%7CAID.webconnect%7CPAPPID.9f3a7223-19db-4ac7-832f-cf8e4699186f?tab=Overview). [ATT FYLLA I: om Ongoing-integrationen ingår i appen Web Connect Ready Integrations eller levereras som konfiguration] |
 
 ## What can be synchronized
@@ -278,7 +278,7 @@ Warehouse locations, picking, packing, carrier booking and the 3PL's own article
 
 ## What you need
 
-- Microsoft Dynamics 365 Business Central [ATT FYLLA I: utgåva och lägsta version]
+- Microsoft Dynamics 365 Business Central, any edition, including the latest version
 - Web Connect installed from Microsoft AppSource, with an activated Web Connect license
 - Your approval for Web Connect to be installed and to act in your Business Central environment
 - Web Connect added as a Microsoft Entra application in Business Central, with consent granted by your Entra administrator. Webhooks from Ongoing cannot reach Business Central without it
