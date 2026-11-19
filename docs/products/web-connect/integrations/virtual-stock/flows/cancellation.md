@@ -1,81 +1,89 @@
-# Cancellation Flow
-
-**Direction:** BC → Virtual Stock
-**Purpose:** Cancel an acknowledged order in Virtual Stock when it can no longer be fulfilled.
-
+---
+title: "Business Central to Virtualstock: cancellation"
+description: "Web Connect reports order lines that cannot be delivered from Business Central to Virtualstock as cancelled, with item, line reference and quantity."
+summary: "When order lines from Virtualstock cannot be delivered, for example back-ordered lines, Web Connect reports them as cancelled to Virtualstock. Each line is sent with its part number, Virtualstock line reference and the quantity that will not be delivered."
+lang: en
+translation_key: integration-virtual-stock-cancellation
+product: web-connect
+type: integration-flow
+system: "Virtualstock"
+system_category: "marketplace (dropship)"
+keywords:
+  - business central virtualstock cancellation
+  - virtualstock cancel order lines business central
+faq:
+  - question: "Can a whole order be cancelled, or only lines?"
+    answer: "The message is built from the order lines, so it can contain one line or all lines of the order. Each line is sent with the quantity that will not be delivered."
+last_reviewed: 2026-11-19
 ---
 
-## Overview
+# Business Central to Virtualstock: cancellation
 
-If an order that has already been confirmed (status `PROCESSING`) cannot be fulfilled, a cancellation notification must be sent to Virtual Stock. This updates the order status to **CANCELLED** and notifies the retailer.
+When order lines from Virtualstock cannot be delivered, for example back-ordered lines, Web Connect reports them as cancelled to Virtualstock. Each line is sent with its part number, Virtualstock line reference and the quantity that will not be delivered.
 
-> **Note:** If the retailer initiates a cancellation, the order status in Virtual Stock becomes `CANCEL`. This is a separate scenario that must be handled in BC — the incoming status change is picked up during the next polling cycle.
-
----
-
-## How It Works
-
-**Trigger:** Automatic — triggered when an order is cancelled in BC
-**Objects used:**
-
-| Object | Role |
+| | |
 |---|---|
-| `VS_CANCELLATION` | Parent — sends cancellation notification to Virtual Stock |
-| `VS_CANCELLED_ITEMS` | Sub — cancelled order lines |
+| **Direction** | Business Central → Virtualstock |
+| **Trigger** | Outgoing sync triggers, set per integration when the flow is used. Usually the fields that are sent to Virtualstock are the trigger fields, so a change in one of them sends the record again |
+| **Result** | The lines are registered as cancelled in Virtualstock |
+| **Part of** | [Business Central and Virtualstock integration](../overview.md) |
 
-**Process steps:**
+## Step by step
 
-1. Order is cancelled in Business Central
-2. Web Connect detects the cancellation
-3. Cancellation payload built from `VS_CANCELLATION` + `VS_CANCELLED_ITEMS`
-4. Cancellation sent to Virtual Stock
-5. Virtual Stock updates order status to `CANCELLED`
-
-**Sequence diagram:**
+1. Some or all lines on a Virtualstock sales order cannot be delivered.
+2. The outgoing sync trigger set up for the integration fires for the sales order.
+3. Web Connect builds the message from the sales lines of type Item, with the quantity that is still outstanding.
+4. The cancellation is sent to Virtualstock for the stored Virtualstock order ID.
 
 ```mermaid
 sequenceDiagram
     participant BC as 🔄 Business Central
     participant WC as ⚙️ Web Connect
-    participant VS as 🏪 Virtual Stock
+    participant VS as 🛒 Virtualstock
 
-    Note over BC: Order cancelled in BC
-    BC-->>WC: Cancellation detected
-    WC->>VS: Send cancellation (VS_CANCELLATION + VS_CANCELLED_ITEMS)
-    VS-->>VS: Status → CANCELLED
-    VS-->>WC: Cancellation acknowledged
+    BC-->>WC: Lines on a Virtualstock order cannot be delivered
+    WC->>WC: Build cancellation from outstanding quantities
+    WC->>VS: Cancel lines (order ID)
+    alt Accepted
+        VS-->>WC: OK
+    else Rejected
+        VS-->>WC: Error, shown in Entries ⚠️
+    end
 ```
 
----
+## Data mapping
 
-## Variants
-
-### Variant A — Full order cancellation (Standard)
-
-The entire order is cancelled. All lines included in `VS_CANCELLED_ITEMS`.
-
-### Variant B — Partial line cancellation
-
-Individual order lines are cancelled while others remain active. Supported by Virtual Stock; whether this is configured depends on customer setup.
-
----
-
-## Configuration Notes
-
-- **Timing:** Cancellations can only be sent while the order is still in `PROCESSING` status — not after dispatch
-- **Retailer-initiated cancellations:** If the retailer cancels (order status becomes `CANCEL` in VS), this must be handled in BC separately — e.g. the Sales Order is put on hold or deleted
-
----
-
-## Error Handling
-
-| Step | What can go wrong | What happens |
+| Business Central field | Virtualstock field | Note |
 |---|---|---|
-| Detecting cancellation | Trigger not configured | Cancellation never sent; order stays `PROCESSING` in VS |
-| Sending cancellation | VS API error | Job Queue entry fails; retry on next run |
-| Sending cancellation | Auth error (401/403) | Token refresh attempted; if fails, check `VS_OAUTH` config |
-| Sending cancellation | Order already dispatched | VS rejects the cancellation — cannot cancel after dispatch |
+| Web Connect external ID on the sales order | Order ID in the address of the call | The Virtualstock order ID |
+| Sales Line: No. | `items[].part_number` | |
+| Web Connect external ID on the line | `items[].line_ref` | The Virtualstock line reference |
+| Sales Line: Outstanding Quantity | `items[].quantity` | The quantity that will not be delivered |
+| None by default | `items[].comment` | Left out when empty |
 
----
-**Related:**
-[Overview](../overview.md) · [Order — Inbound](order-inbound.md) · [Order Confirmation](order-confirmation.md) · [How-to](../../../../../how-to/web-connect/README.md)
+## Web Connect objects
+
+| Object | Role |
+|---|---|
+| `VS_CANCELLATION` | Sends the cancellation for the sales order |
+| `VS_CANCELLED_ITEMS` | One entry per sales line of type Item |
+| `VS_URL` | Puts the Virtualstock order ID into the address of the call |
+
+## Error handling
+
+| Situation | What happens | What to do |
+|---|---|---|
+| Virtualstock rejects the cancellation | The entry gets an error in Web Connect Entries | Check the order status in Virtualstock, for example that the lines have not already been dispatched |
+| Calls fail with 401 Unauthorized | The token could not be fetched | Check the API password in Secret Value Storage |
+
+## Frequently asked questions
+
+### Can a whole order be cancelled, or only lines?
+
+The message is built from the order lines, so it can contain one line or all lines of the order. Each line is sent with the quantity that will not be delivered.
+
+## Related
+
+- [Business Central and Virtualstock integration](../overview.md)
+- [Order inbound](order-inbound.md) · [Order confirmation](order-confirmation.md)
+- [Entries](../../../general/entries.md)

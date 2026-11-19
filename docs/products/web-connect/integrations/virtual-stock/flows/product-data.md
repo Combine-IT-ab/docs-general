@@ -1,88 +1,88 @@
-# Product Data Flow
-
-**Direction:** BC → Virtual Stock
-**Purpose:** Sync product information from Business Central to Virtual Stock so the retailer's catalogue is up to date.
-
+---
+title: "Business Central to Virtualstock: product data"
+description: "Web Connect can create items from Business Central as products in Virtualstock, with part number and unit of measure. The flow is not in production use today."
+summary: "The standard Web Connect configuration for Virtualstock contains a product object that creates items from Business Central as products in Virtualstock, with item number as part number and the base unit of measure. No Web Connect customer uses it in production today. Instead, the supplier creates the products in Virtualstock and links them manually by registering the Virtualstock product ID on the item card or as an item reference in Business Central."
+lang: en
+translation_key: integration-virtual-stock-product-data
+product: web-connect
+type: integration-flow
+system: "Virtualstock"
+system_category: "marketplace (dropship)"
+keywords:
+  - business central virtualstock products
+  - virtualstock product sync business central
+faq:
+  - question: "Do we have to create products in Virtualstock from Business Central?"
+    answer: "No. The supplier can create the products in Virtualstock and register each Virtualstock product ID on the item card or as an item reference in Business Central, which is how Web Connect customers work today. Orders and stock work the same either way, as long as each item has its EAN and Virtualstock product ID."
+last_reviewed: 2026-11-19
 ---
 
-## Overview
+# Business Central to Virtualstock: product data
 
-Before orders can flow through the integration, products must exist in Virtual Stock. Product information — such as item references, EAN codes, descriptions, and dimensions — is pushed from BC to Virtual Stock via Web Connect. Virtual Stock assigns each product an **External ID** which is stored back in BC and used for all subsequent stock updates.
+The standard Web Connect configuration for Virtualstock contains a product object that creates items from Business Central as products in Virtualstock, with item number as part number and the base unit of measure. No Web Connect customer uses it in production today. Instead, the supplier creates the products in Virtualstock and links them manually by registering the Virtualstock product ID on the item card or as an item reference in Business Central.
 
----
-
-## How It Works
-
-**Trigger:** Configurable — can be triggered by item creation/changes in BC or run as an initial one-time sync
-**API endpoints:**
-- `POST /api/v4/products` — create new product
-- `PUT /api/v4/products/{external_id}` — update existing product
-
-**Objects used:**
-
-| Object | Role |
+| | |
 |---|---|
-| `VS_PRODUCT` | Sends product data to Virtual Stock (create or update) |
+| **Direction** | Business Central → Virtualstock |
+| **Trigger** | Outgoing sync triggers, set per integration when the flow is used. Usually the fields that are sent to Virtualstock are the trigger fields, so a change in one of them sends the record again |
+| **Result** | The item exists as a product in Virtualstock |
+| **Part of** | [Business Central and Virtualstock integration](../overview.md) |
 
-**Process steps:**
+## Step by step
 
-1. Item created or changed in BC (or initial sync is triggered)
-2. Web Connect detects the change
-3. Product payload built and sent to Virtual Stock
-4. If the product is new: Virtual Stock creates it and returns an **External ID**
-5. External ID stored in BC (on Item Card) or in Web Connect Outgoing Data
-6. External ID is now available for [Stock Updates](stock-update.md)
-
-**Sequence diagram:**
+1. An item that should be sold through Virtualstock is selected in Business Central.
+2. Web Connect builds the product with the item number, the base unit of measure and the links to the Virtualstock category, client and supplier.
+3. The product is created in Virtualstock.
+4. Virtualstock answers with the new product ID, and Web Connect stores it, so that stock updates reach the product.
 
 ```mermaid
 sequenceDiagram
     participant BC as 🔄 Business Central
     participant WC as ⚙️ Web Connect
-    participant VS as 🏪 Virtual Stock
+    participant VS as 🛒 Virtualstock
 
-    BC-->>WC: Item created or updated
-    WC->>WC: Build product payload
-    alt New product
-        WC->>VS: POST /api/v4/products
-        VS-->>WC: Return External ID
-        WC->>BC: Store External ID on item
-    else Existing product
-        WC->>VS: PUT /api/v4/products/{external_id}
-        VS-->>VS: Product updated
+    BC-->>WC: Item to create in Virtualstock
+    WC->>WC: Build product
+    WC->>VS: Create product
+    alt Accepted
+        VS-->>WC: Product created, with product ID
+        WC->>BC: Store the product ID
+    else Rejected
+        VS-->>WC: Error, shown in Entries ⚠️
     end
 ```
 
----
+## Data mapping
 
-## Variants
-
-### Variant A — Initial sync + ongoing updates (Standard)
-
-An initial sync pushes all relevant items from BC to Virtual Stock. After that, Web Connect detects item changes and pushes updates automatically.
-
-### Variant B — Initial sync only
-
-Used when the product catalogue is stable and items rarely change. An initial sync is run once; subsequent updates are handled manually or via periodic re-sync.
-
----
-
-## Configuration Notes
-
-- **External ID:** Assigned by Virtual Stock at product creation time. Must be stored and linked to the BC item — required for all stock updates
-- **EAN:** Should be present on every item; used for item matching in the order flow
-- **Retailer-specific requirements:** Some retailers require product data in a specific format or with specific fields. Confirm with Virtual Stock onboarding documentation
-
----
-
-## Error Handling
-
-| Step | What can go wrong | What happens |
+| Business Central field | Virtualstock field | Note |
 |---|---|---|
-| Building payload | Missing required fields | VS API returns validation error |
-| Creating product | Product already exists | VS returns conflict; use update endpoint instead |
-| Storing External ID | Not saved after creation | Stock updates fail — cannot match product in VS |
+| Item: No. | `part_number` and `data.supplier_part_number` | |
+| Item: Base Unit of Measure | `data.uom` | |
+| Set per integration | `category`, `client`, `supplier` | Links to the Virtualstock category, client and supplier, given by Virtualstock |
+| Fixed value | `data.low_stock` | The low stock level in Virtualstock |
 
----
-**Related:**
-[Overview](../overview.md) · [Stock Update](stock-update.md) · [How-to](../../../../../how-to/web-connect/README.md)
+## Web Connect objects
+
+| Object | Role |
+|---|---|
+| `VS_PRODUCT` | Creates the product in Virtualstock |
+| `VS_ITEM-DATA` | The product data block: supplier part number, unit of measure and low stock level |
+
+## Error handling
+
+| Situation | What happens | What to do |
+|---|---|---|
+| Virtualstock rejects the product | The entry gets an error in Web Connect Entries | Check the category, client and supplier links and the required fields for the retailer |
+| Calls fail with 401 Unauthorized | The token could not be fetched | Check the API password in Secret Value Storage |
+
+## Frequently asked questions
+
+### Do we have to create products in Virtualstock from Business Central?
+
+No. The supplier can create the products in Virtualstock and register each Virtualstock product ID on the item card or as an item reference in Business Central, which is how Web Connect customers work today. Orders and stock work the same either way, as long as each item has its EAN and Virtualstock product ID.
+
+## Related
+
+- [Business Central and Virtualstock integration](../overview.md)
+- [Stock update](stock-update.md)
+- [Entries](../../../general/entries.md)
