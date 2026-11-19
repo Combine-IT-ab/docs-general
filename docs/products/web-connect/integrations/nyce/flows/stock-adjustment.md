@@ -54,7 +54,7 @@ sequenceDiagram
 | `Item.Sku` | Item No. | |
 | `Quantity` | Quantity | Positive or negative adjustment |
 | `DateAdded` | Posting date on the WMS document | |
-| `TransactionType` | Read, not stored | [ATT FYLLA I: whether some transaction types are filtered out] |
+| `TransactionType` | Read, not stored | Not used to filter transactions |
 
 ## Web Connect objects
 

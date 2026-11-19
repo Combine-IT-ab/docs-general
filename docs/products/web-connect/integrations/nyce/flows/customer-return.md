@@ -1,7 +1,7 @@
 ---
 title: "Nyce Logic WMS to Business Central: customer returns"
 description: "Web Connect fetches customer returns registered in Nyce Logic WMS and logs them in Business Central with item, quantity, original order and return cause."
-summary: "When the warehouse registers a customer return, usually from the original customer order or delivery, Web Connect fetches it from Nyce Logic WMS on a schedule. The return is logged in Business Central as a WMS document of type Return Order, with the returned item, quantity, the original order and the return cause."
+summary: "When the warehouse registers a customer return, usually from the original customer order or delivery, Web Connect fetches it from Nyce Logic WMS on a schedule. The return is logged as a WMS document of type Return Order, with the returned item, quantity, the original order and the return cause, and the return receipt is posted in Business Central."
 slug: integrations/business-central-nyce/customer-return
 lang: en
 translation_key: integration-nyce-customer-return
@@ -19,13 +19,13 @@ last_reviewed: 2026-11-19
 
 # Nyce Logic WMS to Business Central: customer returns
 
-When the warehouse registers a customer return, usually from the original customer order or delivery, Web Connect fetches it from Nyce Logic WMS on a schedule. The return is logged in Business Central as a WMS document of type Return Order, with the returned item, quantity, the original order and the return cause.
+When the warehouse registers a customer return, usually from the original customer order or delivery, Web Connect fetches it from Nyce Logic WMS on a schedule. The return is logged as a WMS document of type Return Order, with the returned item, quantity, the original order and the return cause, and the return receipt is posted in Business Central.
 
 | | |
 |---|---|
 | **Direction** | Nyce → Business Central |
 | **Trigger** | Schedule in the Business Central job queue |
-| **Result** | A WMS document of type Return Order in Business Central. [ATT FYLLA I: whether a sales return order is created and the return receipt posted automatically] |
+| **Result** | A posted return receipt in Business Central, followed by a credit memo, and a WMS document of type Return Order |
 | **Part of** | [Business Central and Nyce Logic WMS integration](../overview.md) |
 
 ## Step by step
@@ -34,7 +34,8 @@ When the warehouse registers a customer return, usually from the original custom
 2. For each return in `Data.CustomerReturnDelivery`, Web Connect creates a WMS document of type Return Order, numbered with the Nyce document number.
 3. The original customer order number is stored on the document.
 4. Each line gets the returned item, quantity and return cause code.
-5. [ATT FYLLA I: what Business Central does with the return after that]
+5. Web Connect posts the return receipt, if that is switched on. This is the usual setup.
+6. The credit memo is posted afterwards. It can be posted automatically by a job in the Business Central job queue.
 
 ```mermaid
 sequenceDiagram
@@ -44,7 +45,9 @@ sequenceDiagram
 
     WC->>N: GET customer return deliveries (scheduled)
     N-->>WC: Returns with lines and return cause
-    WC-->>BC: WMS document: Return Order
+    WC-->>WC: WMS document: Return Order
+    WC->>BC: Post return receipt
+    BC-->>BC: Credit memo, by hand or by a job queue entry
 ```
 
 ## Data mapping

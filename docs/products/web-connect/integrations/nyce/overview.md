@@ -22,6 +22,8 @@ faq:
     answer: "Nyce reports two figures per item. Balance excludes locked locations, for example inbound, returns and repacking. PhysicalBalance is everything physically in the warehouse. Which figure is used for what is decided in the setup, so the same stock is not deducted twice."
   - question: "How often is stock reconciled between Nyce and Business Central?"
     answer: "Shipments, receipts and stock adjustments are fetched on a schedule from the Business Central job queue, so stock moves as the warehouse works. In addition, a full stock balance is fetched once a day in a time window you set, and differences are posted through a physical inventory journal."
+  - question: "Can an order be cancelled after it has been sent to Nyce?"
+    answer: "Yes, until Nyce has allocated it. Cancellation is manual by default. It can be set up so that customer service sends a cancellation to the warehouse from the order in Business Central, and Nyce cancels the order if its status allows it."
   - question: "What happens if a receipt is reversed in Nyce?"
     answer: "Reversals in the WMS are not integrated. If a receipt is reversed and posted again in Nyce, the new receipt stops with an error in Business Central because the purchase order is already received. The correction is made manually in Business Central, following Business Central standard."
 last_reviewed: 2026-11-19
@@ -43,7 +45,7 @@ Web Connect by CombineIT connects Microsoft Dynamics 365 Business Central with N
 | **Nyce API** | Nyce REST API. The API documentation is not public: your Nyce supplier gives access to it once you are a customer |
 | **Data flows** | 9: items, item dimensions and weights, outbound orders, shipments, inbound orders, receipts, customer returns, stock adjustments and stock balance |
 | **Business Central editions** | All editions, Essentials and Premium, including the latest version |
-| **Available from** | [Web Connect on Microsoft AppSource](https://marketplace.microsoft.com/sv-se/product/PUBID.martitab1633951001710%7CAID.webconnect%7CPAPPID.9f3a7223-19db-4ac7-832f-cf8e4699186f?tab=Overview). [ATT FYLLA I: whether the Nyce integration is included in the Web Connect Ready Integrations app] |
+| **Available from** | [Web Connect on Microsoft AppSource](https://marketplace.microsoft.com/sv-se/product/PUBID.martitab1633951001710%7CAID.webconnect%7CPAPPID.9f3a7223-19db-4ac7-832f-cf8e4699186f?tab=Overview). The Nyce integration is not part of the Web Connect Ready Integrations app. It is set up in your Web Connect during the project |
 
 ## What can be synchronized
 
@@ -57,7 +59,7 @@ Web Connect has nine data flows between Business Central and Nyce Logic WMS.
 | [Shipments](flows/shipment.md) | Nyce → Business Central | Delivered quantities are fetched and the shipment is posted in Business Central |
 | [Inbound orders](flows/purchase-order.md) | Business Central → Nyce | Released purchase orders and incoming transfer orders are sent to Nyce as expected receipts |
 | [Receipts](flows/receipt.md) | Nyce → Business Central | Received quantities are fetched and the receipt is posted in Business Central |
-| [Customer returns](flows/customer-return.md) | Nyce → Business Central | Returns registered in the warehouse are fetched with item, quantity, original order and return cause |
+| [Customer returns](flows/customer-return.md) | Nyce → Business Central | Returns registered in the warehouse are fetched, the return receipt is posted and a credit memo follows |
 | [Stock adjustments](flows/stock-adjustment.md) | Nyce → Business Central | Stock corrections made in Nyce are posted through an item journal |
 | [Stock balance](flows/stock-balance.md) | Nyce → Business Central | The full stock balance is fetched once a day and differences are posted through a physical inventory journal |
 
@@ -131,13 +133,13 @@ Picking, packing, carrier booking and the warehouse locations are always handled
 - Web Connect installed from Microsoft AppSource, with an activated Web Connect license
 - Your approval for Web Connect to be installed and to act in your Business Central environment
 - An API user in Nyce, and the client, warehouse and client group that the user logs in to. These are created by your Nyce supplier
-- Network access from Business Central to the Nyce API address [ATT FYLLA I: whether Nyce is reached over the internet or needs an allow list or VPN]
+- Network access from Business Central to the Nyce API. Nyce can run on the supplier's servers or on your own, and Web Connect supports both. Where Nyce runs decides how it is reached
 - A location in Business Central that represents the Nyce warehouse
 
 ## Setting it up
 
 1. Decide which flows to use and which option to choose for each, see [Choose your setup](#choose-your-setup).
-2. Install Web Connect in Business Central, activate the license and give your approval. [ATT FYLLA I: how the ready Nyce integration is installed]
+2. Install Web Connect in Business Central, activate the license and give your approval. The Nyce integration is not part of the Ready Integrations app, so its objects and mappings are set up in your Web Connect.
 3. Store the Nyce password in Web Connect [Secret Value Storage](../../general/secret-value-storage.md) and set up the authentication with user name, client, warehouse and client group.
 4. Set up the [Logistics Setup](../../general/logistics-setup.md) for Nyce: the location, which documents are sent on release, automatic posting and the item journals.
 5. Set up the configuration choices below.
@@ -161,6 +163,7 @@ All configuration and logic in the integration is visible and editable in Busine
 
 - **Location:** which Business Central location is the Nyce warehouse.
 - **Documents sent to Nyce:** sales orders, purchase orders, outgoing and incoming transfer orders and sales returns can each be switched on. Orders are sent when they are released.
+- **Returns:** whether Web Connect posts the return receipt, which is the usual choice, and whether the credit memo is posted automatically. Automatic credit memos run as a job in the Business Central job queue, which CombineIT can help you set up.
 - **Quantity sent:** whether the outstanding quantity or the full ordered quantity is sent on sales orders.
 - **Rest orders:** whether Nyce may accept an order for handling even when not every line has stock. If not, Nyce cancels the lines that have no stock. The value is sent from Business Central on each order.
 - **Units of measure:** whether quantities are converted to the base unit of measure, and how Nyce unit codes map to Business Central units.
@@ -176,8 +179,8 @@ All configuration and logic in the integration is visible and editable in Busine
 - **The Nyce API varies between installations.** Nyce is configured per customer, and the API can differ between Nyce customers. Expect to verify the API against your own Nyce installation during setup.
 - **Reversals in Nyce are not integrated.** A receipt that is reversed and posted again in Nyce stops with an error in Business Central, because the purchase order is already received. It is corrected manually in Business Central.
 - **The full stock balance is fetched once a day.** During the day, stock in Business Central follows shipments, receipts and adjustments from Nyce.
-- **Orders cannot normally be changed once picking has started.** Nyce does not normally accept changes to a customer order after picking orders have been created for its lines. Cancellation is not part of the standard setup. [ATT FYLLA I: how an order that has already been sent to Nyce is cancelled]
-- **Customer returns are registered in Nyce.** The warehouse registers the return when it arrives, usually from the original customer order or delivery. Nyce can also receive returns announced in advance from the ERP, but that is not part of the standard setup. [ATT FYLLA I: whether the return receipt is posted automatically in Business Central]
+- **Cancelling an order that has been sent to Nyce depends on how far it has come.** In Nyce, an order can be cancelled until it has been allocated, and changes are not normally accepted after picking orders have been created. Cancellation is manual by default. It can be set up so that customer service sends a cancellation to the warehouse from the order in Business Central, and Nyce cancels the order if its status allows it.
+- **Customer returns are registered in Nyce.** The warehouse registers the return when it arrives, usually from the original customer order or delivery. Nyce can also receive returns announced in advance from the ERP, but that is not part of the standard setup.
 
 ## Frequently asked questions
 
@@ -192,6 +195,10 @@ Nyce reports two figures per item. Balance excludes locked locations, for exampl
 ### How often is stock reconciled between Nyce and Business Central?
 
 Shipments, receipts and stock adjustments are fetched on a schedule from the Business Central job queue, so stock moves as the warehouse works. In addition, a full stock balance is fetched once a day in a time window you set, and differences are posted through a physical inventory journal.
+
+### Can an order be cancelled after it has been sent to Nyce?
+
+Yes, until Nyce has allocated it. Cancellation is manual by default. It can be set up so that customer service sends a cancellation to the warehouse from the order in Business Central, and Nyce cancels the order if its status allows it.
 
 ### What happens if a receipt is reversed in Nyce?
 
