@@ -1,7 +1,7 @@
 ---
 title: "Astro WMS to Business Central: receipts"
-description: "Web Connect fetches purchase order deliveries from Astro WMS every five minutes in the daytime and posts the receipt with batch numbers in Business Central."
-summary: "Every five minutes between early morning and late evening, Web Connect asks Astro WMS for new purchase order deliveries. Received quantities and batch numbers are written to the warehouse document in Business Central, and the receipt can be posted automatically. Each delivery is read once, based on the order number."
+description: "Web Connect fetches purchase order deliveries from Astro WMS on a schedule and posts the received quantities and batch numbers in Business Central."
+summary: "On a schedule, for example every five minutes during the day, Web Connect asks Astro WMS for new purchase order deliveries. Received quantities and batch numbers are written to the warehouse document in Business Central, and the receipt can be posted automatically. Each delivery is read once, based on the order number."
 slug: integrations/business-central-astro/receipt
 lang: en
 translation_key: integration-astro-receipt
@@ -14,25 +14,25 @@ keywords:
   - astro wms goods receipt business central
 faq:
   - question: "How soon is a receipt visible in Business Central?"
-    answer: "Web Connect fetches receipts every five minutes during the day. When the warehouse has registered the receipt, it is usually posted in Business Central within a few minutes. The schedule can be changed in Web Connect."
+    answer: "Web Connect fetches receipts on a schedule, for example every five minutes during the day. When the warehouse has registered the receipt, it is usually posted in Business Central within a few minutes. The schedule can be changed in Web Connect."
 last_reviewed: 2026-11-19
 ---
 
 # Astro WMS to Business Central: receipts
 
-Every five minutes between early morning and late evening, Web Connect asks Astro WMS for new purchase order deliveries. Received quantities and batch numbers are written to the warehouse document in Business Central, and the receipt can be posted automatically. Each delivery is read once, based on the order number.
+On a schedule, for example every five minutes during the day, Web Connect asks Astro WMS for new purchase order deliveries. Received quantities and batch numbers are written to the warehouse document in Business Central, and the receipt can be posted automatically. Each delivery is read once, based on the order number.
 
 | | |
 |---|---|
 | **Direction** | Astro WMS → Business Central |
-| **Trigger** | Schedule in Web Connect: every five minutes between 04:00 and 22:00 |
+| **Trigger** | Schedule in Web Connect, set to your needs, for example every five minutes between 04:00 and 22:00 |
 | **Result** | A posted receipt in Business Central with received quantities and batch numbers |
 | **Part of** | [Business Central and Astro WMS integration](../overview.md) |
 
 ## Step by step
 
 1. The warehouse receives the goods on the inbound order (Astro WMS).
-2. Web Connect fetches new purchase order deliveries from the warehouse API, through the Azure endpoint (Web Connect).
+2. Web Connect fetches new purchase order deliveries from the warehouse API (Web Connect).
 3. Each delivery is matched to its warehouse document by the document number that was sent with the [purchase order](purchase-order.md) (Web Connect).
 4. Received quantity per line, and the batch numbers with their quantities, are written to the warehouse document (Web Connect).
 5. The receipt is posted with the work date as posting date, with batch numbers on the lines (Business Central).
@@ -43,7 +43,7 @@ sequenceDiagram
     participant WC as ⚙️ Web Connect
     participant BC as 🔄 Business Central
 
-    WC->>AS: GET purchase order deliveries (every 5 min)
+    WC->>AS: GET purchase order deliveries (on a schedule)
     AS-->>WC: Order head and lines with batches
     alt Purchase order found
         WC->>BC: Received quantities and batch numbers
@@ -84,7 +84,7 @@ sequenceDiagram
 
 ### How soon is a receipt visible in Business Central?
 
-Web Connect fetches receipts every five minutes during the day. When the warehouse has registered the receipt, it is usually posted in Business Central within a few minutes. The schedule can be changed in Web Connect.
+Web Connect fetches receipts on a schedule, for example every five minutes during the day. When the warehouse has registered the receipt, it is usually posted in Business Central within a few minutes. The schedule can be changed in Web Connect.
 
 ## Related
 

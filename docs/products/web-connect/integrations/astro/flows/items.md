@@ -34,7 +34,7 @@ When the name, base unit of measure, type or tariff number of an item changes in
 1. An item is created or one of the trigger fields changes: description, base unit of measure, type or tariff number (Business Central).
 2. Web Connect checks that the item is an inventory item, is not blocked and has a description, a base unit of measure and a tariff number (Web Connect).
 3. Web Connect builds the article with barcodes from the item references, dimensions from the item unit of measure and custom properties for country of origin, tariff number and batch handling (Web Connect).
-4. The article is sent to the warehouse API, through the Azure endpoint (Web Connect).
+4. The article is sent to the warehouse API (Web Connect).
 5. Astro WMS creates or updates the article (Astro WMS).
 
 ```mermaid

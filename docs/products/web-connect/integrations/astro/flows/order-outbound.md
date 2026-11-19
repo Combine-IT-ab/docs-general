@@ -33,7 +33,7 @@ When an inventory pick is created for a sales order at the warehouse location, t
 
 1. An inventory pick is created for a sales order at the warehouse location (Business Central).
 2. Web Connect creates a warehouse document of type goods out request, with the shipping agent from the sales order and the reference from the pick (Web Connect).
-3. The job queue sends picks that have not been sent to the warehouse API, through the Azure endpoint (Web Connect).
+3. The job queue sends picks that have not been sent to the warehouse API (Web Connect).
 4. Astro WMS creates the customer order (Astro WMS).
 5. When the order is delivered, the [shipment](shipment.md) flow brings the result back.
 

@@ -25,15 +25,15 @@ A purchase order for the warehouse location is sent from Business Central to Ast
 | | |
 |---|---|
 | **Direction** | Business Central → Astro WMS |
-| **Trigger** | [ATT FYLLA I: vad som skickar inköpsordern, release eller jobbkö. Automatisk sändning vid release är inte vald i logistikinställningen] |
+| **Trigger** | Change in Business Central: the purchase order is released, or sent with an action on the purchase order |
 | **Result** | An inbound order in Astro WMS, and a warehouse document in Business Central that follows it |
 | **Part of** | [Business Central and Astro WMS integration](../overview.md) |
 
 ## Step by step
 
-1. A purchase order for the warehouse location is sent to the warehouse (Business Central).
+1. A purchase order for the warehouse location is released, or someone sends it with the action on the purchase order (Business Central).
 2. Web Connect creates a warehouse document of type goods in request, with the expected receipt date from the purchase order (Web Connect).
-3. The inbound order is sent to the warehouse API, through the Azure endpoint (Web Connect).
+3. The inbound order is sent to the warehouse API (Web Connect).
 4. Astro WMS creates the inbound order and waits for the goods (Astro WMS).
 
 ```mermaid

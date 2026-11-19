@@ -25,16 +25,16 @@ Web Connect asks Astro WMS on a schedule for new customer order deliveries. Deli
 | | |
 |---|---|
 | **Direction** | Astro WMS → Business Central |
-| **Trigger** | Schedule. [ATT FYLLA I: hur ofta leveranser hämtas, objektet har inget eget schema i exporten] |
-| **Result** | A posted shipment in Business Central with delivered quantities and batch numbers |
+| **Trigger** | Schedule in Web Connect, set to your needs |
+| **Result** | A posted shipment in Business Central with delivered quantities, batch numbers and the tracking reference |
 | **Part of** | [Business Central and Astro WMS integration](../overview.md) |
 
 ## Step by step
 
 1. The warehouse picks and ships the customer order (Astro WMS).
-2. Web Connect fetches new customer order deliveries from the warehouse API, through the Azure endpoint (Web Connect).
+2. Web Connect fetches new customer order deliveries from the warehouse API (Web Connect).
 3. Each delivery is matched to its warehouse document by the order number. The delivery number is stored, so the same delivery is not read twice (Web Connect).
-4. Ordered and delivered quantity per line, and the batch numbers from the picking details, are written to the warehouse document (Web Connect).
+4. Ordered and delivered quantity per line, the batch numbers from the picking details and the tracking reference are written to the warehouse document (Web Connect).
 5. The shipment is posted with the work date as posting date, with batch numbers on the lines (Business Central).
 
 ```mermaid
@@ -64,8 +64,9 @@ sequenceDiagram
 | `Sku` | Item No. | |
 | `OrderedQuantity`, `DeliveredQuantity` | Ordered and delivered quantity | |
 | `PickingDetails.BatchId`, `DeliveredQuantity` | Lot No. and quantity per batch | |
+| `TrackTrace` | Tracking reference | Stored on the inventory pick or on the sales order, chosen at setup |
 
-The tracking reference and SSCC that the warehouse returns are not stored in the current configuration.
+The SSCC that the warehouse returns is not stored.
 
 ## Web Connect objects
 

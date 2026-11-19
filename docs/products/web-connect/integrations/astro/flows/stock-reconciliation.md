@@ -1,7 +1,7 @@
 ---
 title: "Astro WMS to Business Central: stock reconciliation"
-description: "Once a night, Web Connect reads the stock balance per item from Astro WMS and puts it in a physical inventory journal in Business Central for you to post."
-summary: "Once a night, Web Connect reads the stock balance per item from Astro WMS. The balances are put in the physical inventory journal for the warehouse in Business Central, where you review the differences and post. It catches anything the other flows missed."
+description: "Usually once a night, Web Connect reads the stock balance per item from Astro WMS and puts it in a physical inventory journal in Business Central to post."
+summary: "Usually once a night, Web Connect reads the stock balance per item from Astro WMS. The balances are put in the physical inventory journal for the warehouse in Business Central, where you review the differences and post. It catches anything the other flows missed."
 slug: integrations/business-central-astro/stock-reconciliation
 lang: en
 translation_key: integration-astro-stock-reconciliation
@@ -20,12 +20,12 @@ last_reviewed: 2026-11-19
 
 # Astro WMS to Business Central: stock reconciliation
 
-Once a night, Web Connect reads the stock balance per item from Astro WMS. The balances are put in the physical inventory journal for the warehouse in Business Central, where you review the differences and post. It catches anything the other flows missed.
+Usually once a night, Web Connect reads the stock balance per item from Astro WMS. The balances are put in the physical inventory journal for the warehouse in Business Central, where you review the differences and post. It catches anything the other flows missed.
 
 | | |
 |---|---|
 | **Direction** | Astro WMS → Business Central |
-| **Trigger** | Schedule in Web Connect: once a night, at 01:00 |
+| **Trigger** | Schedule in Web Connect, usually once a night |
 | **Result** | A physical inventory journal in Business Central with the balances from the warehouse |
 | **Part of** | [Business Central and Astro WMS integration](../overview.md) |
 

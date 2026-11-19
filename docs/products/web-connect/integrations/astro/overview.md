@@ -38,13 +38,13 @@ Web Connect by CombineIT connects Microsoft Dynamics 365 Business Central with A
 |---|---|
 | **System** | Astro WMS from Consafe Logistics (warehouse management system, here run by a 3PL) |
 | **Integration product** | Web Connect for Microsoft Dynamics 365 Business Central |
-| **Runs in** | Your own Business Central environment, as an extension. Items are sent when they change, and outbound orders are sent from the Business Central job queue. Web Connect fetches deliveries, receipts, stock transactions and stock balances from the warehouse on a schedule. Calls to the warehouse API pass through an Azure endpoint that only forwards them. [ATT FYLLA I: varför anropen går via Azure-endpointen, till exempel IP-spärr hos 3PL:en] All processing and configuration stays in Business Central. |
+| **Runs in** | Your own Business Central environment, as an extension. Items are sent when they change, and outbound orders are sent from the Business Central job queue. Web Connect fetches deliveries, receipts, stock transactions and stock balances from the warehouse on a schedule. If the 3PL's environment only accepts calls from known addresses, the calls pass through an Azure endpoint that only forwards them. Otherwise Web Connect calls the warehouse API directly. All processing and configuration stays in Business Central. |
 | **Configured by** | You, in Business Central: mappings, conditions, triggers and flows. You can do all of it yourself. If you want, CombineIT takes part in any step, as a sounding board or by doing the work. |
 | **Connection** | REST API with JSON, provided by the 3PL in front of Astro WMS. OAuth 2.0 client credentials, with tokens from Microsoft Entra ID |
-| **Astro WMS API** | [ATT FYLLA I: länk till API-dokumentationen, från 3PL:en eller Consafe Logistics] |
+| **Astro WMS API** | Astro WMS has no public API documentation. The API and its documentation come from the 3PL that runs the warehouse |
 | **Data flows** | 7: items, outbound orders, purchase orders, shipments, receipts, stock adjustments and stock reconciliation |
 | **Business Central editions** | [ATT FYLLA I: vilka utgåvor av Business Central som stöds (Essentials, Premium)] |
-| **Available from** | [Web Connect on Microsoft AppSource](https://marketplace.microsoft.com/sv-se/product/PUBID.martitab1633951001710%7CAID.webconnect%7CPAPPID.9f3a7223-19db-4ac7-832f-cf8e4699186f?tab=Overview). [ATT FYLLA I: om Astro-integrationen ingår i appen Web Connect Ready Integrations eller levereras som konfiguration] |
+| **Available from** | [Web Connect on Microsoft AppSource](https://marketplace.microsoft.com/sv-se/product/PUBID.martitab1633951001710%7CAID.webconnect%7CPAPPID.9f3a7223-19db-4ac7-832f-cf8e4699186f?tab=Overview). The Astro WMS integration is not part of the Web Connect Ready Integrations app. It is set up as a configuration in Web Connect |
 
 ## What can be synchronized
 
@@ -54,11 +54,11 @@ Web Connect has seven data flows between Business Central and Astro WMS.
 |---|---|---|
 | [Items](flows/items.md) | Business Central → Astro WMS | Items are created or updated as articles, with barcodes, dimensions, country of origin, tariff number and batch handling |
 | [Outbound orders](flows/order-outbound.md) | Business Central → Astro WMS | An inventory pick for a sales order is sent to the warehouse as a customer order, with buyer, delivery address and way of delivery |
-| [Purchase orders](flows/purchase-order.md) | Business Central → Astro WMS | A purchase order is sent to the warehouse as an inbound order, with supplier and expected receipt date |
-| [Shipments](flows/shipment.md) | Astro WMS → Business Central | Delivered quantities and batch numbers come back, and the shipment can be posted automatically |
+| [Purchase orders](flows/purchase-order.md) | Business Central → Astro WMS | A purchase order is sent to the warehouse as an inbound order when it is released or with an action on the order |
+| [Shipments](flows/shipment.md) | Astro WMS → Business Central | Delivered quantities, batch numbers and the tracking reference come back, and the shipment can be posted automatically |
 | [Receipts](flows/receipt.md) | Astro WMS → Business Central | Received quantities and batch numbers come back, and the receipt can be posted automatically |
 | [Stock adjustments](flows/stock-adjustment.md) | Astro WMS → Business Central | Stock transactions from the warehouse are written to an item journal in Business Central |
-| [Stock reconciliation](flows/stock-reconciliation.md) | Astro WMS → Business Central | The stock balance per item is read once a day and put in a physical inventory journal |
+| [Stock reconciliation](flows/stock-reconciliation.md) | Astro WMS → Business Central | The stock balance per item is read on a schedule, usually once a night, and put in a physical inventory journal |
 
 All seven flows are part of the one Astro WMS integration in production today. See [Choose your setup](#choose-your-setup).
 
@@ -69,7 +69,7 @@ Astro WMS is run by the 3PL warehouse, and the 3PL provides a REST API in front 
 ```mermaid
 graph LR
     A["📦 Astro WMS<br/>(warehouse, run by a 3PL)"]
-    P["☁️ Azure endpoint<br/>(forwards calls)"]
+    P["☁️ Azure endpoint<br/>(forwards calls, if the 3PL requires it)"]
     B["⚙️ Web Connect<br/>(Business Central extension)"]
     C["🔄 Business Central<br/>(ERP)"]
 
@@ -175,16 +175,18 @@ Warehouse locations, picking, packing and carrier booking are always maintained 
 3. Import the Astro WMS configuration with the integration turned off, then set your location, journal batches and partner ID.
 4. Store the client ID and client secret from the 3PL in [Secret Value Storage](../../general/secret-value-storage.md) and set up the token request.
 5. Translate your shipping agents to the warehouse's delivery codes in [Text Mapping](../../general/text-mapping.md).
-6. Test items, orders and purchase orders against the 3PL's test environment before going live. [ATT FYLLA I: om 3PL:en har en testmiljö för API:t]
+6. Set how often deliveries, receipts, stock transactions and stock balances are fetched.
+7. Test items, orders and purchase orders before going live.
 
 ## Configure it yourself in Business Central
 
-All configuration and logic in the integration is visible and editable in Business Central. There is no external integration platform where the logic is hidden. The Azure endpoint between Web Connect and the warehouse API only forwards the calls.
+All configuration and logic in the integration is visible and editable in Business Central. There is no external integration platform where the logic is hidden. When calls go through an Azure endpoint, it only forwards them.
 
 | What you can change | Where in Web Connect | Example |
 |---|---|---|
 | Which documents are integrated | [Logistics Setup](../../general/logistics-setup.md) | Send inventory picks and purchase orders for the warehouse location |
 | Whether shipments and receipts are posted | [Logistics Setup](../../general/logistics-setup.md) | Post shipments and receipts automatically, with the work date as posting date |
+| How often data is fetched | [Objects](../../general/objects.md) | Fetch receipts every five minutes during the day, and the stock balance once a night |
 | What is sent to the warehouse | [Outgoing Mapping](../../general/outgoing-mapping/README.md) | Add or remove a field on the article or the customer order |
 | What triggers an item update | [Outgoing Sync Triggers](../../general/outgoing-mapping/outgoing-sync-triggers.md) | Resend the article when the name, base unit of measure or tariff number changes |
 | Which items are sent | [Outgoing Sync Triggers](../../general/outgoing-mapping/outgoing-sync-triggers.md) | Only send inventory items that are not blocked and have a tariff number |
@@ -196,22 +198,23 @@ All configuration and logic in the integration is visible and editable in Busine
 
 - **Location:** which Business Central location the 3PL runs. Only documents for that location are sent to the warehouse.
 - **Document types:** inventory picks and purchase orders are switched on one by one in the logistics setup.
+- **Sending purchase orders:** when the purchase order is released, or with an action on the purchase order.
+- **Schedules:** how often deliveries, receipts, stock transactions and stock balances are fetched from the warehouse, set to your needs.
+- **Tracking reference:** whether the tracking reference from the warehouse is stored on the inventory pick or on the sales order.
 - **Posting rules:** whether shipments and receipts are posted automatically, and which posting date is used.
 - **Batch numbers:** whether batch numbers are required on shipments and receipts.
 - **Way of delivery:** how each shipping agent in Business Central is translated to a delivery code in the warehouse, and which code is used when the order has no shipping agent.
 - **Item data:** which item fields are sent, and which items are included.
 - **Order currency:** the currency sent on customer orders is set in the mapping.
-- **Cancellation:** whether the warehouse may cancel orders. The setting allows whole orders. [ATT FYLLA I: hur en avbokning skickas till Astro WMS, det finns inget avbokningsobjekt i konfigurationen]
 - **Error handling:** how many times a failed message is retried, and who receives the daily error summary email.
 
 ## Limitations
 
-- **The integration uses the 3PL's API in front of Astro WMS.** Web Connect does not connect to an Astro WMS installation directly, so a new 3PL means checking its API first. [ATT FYLLA I: om Astro WMS hos andra lager har samma API eller filöverföring]
+- **The integration uses the 3PL's API in front of Astro WMS.** Web Connect does not connect to an Astro WMS installation directly, so a new 3PL means checking its API first.
 - **Deliveries, receipts and stock are fetched on a schedule.** Business Central is not told about changes in the warehouse in real time.
-- **The stock balance is read once a day.** Differences are put in a physical inventory journal for you to review and post.
+- **The stock balance is read on a schedule, usually once a night.** Differences are put in a physical inventory journal for you to review and post.
 - **Stock adjustments are not posted automatically.** They are written to an item journal, and you post it.
-- **The tracking reference from the warehouse is not stored in Business Central** in the current configuration. [ATT FYLLA I: om spårningsnumret ska sparas på leveransen]
-- **Order changes and cancellations are not sent to the warehouse.** [ATT FYLLA I: hur en ändrad eller avbokad order hanteras mot lagret]
+- **Cancellations are not sent to the warehouse.** There is no cancellation flow to Astro WMS.
 - **Long texts are cut.** Item names and order line descriptions are sent with at most 60 characters, and customer references and supplier names with at most 35.
 
 ## Frequently asked questions

@@ -25,14 +25,14 @@ Web Connect fetches stock transactions from Astro WMS, such as corrections made 
 | | |
 |---|---|
 | **Direction** | Astro WMS → Business Central |
-| **Trigger** | Schedule. [ATT FYLLA I: hur ofta lagertransaktioner hämtas, objektet har inget eget schema i exporten] |
+| **Trigger** | Schedule in Web Connect, set to your needs |
 | **Result** | Lines in the item journal batch for the warehouse, ready to post |
 | **Part of** | [Business Central and Astro WMS integration](../overview.md) |
 
 ## Step by step
 
 1. Stock is corrected in the warehouse (Astro WMS).
-2. Web Connect fetches new warehouse transactions from the warehouse API, through the Azure endpoint (Web Connect).
+2. Web Connect fetches new warehouse transactions from the warehouse API (Web Connect).
 3. Conditions on the reason code decide the sign of each transaction: one reason code adds the quantity, two others remove it (Web Connect).
 4. The transactions are written to the adjustment item journal batch set in the logistics setup (Business Central).
 5. You review the journal and post it (you).
