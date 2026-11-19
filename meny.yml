@@ -86,6 +86,22 @@ nav:
         - Overview: products/web-connect/integrations/plytix/overview.md
         - Product Data: products/web-connect/integrations/plytix/flows/product-data.md
         - Product Matching: products/web-connect/integrations/plytix/flows/product-matching.md
+      - Nyce Logic WMS:
+        - Overview: products/web-connect/integrations/nyce/overview.md
+        - Items: products/web-connect/integrations/nyce/flows/item-data.md
+        - Item Dimensions: products/web-connect/integrations/nyce/flows/item-dimensions.md
+        - Outbound Orders: products/web-connect/integrations/nyce/flows/order-outbound.md
+        - Shipments: products/web-connect/integrations/nyce/flows/shipment.md
+        - Inbound Orders: products/web-connect/integrations/nyce/flows/purchase-order.md
+        - Receipts: products/web-connect/integrations/nyce/flows/receipt.md
+        - Customer Returns: products/web-connect/integrations/nyce/flows/customer-return.md
+        - Stock Adjustments: products/web-connect/integrations/nyce/flows/stock-adjustment.md
+        - Stock Balance: products/web-connect/integrations/nyce/flows/stock-balance.md
+      - CHESS:
+        - Overview: products/web-connect/integrations/chess/overview.md
+        - Shipment Tickets: products/web-connect/integrations/chess/flows/shipment-ticket.md
+        - Safety Data Sheets: products/web-connect/integrations/chess/flows/safety-data-sheets.md
+        - Documents Marked as Printed: products/web-connect/integrations/chess/flows/set-to-printed.md
   - Easy Connect:
     - Overview: products/easy-connect/README.md
     - Setup: products/easy-connect/setup.md
