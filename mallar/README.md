@@ -46,6 +46,7 @@ Mallarna bygger på nulägesmätningen i Combine-IT-ab/docs-internal#47: sökord
 | NYCE | Nyce Logic WMS | warehouse (WMS) |
 | Nowaste | Nowaste | warehouse (3PL) |
 | 3PL Central | 3PL Central | warehouse (WMS) |
+| Addimotion | Addimotion | delivery management |
 | Reclaimit | Reclaimit | returns |
 | Shelfless | Shelfless | returns |
 | Global-e | Global-e returns | returns |
