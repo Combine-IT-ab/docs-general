@@ -25,7 +25,7 @@ Web Connect calculates stock per location in Business Central with Web Connect I
 | | |
 |---|---|
 | **Direction** | Business Central → Norce Commerce |
-| **Trigger** | A changed value in Web Connect Item Inventory. [ATT FYLLA I: how often stock is sent; the configuration export has no outgoing sync trigger on this object, so sending is started from Item Inventory and the job queue] |
+| **Trigger** | A changed value in Web Connect Item Inventory, sent from the Business Central job queue. How often the job runs can be adjusted to what your business needs |
 | **Result** | Stock on hand per SKU and warehouse in Norce Commerce |
 | **Part of** | [Business Central and Norce Commerce integration](../overview.md) |
 
