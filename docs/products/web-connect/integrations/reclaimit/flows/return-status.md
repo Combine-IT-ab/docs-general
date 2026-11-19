@@ -58,7 +58,7 @@ sequenceDiagram
 | Business Central field | Reclaimit field | Note |
 |---|---|---|
 | External ID on the return receipt line | `reclaimId` | The id of the returned item in Reclaimit |
-| | `statusCode` | Fixed value in the mapping. The standard setup sends 300. [ATT FYLLA I: what status 300 means in Reclaimit] |
+| | `statusCode` | Fixed value in the mapping, the Reclaimit status for received |
 
 ## Web Connect objects
 

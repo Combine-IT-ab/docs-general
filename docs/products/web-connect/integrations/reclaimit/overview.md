@@ -24,7 +24,7 @@ faq:
   - question: "Is the return freight the customer pays included on the return order?"
     answer: "Yes. Return costs from Reclaimit are added to the return order in Business Central as a return freight line, so the credit memo can deduct them."
   - question: "Is the return sent on to our warehouse?"
-    answer: "It can be. If your warehouse system is also connected through Web Connect, the return order created from Reclaimit can be sent on to the warehouse as an expected receipt. This is a setting in the logistics setup."
+    answer: "Yes, when your warehouse system is also connected through Web Connect. The return order created from Reclaimit is sent on to the warehouse as an expected receipt, and the return receipt can be posted automatically when the warehouse reports it."
 last_reviewed: 2026-11-19
 ---
 
@@ -41,10 +41,10 @@ Web Connect by CombineIT connects Microsoft Dynamics 365 Business Central with R
 | **Runs in** | Your own Business Central environment, as an extension. Depending on the setup, Web Connect fetches new returns from Reclaimit on a schedule in the Business Central job queue, or Reclaimit sends returns and purchase lookups to an Azure endpoint that passes them on to Web Connect. The return status is sent to Reclaimit when the return receipt is posted. All processing and configuration stays in Business Central. |
 | **Configured by** | You, in Business Central: mappings, conditions, triggers and flows. You can do all of it yourself. If you want, CombineIT takes part in any step, as a sounding board or by doing the work. |
 | **Connection** | Reclaimit web API (REST with JSON) with OAuth 2.0. The API user is created in Reclaimit. Calls from Reclaimit to Business Central come as webhooks |
-| **Reclaimit API** | [ATT FYLLA I: link to Reclaimit's API documentation, if it is public] |
+| **Reclaimit API** | [Reclaimit Web API Help](https://live.reclaimit.com/webapi/help) |
 | **Data flows** | 3: return orders, return status and purchase lookup |
 | **Business Central editions** | All editions, Essentials and Premium, including the latest version |
-| **Available from** | [Web Connect on Microsoft AppSource](https://marketplace.microsoft.com/sv-se/product/PUBID.martitab1633951001710%7CAID.webconnect%7CPAPPID.9f3a7223-19db-4ac7-832f-cf8e4699186f?tab=Overview). [ATT FYLLA I: whether the Reclaimit integration is part of the Web Connect Ready Integrations app] |
+| **Available from** | [Web Connect on Microsoft AppSource](https://marketplace.microsoft.com/sv-se/product/PUBID.martitab1633951001710%7CAID.webconnect%7CPAPPID.9f3a7223-19db-4ac7-832f-cf8e4699186f?tab=Overview). The Reclaimit integration is not part of the Web Connect Ready Integrations app. It is set up as a configuration in Web Connect |
 
 ## What can be synchronized
 
@@ -60,7 +60,7 @@ Return orders are part of every Reclaimit integration. The other two flows are c
 
 ## How it works
 
-Web Connect uses the [WMS documents](../../general/wms-documents.md) in Business Central, the same layer that handles warehouse and POS systems. A return from Reclaimit first becomes a warehouse document of the type Return Order, and the [logistics setup](../../general/logistics-setup.md) for Reclaimit decides what happens next: a sales return order is created, it can be sent on to the warehouse, and the return receipt can be posted. Returns either come in on a schedule, when Web Connect asks the Reclaimit API for new return errands, or as webhooks from Reclaimit. Before each call to Reclaimit, Web Connect gets an access token and renews it automatically. Every message in both directions is logged in Web Connect [Entries](../../general/entries.md), where it can be inspected and resent, and a daily error summary can be emailed to you.
+Web Connect uses the [WMS documents](../../general/wms-documents.md) in Business Central, the same layer that handles warehouse and POS systems. A return from Reclaimit first becomes a warehouse document of the type Return Order. The [logistics setup](../../general/logistics-setup.md) for Reclaimit then creates a sales return order, sends it on to the warehouse and decides whether the return receipt is posted automatically when the warehouse reports it. Returns either come in on a schedule, when Web Connect asks the Reclaimit API for new return errands, or as webhooks from Reclaimit. Before each call to Reclaimit, Web Connect gets an access token and renews it automatically. Every message in both directions is logged in Web Connect [Entries](../../general/entries.md), where it can be inspected and resent, and a daily error summary can be emailed to you.
 
 ```mermaid
 graph LR
@@ -68,7 +68,7 @@ graph LR
     P["☁️ Azure endpoint<br/>(passes webhooks on)"]
     B["⚙️ Web Connect<br/>(Business Central extension)"]
     C["🔄 Business Central<br/>(ERP)"]
-    W["📦 Warehouse<br/>(optional)"]
+    W["📦 Warehouse"]
 
     B -->|Fetch return errands on a schedule| A
     A -->|Returns and purchase lookups as webhooks| P
@@ -76,7 +76,8 @@ graph LR
     B -->|Return order with reasons and freight| C
     C -->|Return receipt posted| B
     B -->|Return status| A
-    C -.->|Expected receipt| W
+    C -->|Expected receipt| W
+    W -->|Received| C
 ```
 
 ### Return document status in Business Central
@@ -85,9 +86,8 @@ graph LR
 stateDiagram-v2
     [*] --> Received : Return from Reclaimit
     Received --> ReturnOrder : Sales return order created
-    ReturnOrder --> SentToWarehouse : Sent to the warehouse (optional)
-    ReturnOrder --> Posted : Return receipt posted
-    SentToWarehouse --> Posted : Warehouse reports the receipt
+    ReturnOrder --> SentToWarehouse : Sent to the warehouse
+    SentToWarehouse --> Posted : Warehouse reports the receipt, return receipt posted
     Posted --> Reported : Status sent to Reclaimit (optional)
     Received --> Error : Item or original order not found
     Error --> Received : Processed again after the fix
@@ -126,12 +126,14 @@ flowchart LR
 
 ### Return receipt
 
+The return order created from Reclaimit is sent on to your warehouse system as an expected receipt, when the warehouse is also connected through Web Connect. What differs is how the return receipt is posted when the warehouse reports that the goods have arrived.
+
 | Option | How it works | When it fits |
 |---|---|---|
-| **Return order sent on to the warehouse** (common setup) | The return order is sent to your warehouse system as an expected receipt. The return receipt is posted when the warehouse reports that the goods have arrived | Returned goods arrive at a warehouse that is also connected through Web Connect |
-| **Return receipt posted by Web Connect** | Web Connect posts the return receipt as soon as the return comes in from Reclaimit | The return is already checked when Reclaimit registers it, and no warehouse needs to confirm it |
+| **Posted by you** (common setup) | The warehouse reports the receipt, and you post the return receipt in Business Central | You want to check the returned goods before the receipt is posted |
+| **Posted automatically** | Web Connect posts the return receipt as soon as the warehouse reports that the goods have arrived | The warehouse's check of the returned goods can be trusted without a manual step |
 
-#### Return receipt after the warehouse has received the goods
+#### Return receipt posted by you
 
 ```mermaid
 flowchart LR
@@ -139,14 +141,18 @@ flowchart LR
     WC -->|Return order| BC["🔄 Business Central"]
     BC -->|Expected receipt| W["📦 Warehouse"]
     W -->|Received| BC
+    BC --> U["👤 You post the return receipt"]
 ```
 
-#### Return receipt posted by Web Connect
+#### Return receipt posted automatically
 
 ```mermaid
 flowchart LR
     RE["↩️ Reclaimit"] -->|Return| WC["⚙️ Web Connect"]
-    WC -->|Return order and receipt posted| BC["🔄 Business Central"]
+    WC -->|Return order| BC["🔄 Business Central"]
+    BC -->|Expected receipt| W["📦 Warehouse"]
+    W -->|Received| WC
+    WC -->|Post return receipt| BC
 ```
 
 ### Return status
@@ -209,7 +215,7 @@ All configuration and logic in the integration is visible and editable in Busine
 
 | What you can change | Where in Web Connect | Example |
 |---|---|---|
-| What happens with a return | [Logistics Setup](../../general/logistics-setup.md) | Create a sales return order, send it to the warehouse, or post the return receipt directly |
+| What happens with a return | [Logistics Setup](../../general/logistics-setup.md) | Send the return order to the warehouse, and post the return receipt automatically when the warehouse reports it |
 | Return reasons | [WMS/Return Reason Codes](../../general/wms-return-reason-codes.md) | Map a Reclaimit return reason to a return reason code in Business Central |
 | Item numbers | [Text Mapping](../../general/text-mapping.md) | Translate the article number in Reclaimit to item number and variant in Business Central |
 | Which returns are fetched | [Objects](../../general/objects.md) | Fetch errands in another Reclaimit status, or change how often they are fetched |
@@ -225,7 +231,7 @@ All configuration and logic in the integration is visible and editable in Busine
 - **Schedule:** how often return errands are fetched, set to your needs.
 - **Return order number:** whether the return order in Business Central gets the Reclaimit number or a number from your number series.
 - **Original order:** whether every return must refer to the original sales document.
-- **Return receipt:** whether the return order is sent on to the warehouse, or the return receipt is posted when the return comes in.
+- **Return receipt:** whether the return order is sent on to the warehouse, and whether the return receipt is posted automatically when the warehouse reports it.
 - **Return reasons:** how each Reclaimit return reason is translated to a return reason code, and whether a reason adds a return fee.
 - **Item matching:** whether the article number in Reclaimit is the item number, or is translated to item number and variant.
 - **Return freight:** which item or account the return freight line uses.
@@ -257,7 +263,7 @@ Yes. Return costs from Reclaimit are added to the return order in Business Centr
 
 ### Is the return sent on to our warehouse?
 
-It can be. If your warehouse system is also connected through Web Connect, the return order created from Reclaimit can be sent on to the warehouse as an expected receipt. This is a setting in the logistics setup.
+Yes, when your warehouse system is also connected through Web Connect. The return order created from Reclaimit is sent on to the warehouse as an expected receipt, and the return receipt can be posted automatically when the warehouse reports it.
 
 ## Related
 

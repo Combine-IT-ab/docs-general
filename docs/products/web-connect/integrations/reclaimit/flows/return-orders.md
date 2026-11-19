@@ -1,7 +1,7 @@
 ---
 title: "Reclaimit to Business Central: return orders"
 description: "A return registered in Reclaimit becomes a return order in Business Central, with items, return reasons, prices and return freight, fetched or pushed."
-summary: "When a customer registers a return in Reclaimit, Web Connect creates a return order in Business Central, linked to the original order, with items, quantities, return reasons, prices and return freight. Returns are fetched from the Reclaimit API on a schedule, or sent by Reclaimit as webhooks. The logistics setup decides whether the return is sent on to the warehouse or the return receipt is posted directly."
+summary: "When a customer registers a return in Reclaimit, Web Connect creates a return order in Business Central, linked to the original order, with items, quantities, return reasons, prices and return freight. Returns are fetched from the Reclaimit API on a schedule, or sent by Reclaimit as webhooks. The return order is then sent on to the warehouse as an expected receipt."
 slug: integrations/business-central-reclaimit/return-orders
 lang: en
 translation_key: integration-reclaimit-return-orders
@@ -23,7 +23,7 @@ last_reviewed: 2026-11-19
 
 # Reclaimit to Business Central: return orders
 
-When a customer registers a return in Reclaimit, Web Connect creates a return order in Business Central, linked to the original order, with items, quantities, return reasons, prices and return freight. Returns are fetched from the Reclaimit API on a schedule, or sent by Reclaimit as webhooks. The logistics setup decides whether the return is sent on to the warehouse or the return receipt is posted directly.
+When a customer registers a return in Reclaimit, Web Connect creates a return order in Business Central, linked to the original order, with items, quantities, return reasons, prices and return freight. Returns are fetched from the Reclaimit API on a schedule, or sent by Reclaimit as webhooks. The return order is then sent on to the warehouse as an expected receipt.
 
 | | |
 |---|---|
@@ -41,7 +41,7 @@ When a customer registers a return in Reclaimit, Web Connect creates a return or
 3. For each errand in the list, Web Connect fetches the full errand with its customer, returned items and costs (Web Connect).
 4. Web Connect creates a warehouse document of the type Return Order, with the Reclaimit number as document number and the original receipt or order number as reference (Web Connect).
 5. Each returned item becomes a line with item, quantity, price and return reason. Return costs become a return freight line (Web Connect).
-6. The logistics setup creates the sales return order and, if chosen, sends it on to the warehouse as an expected receipt (Business Central).
+6. The logistics setup creates the sales return order and sends it on to the warehouse as an expected receipt (Business Central).
 
 ```mermaid
 sequenceDiagram
@@ -70,7 +70,7 @@ sequenceDiagram
 2. Reclaimit sends the return to the Azure endpoint, which passes it on to Web Connect (Reclaimit).
 3. Web Connect answers OK and creates a warehouse document of the type Return Order, with the Reclaimit order number as document number and the original order number as reference (Web Connect).
 4. Each line becomes a return line with item, variant, quantity, unit price and return reason. Freight lines are translated to return freight (Web Connect).
-5. The logistics setup decides what happens next. In the setup in use today, the return receipt is posted automatically (Business Central). [ATT FYLLA I: confirm that a sales return order is created in this setup, since Integrate Sales Return is turned off in the logistics setup]
+5. The logistics setup creates the sales return order and sends it on to the warehouse as an expected receipt (Business Central).
 
 ```mermaid
 sequenceDiagram
@@ -83,7 +83,8 @@ sequenceDiagram
     P->>WC: Pass on
     WC-->>RE: OK
     WC->>BC: Return Order warehouse document
-    BC-->>BC: Return receipt posted (if chosen)
+    BC-->>WC: Sales return order created
+    WC->>WC: Sent on to the warehouse
 ```
 
 ## Data mapping
