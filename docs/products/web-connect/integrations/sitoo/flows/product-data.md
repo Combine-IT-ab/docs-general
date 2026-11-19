@@ -25,7 +25,7 @@ Web Connect creates and updates products in Sitoo POS from the items in Business
 | | |
 |---|---|
 | **Direction** | Business Central → Sitoo POS |
-| **Trigger** | A change to the item in Business Central, where an automatic trigger is set up. The image is sent when the picture on the item changes. [ATT FYLLA I: how product data is sent in setups without an automatic trigger] |
+| **Trigger** | Chosen by you in the [Outgoing Sync Triggers](../../../general/outgoing-mapping/outgoing-sync-triggers.md), for example when the item, its barcodes or its price changes. The image is sent when the picture on the item changes |
 | **Result** | A product in Sitoo, with the Sitoo product ID stored on the item in Business Central |
 | **Part of** | [Business Central and Sitoo POS integration](../overview.md) |
 

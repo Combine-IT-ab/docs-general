@@ -1,7 +1,7 @@
 ---
 title: "Business Central to Sitoo POS: shipments to stores"
 description: "Web Connect sends goods on their way to a store from Business Central to Sitoo POS as an inbound shipment, and updates its status, so the store can receive it."
-summary: "When goods are on their way from Business Central to a store, Web Connect sends a warehouse document to the Sitoo Shipments API as an inbound shipment for the store's warehouse, with packages, items and quantities. The status of the shipment in Sitoo follows the status in Business Central, so the store sees it arrive and can receive it."
+summary: "When a transfer to a store has been shipped from the sending warehouse, Web Connect sends a warehouse document to the Sitoo Shipments API as an inbound shipment for the store's warehouse, with packages, items and quantities. The status of the shipment in Sitoo follows the status in Business Central, so the store sees it arrive and can receive it."
 slug: integrations/business-central-sitoo/shipment-to-store
 lang: en
 translation_key: integration-sitoo-shipment-to-store
@@ -20,18 +20,18 @@ last_reviewed: 2026-11-19
 
 # Business Central to Sitoo POS: shipments to stores
 
-When goods are on their way from Business Central to a store, Web Connect sends a warehouse document to the Sitoo Shipments API as an inbound shipment for the store's warehouse, with packages, items and quantities. The status of the shipment in Sitoo follows the status in Business Central, so the store sees it arrive and can receive it.
+When a transfer to a store has been shipped from the sending warehouse, Web Connect sends a warehouse document to the Sitoo Shipments API as an inbound shipment for the store's warehouse, with packages, items and quantities. The status of the shipment in Sitoo follows the status in Business Central, so the store sees it arrive and can receive it.
 
 | | |
 |---|---|
 | **Direction** | Business Central → Sitoo POS |
-| **Trigger** | A goods-in request for a store location in the [WMS documents](../../../general/wms-documents.md). The status is sent when the external status on the warehouse document changes. [ATT FYLLA I: which Business Central event creates the goods-in request for the store, for example a released or shipped transfer order, or a purchase order delivered to the store] |
+| **Trigger** | The transfer to the store has been shipped from the sending warehouse, which creates a goods-in request for the store location in the [WMS documents](../../../general/wms-documents.md). The status is sent when the external status on the warehouse document changes |
 | **Result** | An inbound shipment in Sitoo for the store's warehouse |
 | **Part of** | [Business Central and Sitoo POS integration](../overview.md) |
 
 ## Step by step
 
-1. Goods are to be delivered to a store, and a goods-in request is created for the store location (Business Central).
+1. A transfer to a store is shipped from the sending warehouse, and a goods-in request is created for the store location (Business Central).
 2. Web Connect sends the warehouse document to the Sitoo Shipments API as a shipment, with the origin warehouse, the destination warehouse for the store, and the lines with SKU, barcode, name and quantity. Lines with zero quantity are left out (Web Connect).
 3. As the status of the warehouse document changes, Web Connect moves the shipment in Sitoo through packed, transport ordered and ready for pickup to in transit (Web Connect).
 4. The store sees the shipment on its way and receives it in Sitoo, see [Store receipts](store-receipt.md) (Sitoo POS).

@@ -56,7 +56,7 @@ Web Connect has ten data flows between Business Central and Sitoo POS.
 | [Store orders delivered from the central warehouse](flows/store-order-delivery.md) | Sitoo POS ↔ Business Central | An order placed in the store but not handed over becomes a sales order. When it is shipped from Business Central, the order is marked as delivered and archived in Sitoo |
 | [Product data](flows/product-data.md) | Business Central → Sitoo POS | Items, or items with their variants, are created or updated as products with barcodes, VAT group, category, manufacturer and image |
 | [Prices](flows/prices.md) | Business Central → Sitoo POS | Price lists and active price list lines are sent as Sitoo price lists |
-| [Shipments to stores](flows/shipment-to-store.md) | Business Central → Sitoo POS | Goods on their way to a store are sent as an inbound shipment, so the store can receive them in Sitoo |
+| [Shipments to stores](flows/shipment-to-store.md) | Business Central → Sitoo POS | When a transfer to a store has been shipped from the sending warehouse, it is sent as an inbound shipment, so the store can receive it in Sitoo |
 | [Store receipts](flows/store-receipt.md) | Sitoo POS → Business Central | When the store has received a shipment, the received quantities come back and the receipt is registered in Business Central |
 | [Returns from stores](flows/returns-from-store.md) | Sitoo POS → Business Central | A shipment created in a store becomes a transfer order from the store location, and the shipment is posted |
 | [Stock adjustments](flows/stock-adjustment.md) | Sitoo POS → Business Central | Stock transactions made in the stores are written to an item journal |
@@ -135,7 +135,7 @@ flowchart LR
 | **One product per item** | Each item is a product in Sitoo, with its barcodes as barcode aliases | Items without variants. Two of four customers are set up this way |
 | **Products with variants** | Each item variant is a product in Sitoo, and the variants are grouped by colour and size under the item | Fashion and other assortments with variants. Two of four customers are set up this way |
 
-[ATT FYLLA I: in three of four configurations product data has no automatic trigger. Confirm how product data is sent in those setups, for example manually from Business Central, or whether the products are maintained in Sitoo or another system. In the fourth, products are sent when the item, its barcodes or its web price changes.]
+When product data is sent is your choice, as for every Web Connect integration. You set the trigger yourself, for example when the item, its barcodes or its price changes.
 
 #### Product data as one product per item
 
@@ -241,7 +241,7 @@ All configuration and logic in the integration is visible and editable in Busine
 | How payments are booked | [Text Mapping](../../general/text-mapping.md) | Translate a Sitoo payment type to a payment method, or [split cash per store](../../../../how-to/web-connect/split-cash-payment-per-store.md) |
 | What becomes an invoice, a credit memo or an order | [Condition List](../../general/condition-list.md) | Make negative orders credit memos, and orders not handed over sales orders |
 | Field mapping | [Incoming Data mapping](../../general/incoming-data/mapping.md) and [Outgoing Mapping](../../general/outgoing-mapping/README.md) | Put the Sitoo receipt ID in External Document No., or add a field to the product |
-| Triggers | [Outgoing Sync Triggers](../../general/outgoing-mapping/outgoing-sync-triggers.md) | Send the product image when the picture on the item changes |
+| Triggers | [Outgoing Sync Triggers](../../general/outgoing-mapping/outgoing-sync-triggers.md) | Send the product when the item changes, the price when a price is updated, and the image when the picture on the item changes |
 | How often data is fetched | [Objects](../../general/objects.md) | Fetch sales every two minutes and stock balances every hour |
 | Which shipments and transfers are integrated | [Logistics Setup](../../general/logistics-setup.md) | Integrate transfer orders to the store locations, and post receipts automatically |
 | Monitoring and resending | [Entries](../../general/entries.md) | See every receipt and shipment message, and [resend a message](../../../../how-to/web-connect/resend-outgoing-message.md) |
@@ -252,13 +252,15 @@ All configuration and logic in the integration is visible and editable in Busine
 - **Warehouses and locations:** which location each Sitoo warehouse is, for sales, shipments, returns and stock.
 - **Which orders are fetched:** sales are fetched from a start date, filtered on order type and payment state, and optionally on order state or warehouse.
 - **Payment methods:** how each Sitoo payment type is translated, and whether orders paid with several payment types get their own payment method.
+- **Posting:** whether sales invoices and credit memos from Sitoo are posted automatically, or posted by you.
 - **Salesperson:** whether the staff member on the receipt is set as salesperson.
 - **Product structure:** one product per item, or one product per variant grouped by colour and size.
 - **VAT groups:** how each VAT product posting group is translated to a Sitoo VAT group.
-- **Price lists:** which price lists and which lines are sent.
+- **Price lists:** which price lists and which lines are sent, and what triggers the send, often an updated price.
+- **Product triggers:** when product data is sent, for example when the item, its barcodes or its price changes.
 - **Schedules:** how often sales, stock transactions, stock balances and returns from stores are fetched, set to your needs.
 - **Stock transaction types:** which Sitoo transaction types are fetched as stock adjustments.
-- **Shipments:** which Business Central documents create inbound shipments to the stores, and whether receipts are posted automatically.
+- **Shipments:** which store locations get inbound shipments in Sitoo, and whether receipts are posted automatically.
 
 ## Limitations
 
@@ -267,7 +269,6 @@ All configuration and logic in the integration is visible and editable in Busine
 - **An inbound shipment cannot be updated in Sitoo once it is created.** If the document changes in Business Central, cancel it to Sitoo and send it again, see [WMS request not sent](../../../../how-to/web-connect/wms-request-not-sent-error.md).
 - **Stock adjustments and stock balances are written to journals.** They change the stock in Business Central only when the journal is posted, unless automatic posting is set in the logistics setup.
 - **Product images need the product in Sitoo first.** The image is only sent when the item already has a product ID from Sitoo.
-- [ATT FYLLA I: are sales invoices and credit memos from Sitoo posted automatically, or posted by the user? The export does not show it.]
 
 ## Frequently asked questions
 

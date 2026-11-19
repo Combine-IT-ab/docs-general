@@ -25,7 +25,7 @@ Web Connect sends the price lists in Business Central to Sitoo POS as price list
 | | |
 |---|---|
 | **Direction** | Business Central → Sitoo POS |
-| **Trigger** | [ATT FYLLA I: what starts the price send. The configurations in use have a trigger filter on active lines, but no automatic event] |
+| **Trigger** | Chosen by you in the [Outgoing Sync Triggers](../../../general/outgoing-mapping/outgoing-sync-triggers.md), often when a price is updated. Only active lines are sent |
 | **Result** | Price lists and price list items in Sitoo |
 | **Part of** | [Business Central and Sitoo POS integration](../overview.md) |
 
