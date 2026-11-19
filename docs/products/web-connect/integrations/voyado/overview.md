@@ -43,7 +43,7 @@ Web Connect by CombineIT connects Microsoft Dynamics 365 Business Central with V
 | **Voyado API** | [Voyado developer documentation](https://developer.voyado.com/) |
 | **Data flows** | 3: contacts, contact consent and orders |
 | **Business Central editions** | All editions, Essentials and Premium, including the latest version |
-| **Available from** | [Web Connect on Microsoft AppSource](https://marketplace.microsoft.com/sv-se/product/PUBID.martitab1633951001710%7CAID.webconnect%7CPAPPID.9f3a7223-19db-4ac7-832f-cf8e4699186f?tab=Overview). [ATT FYLLA I: Ingår Voyado i Web Connect Ready Integrations, eller sätts integrationen upp som en del av implementationen?] |
+| **Available from** | [Web Connect on Microsoft AppSource](https://marketplace.microsoft.com/sv-se/product/PUBID.martitab1633951001710%7CAID.webconnect%7CPAPPID.9f3a7223-19db-4ac7-832f-cf8e4699186f?tab=Overview). The Voyado integration is not part of the Web Connect Ready Integrations app. It is set up as a configuration in Web Connect |
 
 ## What can be synchronized
 
