@@ -146,7 +146,7 @@ Retailer data, retailer prices and the order itself are always maintained in Vir
 - Microsoft Dynamics 365 Business Central, any edition (Essentials or Premium), including the latest version
 - Web Connect installed from Microsoft AppSource, with an activated Web Connect license
 - Your approval for Web Connect to be installed and to act in your Business Central environment
-- An API user from Virtualstock (user name and password) for each retailer connection, for both the sandbox and production. [ATT FYLLA I: where the supplier gets the API user, from Virtualstock or from the retailer]
+- API credentials (user name and password) from Virtualstock. Virtualstock provides them when you are set up as a supplier, starting with a test supplier
 - An EAN for every item you sell through Virtualstock, registered as an Item Reference in Business Central
 - The Virtualstock delivery codes the retailer uses, so they can be mapped to shipping agent services in Business Central
 
@@ -187,6 +187,7 @@ All configuration and logic in the integration is visible and editable in Busine
 - **Each item needs its Virtualstock product ID** for stock updates to reach the right product. It is stored on the item card or as an item reference in Business Central.
 - **Only orders with status `ORDER` are fetched.** Changes the retailer makes to an order after it has been acknowledged, for example a cancellation request, are not read by the integration today. It can be built if Virtualstock supports it.
 - **Product data from Business Central is not in production use.** The standard configuration can create products in Virtualstock and store the product ID that comes back, but Web Connect customers create their products in Virtualstock today.
+- **Virtualstock allows 250 API requests per minute.** Calls above the limit are rejected with status 429 until the next minute.
 - **Retailer prices are not changed from Business Central.** The unit cost price on the order comes from Virtualstock.
 
 ## Frequently asked questions
