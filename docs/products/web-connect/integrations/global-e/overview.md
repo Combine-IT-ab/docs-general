@@ -44,7 +44,7 @@ Web Connect by CombineIT connects Microsoft Dynamics 365 Business Central with G
 | **Global-e API** | [ATT FYLLA I: name of and link to the Global-e API documentation for return notifications and CreateOrderRefund] |
 | **Data flows** | 2: returns with return fee, and refunds |
 | **Business Central editions** | All editions, Essentials and Premium, including the latest version |
-| **Available from** | [Web Connect on Microsoft AppSource](https://marketplace.microsoft.com/sv-se/product/PUBID.martitab1633951001710%7CAID.webconnect%7CPAPPID.9f3a7223-19db-4ac7-832f-cf8e4699186f?tab=Overview). [ATT FYLLA I: whether Global-e returns is part of the Web Connect Ready Integrations app] |
+| **Available from** | [Web Connect on Microsoft AppSource](https://marketplace.microsoft.com/sv-se/product/PUBID.martitab1633951001710%7CAID.webconnect%7CPAPPID.9f3a7223-19db-4ac7-832f-cf8e4699186f?tab=Overview). The Global-e returns integration is not part of the Web Connect Ready Integrations app. It is set up as a configuration in Web Connect |
 
 ## What can be synchronized
 
@@ -125,7 +125,7 @@ The return itself, the RMA number, the return label and the shopper's return rea
 ## Setting it up
 
 1. Decide how the return fee is handled and which returns the integration processes, see [Choose your setup](#choose-your-setup).
-2. Install Web Connect in Business Central, activate the license and give your approval. Set up the Global-e returns integration source and its objects. [ATT FYLLA I: whether the objects come from the Ready Integrations app or are set up as part of the implementation]
+2. Install Web Connect in Business Central, activate the license and give your approval. Set up the Global-e returns integration source and its objects. The objects are set up as a configuration in Web Connect, not installed from the Ready Integrations app.
 3. Enter your Global-e merchant GUID in the refund call.
 4. Set up the WMS document mapping for return orders, with the logistics code for Global-e returns, and map return reasons with [WMS/Return Reason Codes](../../general/wms-return-reason-codes.md).
 5. Point the Global-e return notification webhook to Web Connect.
