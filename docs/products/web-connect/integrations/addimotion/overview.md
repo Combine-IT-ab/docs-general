@@ -41,7 +41,7 @@ Web Connect by CombineIT connects Microsoft Dynamics 365 Business Central with A
 | **Addimotion API** | [ATT FYLLA I: name of and link to the Addimotion API documentation, if it is public] |
 | **Data flows** | 1: sales orders |
 | **Business Central editions** | All editions, Essentials and Premium, including the latest version |
-| **Available from** | [Web Connect on Microsoft AppSource](https://marketplace.microsoft.com/sv-se/product/PUBID.martitab1633951001710%7CAID.webconnect%7CPAPPID.9f3a7223-19db-4ac7-832f-cf8e4699186f?tab=Overview). [ATT FYLLA I: whether Addimotion is part of the Web Connect Ready Integrations app or set up as a configuration in Web Connect] |
+| **Available from** | [Web Connect on Microsoft AppSource](https://marketplace.microsoft.com/sv-se/product/PUBID.martitab1633951001710%7CAID.webconnect%7CPAPPID.9f3a7223-19db-4ac7-832f-cf8e4699186f?tab=Overview). The Addimotion integration is not part of the Web Connect Ready Integrations app. It is set up as a configuration in Web Connect |
 
 ## What can be synchronized
 
