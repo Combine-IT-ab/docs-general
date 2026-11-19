@@ -1,90 +1,119 @@
-# Order — Inbound Flow
-
-**Direction:** Virtual Stock → BC
-**Purpose:** Fetch new orders from Virtual Stock and create them as Sales Orders in Business Central.
-
+---
+title: "Virtualstock to Business Central: orders"
+description: "Web Connect fetches new retailer orders from Virtualstock on a schedule and creates them as released sales orders in Business Central, with items matched by EAN."
+summary: "Web Connect fetches new retailer orders from Virtualstock on a schedule and creates each one as a released sales order in Business Central. Items are matched by the EAN on each order line, and the Virtualstock order ID is stored on the order so that the acknowledgement and the dispatch reach the right order."
+lang: en
+translation_key: integration-virtual-stock-order-inbound
+product: web-connect
+type: integration-flow
+system: "Virtualstock"
+system_category: "marketplace (dropship)"
+keywords:
+  - business central virtualstock orders
+  - virtualstock dropship orders business central
+faq:
+  - question: "Which Virtualstock orders are fetched?"
+    answer: "Orders with status ORDER, which are new orders the supplier has not yet acknowledged. Once an order is acknowledged, it is no longer fetched."
+  - question: "What number does the sales order get in Business Central?"
+    answer: "The order reference from Virtualstock becomes the sales order number, so the same number is used in both systems."
+last_reviewed: 2026-11-19
 ---
 
-## Overview
+# Virtualstock to Business Central: orders
 
-Virtual Stock sits between the retailer and the supplier (BC). When a retailer places an order, it becomes available in Virtual Stock with status **PENDING**. Web Connect polls Virtual Stock at regular intervals and creates a corresponding Sales Order in BC.
+Web Connect fetches new retailer orders from Virtualstock on a schedule and creates each one as a released sales order in Business Central. Items are matched by the EAN on each order line, and the Virtualstock order ID is stored on the order so that the acknowledgement and the dispatch reach the right order.
 
----
-
-## How It Works
-
-**Trigger:** Job Queue — Web Connect polls Virtual Stock on a scheduled interval (configurable per customer)
-**Condition:** Orders with status `PENDING` only
-
-**Objects used:**
-
-| Object | Role |
+| | |
 |---|---|
-| `VS_ORDER` | Parent — fetches order header from Virtual Stock |
-| `VS_ORDERITEMS` | Sub — order lines (item, quantity, price, promised date) |
-| `VS_ADDRESS` | Sub — billing/contact address |
-| `VS_SHIPPING_ADDRESS` | Sub — delivery address (name, address, postal code, country, email, phone) |
-| `VS_RETAILER_DATA` | Sub — retailer details (name, address, email, phone, tax code, VS UUID) |
+| **Direction** | Virtualstock → Business Central |
+| **Trigger** | Schedule in the Business Central job queue |
+| **Result** | A released sales order in Business Central, with the Virtualstock order ID and line references stored |
+| **Part of** | [Business Central and Virtualstock integration](../overview.md) |
 
-**Process steps:**
+## Step by step
 
-1. Job Queue triggers Web Connect polling
-2. Web Connect fetches all orders with status `PENDING` from Virtual Stock
-3. Sub-objects resolve to build the full order payload
-4. Each item is matched to a BC Item No. using the configured lookup (e.g. EAN → Item No.)
-5. Sales Order created in BC
-6. Order confirmation sent automatically (see [Order Confirmation](order-confirmation.md))
-
-**Sequence diagram:**
+1. The retailer places an order. It is available in Virtualstock with status `ORDER`.
+2. On its next scheduled run, Web Connect fetches all orders with status `ORDER` from Virtualstock, ten per page, following the link to the next page.
+3. For each order, Web Connect reads the order header, the order lines, the shipping address and the retailer.
+4. Each order line's EAN is looked up in Item References in Business Central to find the item.
+5. The sales order is created on the customer set up for the retailer, with the order reference as order number, and released.
+6. The order is acknowledged in Virtualstock, see [Order confirmation](order-confirmation.md).
 
 ```mermaid
 sequenceDiagram
-    participant VS as 🏪 Virtual Stock
+    participant VS as 🛒 Virtualstock
     participant WC as ⚙️ Web Connect
     participant BC as 🔄 Business Central
 
-    WC->>VS: Poll for PENDING orders (Job Queue)
-    VS-->>WC: Return order(s) with sub-objects
-    WC->>WC: Resolve items via lookup (e.g. EAN → Item No.)
-    alt Item matched
-        WC->>BC: Create Sales Order
-        BC-->>WC: Sales Order created
-    else Item not matched
-        WC-->>WC: Error — Sales Order not created ⚠️
+    WC->>VS: Fetch orders with status ORDER (schedule)
+    VS-->>WC: Orders with lines, shipping address and retailer
+    WC->>BC: Look up each EAN in Item References
+    alt Item found
+        WC->>BC: Create and release sales order
+        BC-->>WC: Sales order created
+    else No item for the EAN
+        WC-->>WC: Line gets no item number, see Entries ⚠️
     end
 ```
 
----
+## Data mapping
 
-## Variants
-
-### Variant A — EAN → Item No. lookup (Standard)
-
-Items on the incoming order are matched using an EAN-to-BC Item No. lookup table configured in Web Connect. A variant code filter (e.g. `-UK`) can be applied.
-
-### Variant B — Direct Item No. from retailer
-
-If the retailer sends the supplier's own item reference (instead of EAN), the lookup step is bypassed and the item is matched directly.
-
----
-
-## Configuration Notes
-
-- **Polling interval:** Configured per customer in the Job Queue
-- **Item lookup:** Must be configured — see customer repo for the specific lookup used
-- **Order status filter:** Standard is `PENDING`; other statuses are not fetched
-
----
-
-## Error Handling
-
-| Step | What can go wrong | What happens |
+| Virtualstock field | Business Central field | Note |
 |---|---|---|
-| Polling | VS API unreachable | Job Queue entry fails; retried on next run |
-| Polling | Auth error (401/403) | Token refresh attempted; if fails, check `VS_OAUTH` config |
-| Item matching | EAN not found | Sales Order creation fails; entry logged with error |
-| Sales Order creation | BC error | Job Queue entry fails with error message |
+| `order_reference` | Sales Header: No. | The sales order gets the Virtualstock order reference as its number |
+| `url` | Web Connect external ID | The Virtualstock order ID is taken from the order URL and used by the acknowledgement, dispatch and cancellation |
+| `retailer_data.name` | Web Connect source on the sales order | Shows which retailer the order came from |
+| `end_user_purchase_order_reference` | Your Reference | |
+| `currency_code` | Currency Code | |
+| `delivery_service_code` | Shipping Agent Service Code | Through a text mapping. A default value is used for codes that are not listed |
+| `comment` | Work Description | |
+| `shipping_address.full_name` | Ship-to Name | |
+| `shipping_address.line_1`, `line_2` | Ship-to Address, Ship-to Address 2 | |
+| `shipping_address.postal_code`, `city`, `country` | Ship-to Post Code, Ship-to City, Ship-to Country/Region Code | |
+| `shipping_address.email` | Sell-to E-Mail | |
+| `shipping_address.phone` | Ship-to Phone No. and Sell-to Phone No. | |
+| `items[].retailer_additional_reference` | Sales Line: No. | The EAN, looked up in Item References. Type is always Item |
+| `items[].line_reference` | Web Connect external ID on the line | Sent back on acknowledgement, dispatch and cancellation |
+| `items[].name` | Description | |
+| `items[].part_number` | Description 2 | Sent back as the part number on acknowledgement and dispatch |
+| `items[].quantity` | Quantity | |
+| `items[].unit_cost_price` | Unit Price | |
+| `items[].promised_date` | Promised Delivery Date | |
 
----
-**Related:**
-[Overview](../overview.md) · [Order Confirmation](order-confirmation.md) · [How-to](../../../../../how-to/web-connect/README.md)
+The customer the order is created on is set per retailer in the mapping.
+
+## Web Connect objects
+
+| Object | Role |
+|---|---|
+| `VS_ORDER` | Fetches orders with status `ORDER` and creates the sales header |
+| `VS_ORDERITEMS` | Order lines |
+| `VS_SHIPPING_ADDRESS` | Shipping address on the sales header |
+| `VS_RETAILER_DATA` | Retailer details on the order. Read, but not downloaded as a record of its own |
+| `VS_ADDRESS` | The retailer's address |
+| `VS_OAUTH` | Gets the access token used by all calls to Virtualstock |
+
+## Error handling
+
+| Situation | What happens | What to do |
+|---|---|---|
+| The EAN on a line has no match in Item References | The lookup returns no item number, and the line cannot be created as an item line | Add the EAN as an Item Reference on the item, then run the record again from [Entries](../../../general/entries.md). [ATT FYLLA I: confirm that the whole order stops, not only the line] |
+| Nothing is fetched | The job queue entry is not running, or the token cannot be fetched | See [Integrations not running](../../../../../how-to/web-connect/integration-not-running.md) and [Nothing downloads to Business Central](../../../../../how-to/web-connect/nothing-downloads-to-business-central.md) |
+| Calls fail with 401 Unauthorized | The API password has changed or the token has expired | Update the password in Secret Value Storage. See [401 after job queue stopped](../../../../../how-to/web-connect/unauthorized-after-job-queue-stopped.md) |
+| The sales order fails validation in Business Central | The error is shown on the entry in Web Connect Entries | Correct the setup, for example the customer or a shipping agent service, and run the record again |
+
+## Frequently asked questions
+
+### Which Virtualstock orders are fetched?
+
+Orders with status `ORDER`, which are new orders the supplier has not yet acknowledged. Once an order is acknowledged, it is no longer fetched.
+
+### What number does the sales order get in Business Central?
+
+The order reference from Virtualstock becomes the sales order number, so the same number is used in both systems.
+
+## Related
+
+- [Business Central and Virtualstock integration](../overview.md)
+- [Order confirmation](order-confirmation.md) · [Shipment](shipment.md) · [Cancellation](cancellation.md)
+- [Incoming Data mapping](../../../general/incoming-data/mapping.md) · [Text Mapping](../../../general/text-mapping.md) · [Entries](../../../general/entries.md)

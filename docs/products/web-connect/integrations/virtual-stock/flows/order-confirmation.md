@@ -1,80 +1,92 @@
-# Order Confirmation Flow
-
-**Direction:** BC → Virtual Stock
-**Purpose:** Acknowledge receipt of an order to Virtual Stock, moving its status from PENDING to PROCESSING.
-
+---
+title: "Business Central to Virtualstock: order acknowledgement"
+description: "Web Connect acknowledges Virtualstock orders from Business Central, line by line with quantity and promised delivery date, so the retailer sees the order is accepted."
+summary: "When a Virtualstock order has been created as a sales order in Business Central, Web Connect acknowledges it in Virtualstock. Each line is acknowledged with its quantity and, when set, the promised delivery date, so the retailer can see that the supplier has accepted the order."
+lang: en
+translation_key: integration-virtual-stock-order-confirmation
+product: web-connect
+type: integration-flow
+system: "Virtualstock"
+system_category: "marketplace (dropship)"
+keywords:
+  - business central virtualstock order acknowledgement
+  - virtualstock acknowledge order business central
+faq:
+  - question: "Are orders from other sales channels acknowledged in Virtualstock?"
+    answer: "No. Only sales orders that came from Virtualstock, and therefore have a Virtualstock source and order ID stored, are acknowledged."
+last_reviewed: 2026-11-19
 ---
 
-## Overview
+# Business Central to Virtualstock: order acknowledgement
 
-After a Sales Order is created in BC (see [Order — Inbound](order-inbound.md)), an order confirmation is sent back to Virtual Stock automatically by Web Connect. This tells Virtual Stock — and the retailer — that the supplier has received and accepted the order.
+When a Virtualstock order has been created as a sales order in Business Central, Web Connect acknowledges it in Virtualstock. Each line is acknowledged with its quantity and, when set, the promised delivery date, so the retailer can see that the supplier has accepted the order.
 
-Virtual Stock moves the order status from **PENDING** to **PROCESSING** upon receipt.
-
----
-
-## How It Works
-
-**Trigger:** Automatic — triggered by Sales Order creation in BC (no manual action required)
-
-**Objects used:**
-
-| Object | Role |
+| | |
 |---|---|
-| `VS_ORDERCONFIRMATION` | Parent — sends confirmation to Virtual Stock |
-| `VS_CONFIRMATION_ITEM` | Sub — confirmed order lines |
+| **Direction** | Business Central → Virtualstock |
+| **Trigger** | Outgoing sync trigger on the sales order. [ATT FYLLA I: which event in Business Central sends the acknowledgement: when the order is created and released, or when it is posted] |
+| **Result** | The order is acknowledged in Virtualstock and is no longer fetched as a new order |
+| **Part of** | [Business Central and Virtualstock integration](../overview.md) |
 
-**Process steps:**
+## Step by step
 
-1. Sales Order created in BC (from [Order — Inbound](order-inbound.md))
-2. Web Connect detects the new Sales Order
-3. Confirmation payload built from `VS_ORDERCONFIRMATION` + `VS_CONFIRMATION_ITEM`
-4. Confirmation sent to Virtual Stock
-5. Virtual Stock updates order status to `PROCESSING`
-
-**Sequence diagram:**
+1. A sales order is created from a Virtualstock order, see [Order inbound](order-inbound.md).
+2. The outgoing sync trigger fires for the sales order. Only orders with a Virtualstock source are included.
+3. Web Connect builds the acknowledgement with one entry per sales line of type Item.
+4. The acknowledgement is sent to Virtualstock for the stored Virtualstock order ID.
+5. Virtualstock registers the order as acknowledged.
 
 ```mermaid
 sequenceDiagram
     participant BC as 🔄 Business Central
     participant WC as ⚙️ Web Connect
-    participant VS as 🏪 Virtual Stock
+    participant VS as 🛒 Virtualstock
 
-    BC-->>WC: Sales Order created
-    WC->>VS: Send order confirmation (VS_ORDERCONFIRMATION)
-    VS-->>VS: Status → PROCESSING
-    VS-->>WC: Confirmation acknowledged
+    BC-->>WC: Sales order from Virtualstock (outgoing sync trigger)
+    WC->>WC: Build acknowledgement per item line
+    WC->>VS: Acknowledge order (order ID)
+    alt Accepted
+        VS-->>WC: OK
+    else Rejected
+        VS-->>WC: Error, shown in Entries ⚠️
+    end
 ```
 
----
+## Data mapping
 
-## Variants
-
-### Variant A — Full order confirmation (Standard)
-
-All lines on the Sales Order are confirmed in a single confirmation message.
-
-### Variant B — Confirmation with expected date per line
-
-The confirmation includes an expected dispatch or delivery date per order line. Used when the retailer requires date commitments upfront.
-
----
-
-## Configuration Notes
-
-- **Expected date:** Optional field; can be included per line in the confirmation
-- **Partial confirmation:** Virtual Stock supports confirming individual lines; whether this is used depends on customer setup
-
----
-
-## Error Handling
-
-| Step | What can go wrong | What happens |
+| Business Central field | Virtualstock field | Note |
 |---|---|---|
-| Sending confirmation | VS API error | Job Queue entry fails; order stays `PENDING` in VS |
-| Sending confirmation | Auth error (401/403) | Token refresh attempted; if fails, check `VS_OAUTH` config |
-| Sending confirmation | Order already confirmed | VS returns error; check for duplicate processing |
+| Web Connect external ID on the sales order | Order ID in the address of the call | The Virtualstock order ID stored when the order was fetched |
+| Sales Line: Description 2 | `items[].part_number` | The part number received on the order |
+| Web Connect external ID on the line | `items[].line_ref` | The Virtualstock line reference |
+| Sales Line: Quantity | `items[].quantity` | |
+| Sales Line: Promised Delivery Date | `items[].supplier_delivery_date` | Left out when empty |
+| Fixed value | `items[].fulfillment_route` | `Direct to customer` |
 
----
-**Related:**
-[Overview](../overview.md) · [Order — Inbound](order-inbound.md) · [Shipment / Dispatch](shipment.md) · [How-to](../../../../../how-to/web-connect/README.md)
+## Web Connect objects
+
+| Object | Role |
+|---|---|
+| `VS_ORDERCONFIRMATION` | Sends the acknowledgement for the sales order |
+| `VS_CONFIRMATION_ITEM` | One entry per sales line of type Item |
+| `VS_URL` | Puts the Virtualstock order ID into the address of the call |
+
+## Error handling
+
+| Situation | What happens | What to do |
+|---|---|---|
+| Virtualstock rejects or does not answer | The entry gets an error in Web Connect Entries, and the order stays unacknowledged in Virtualstock | Correct the cause and [resend the message](../../../../../how-to/web-connect/resend-outgoing-message.md) |
+| Calls fail with 401 Unauthorized | The token could not be fetched | Check the API password in Secret Value Storage |
+| The order is not acknowledged at all | The order has no Virtualstock source, or the trigger is not active | Check that the order came from Virtualstock and that the outgoing sync trigger is enabled |
+
+## Frequently asked questions
+
+### Are orders from other sales channels acknowledged in Virtualstock?
+
+No. Only sales orders that came from Virtualstock, and therefore have a Virtualstock source and order ID stored, are acknowledged.
+
+## Related
+
+- [Business Central and Virtualstock integration](../overview.md)
+- [Order inbound](order-inbound.md) · [Shipment](shipment.md)
+- [Outgoing Sync Triggers](../../../general/outgoing-mapping/outgoing-sync-triggers.md) · [Entries](../../../general/entries.md)

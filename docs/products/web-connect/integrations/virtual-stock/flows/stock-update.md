@@ -1,110 +1,107 @@
-# Stock Update Flow
-
-**Direction:** BC → Virtual Stock
-**Purpose:** Keep stock levels in Virtual Stock in sync with Business Central so the retailer always sees accurate available stock per product.
-
+---
+title: "Business Central to Virtualstock: stock"
+description: "Web Connect sends free stock per item from Business Central to Virtualstock when sales, purchase or transfer lines change. Negative stock is always sent as 0."
+summary: "Web Connect sends the free stock for each item from Business Central to Virtualstock, so the retailer only sells what the supplier can deliver. Stock is calculated in Web Connect Item Inventory and sent when sales, purchase or transfer lines change or an item ledger entry is posted. Negative stock is sent as 0."
+lang: en
+translation_key: integration-virtual-stock-stock-update
+product: web-connect
+type: integration-flow
+system: "Virtualstock"
+system_category: "marketplace (dropship)"
+keywords:
+  - business central virtualstock stock
+  - virtualstock stock sync business central
+faq:
+  - question: "Is negative stock sent to Virtualstock?"
+    answer: "No. A condition in Web Connect checks the calculated stock, and when it is below zero, 0 is sent as the free stock."
+  - question: "Which items get stock updates?"
+    answer: "The items included by the filter on the stock object in Web Connect, usually the items sold through Virtualstock. Each item also needs its Virtualstock product ID."
+last_reviewed: 2026-11-19
 ---
 
-## Overview
+# Business Central to Virtualstock: stock
 
-Virtual Stock displays supplier stock levels to retailers. When inventory changes in BC — for example when a Sales Order is created or a Transfer Order is posted — Web Connect automatically pushes the updated stock level to Virtual Stock.
+Web Connect sends the free stock for each item from Business Central to Virtualstock, so the retailer only sells what the supplier can deliver. Stock is calculated in Web Connect Item Inventory and sent when sales, purchase or transfer lines change or an item ledger entry is posted. Negative stock is sent as 0.
 
-Each product in Virtual Stock is identified by an **External ID** (the Virtual Stock product identifier). This ID must be present in BC or Web Connect for the update to reach the correct product in Virtual Stock.
-
----
-
-## How It Works
-
-**Trigger:** Automatic — field changes on Sales Lines or Transfer Lines in BC
-**API endpoint:** `POST /api/v4/products/{external_id}/stock`
-**Field sent:** `supplier_free_stock`
-
-**Objects used:**
-
-| Object | Role |
+| | |
 |---|---|
-| `VS_STOCKUPDATE` | Sends updated stock level to Virtual Stock |
+| **Direction** | Business Central → Virtualstock |
+| **Trigger** | Outgoing sync triggers on sales lines, purchase lines, transfer lines, item ledger entries and the calculated stock |
+| **Result** | The supplier free stock for the product is updated in Virtualstock |
+| **Part of** | [Business Central and Virtualstock integration](../overview.md) |
 
-**Triggered by (Web Connect outgoing sync):**
+## Step by step
 
-| Source table | Fields watched | Why |
-|---|---|---|
-| Sales Line | Quantity (6), Outstanding Qty (15) | Sales order created or changed → free stock changes |
-| Transfer Line | Item No. (3), Variant Code (4) | Transfer affects stock allocation |
-
-**Lookup used:** EAN → BC Item No. (configured per customer; variant filter such as `-UK` may apply)
-
-**Process steps:**
-
-1. Sales Line or Transfer Line created or modified in BC
-2. Web Connect detects the change via outgoing sync trigger
-3. Item is matched to Virtual Stock using the **External ID** — stored on the BC Item Card or in Web Connect → Outgoing Data
-4. Current free stock calculated
-5. If stock is below zero → `0` is sent (Virtual Stock does not accept negative values)
-6. Stock update sent to Virtual Stock
-
-**Sequence diagram:**
+1. Stock changes in Business Central: a sales, purchase or transfer line is created or changed, or an item ledger entry is posted.
+2. Web Connect recalculates the stock for the item in [Item Inventory](../../../general/item-inventory.md).
+3. When the calculated stock changes, the outgoing sync trigger fires for the item. Only items included by the filter on the stock object are sent.
+4. If the stock is below zero, 0 is used instead.
+5. The free stock is sent to the Virtualstock product.
 
 ```mermaid
 sequenceDiagram
     participant BC as 🔄 Business Central
     participant WC as ⚙️ Web Connect
-    participant VS as 🏪 Virtual Stock
+    participant VS as 🛒 Virtualstock
 
-    BC-->>WC: Sales Line or Transfer Line changed
-    WC->>WC: Look up External ID for item
-    alt External ID found
-        WC->>WC: Calculate free stock
-        alt Stock >= 0
-            WC->>VS: POST stock (supplier_free_stock = n)
-        else Stock < 0
-            WC->>VS: POST stock (supplier_free_stock = 0)
-        end
-        VS-->>VS: Stock level updated
-    else No External ID
-        WC-->>WC: Update skipped ⚠️
+    BC-->>WC: Sales, purchase or transfer line changed, or entry posted
+    WC->>WC: Recalculate stock in Item Inventory
+    alt Stock 0 or more
+        WC->>VS: Update stock (supplier_free_stock = stock)
+    else Stock below 0
+        WC->>VS: Update stock (supplier_free_stock = 0)
     end
+    VS-->>WC: OK, or error shown in Entries
 ```
 
----
+## What triggers an update
 
-## Variants
+| Source in Business Central | Fields watched |
+|---|---|
+| Sales Line | No., Quantity |
+| Purchase Line | No., Quantity |
+| Transfer Line | Item No., Quantity |
+| Item Ledger Entry | When an entry is posted |
+| Web Connect Item Inventory | The calculated stock values |
 
-### Variant A — EAN lookup + External ID on Item Card (Standard)
+You can add or remove triggers yourself in [Outgoing Sync Triggers](../../../general/outgoing-mapping/outgoing-sync-triggers.md).
 
-Items are matched using an EAN lookup. The External ID is stored directly on the BC Item Card.
+## Data mapping
 
-### Variant B — External ID in Web Connect Outgoing Data
-
-The External ID is not on the Item Card but is configured in Web Connect's Outgoing Data mapping. Used when the Item Card cannot be modified or when the mapping is managed centrally in the integration config.
-
----
-
-## External ID Requirement
-
-Every product that should have its stock synced **must have an External ID configured**. Without it, the stock update is silently skipped — Virtual Stock is not updated.
-
-The External ID is assigned by Virtual Stock when the product is first created there (see [Product Data](product-data.md)).
-
----
-
-## Configuration Notes
-
-- **Negative stock:** Always sent as `0`
-- **Scope:** Only items with a matching External ID are synced
-- **Trigger priority:** Web Connect — short Job Queue delay between change and update (typically seconds)
-
----
-
-## Error Handling
-
-| Step | What can go wrong | What happens |
+| Business Central field | Virtualstock field | Note |
 |---|---|---|
-| Item matching | No External ID | Update silently skipped; VS stock not updated |
-| Item matching | Incorrect External ID | Update sent to wrong product in VS |
-| Sending update | VS API error | Job Queue entry fails; retried on next run |
-| Sending update | Auth error (401/403) | Token refresh attempted; if fails, check `VS_OAUTH` config |
+| Item Inventory: calculated stock | `supplier_free_stock` | Sent as 0 when the value is below zero |
+| Virtualstock product ID for the item | Product ID in the address of the call | [ATT FYLLA I: where the Virtualstock product ID for each item is stored in Business Central or Web Connect] |
 
----
-**Related:**
-[Overview](../overview.md) · [Product Data](product-data.md) · [How-to](../../../../../how-to/web-connect/README.md)
+## Web Connect objects
+
+| Object | Role |
+|---|---|
+| `VS_STOCKUPDATE` | Sends the free stock for an item to Virtualstock |
+| `VS_URL` | Puts the Virtualstock product ID into the address of the call |
+| `STOCK-IS-NEGATIVE` | Condition that sends 0 instead of a negative value |
+
+## Error handling
+
+| Situation | What happens | What to do |
+|---|---|---|
+| The item has no Virtualstock product ID | The update cannot reach a product in Virtualstock | Register the product ID for the item. [ATT FYLLA I: where and how] |
+| Stock shows 0 in Virtualstock | The calculated stock in Business Central is 0 or negative | Check the item's stock and the locations included in Item Inventory |
+| Stock does not update at all | The item is outside the filter on the stock object, or the job queue is not running | Check the filter and see [Send inventory to external systems](../../../../../how-to/web-connect/outgoing-inventory-to-external-systems.md) |
+| Virtualstock rejects or does not answer | The entry gets an error in Web Connect Entries | Correct the cause and [resend the message](../../../../../how-to/web-connect/resend-outgoing-message.md) |
+
+## Frequently asked questions
+
+### Is negative stock sent to Virtualstock?
+
+No. A condition in Web Connect checks the calculated stock, and when it is below zero, 0 is sent as the free stock.
+
+### Which items get stock updates?
+
+The items included by the filter on the stock object in Web Connect, usually the items sold through Virtualstock. Each item also needs its Virtualstock product ID.
+
+## Related
+
+- [Business Central and Virtualstock integration](../overview.md)
+- [Product data](product-data.md)
+- [Item Inventory](../../../general/item-inventory.md) · [Destinations](../../../general/destinations.md) · [Condition List](../../../general/condition-list.md)
