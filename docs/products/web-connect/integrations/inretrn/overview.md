@@ -60,7 +60,7 @@ Both flows are part of every Inretrn integration. Inretrn needs the invoiced ord
 
 ## How it works
 
-Web Connect sends each posted sales invoice that matches the filter to Inretrn, one invoice per message, with `POST` to `/v2/salesorder/create`. When a customer registers a return, Inretrn sends a webhook with the ID of the return order. Web Connect answers the webhook, fetches the return order with `GET` on `/v2/returnOrder/` and creates a [WMS document](../../general/wms-documents.md) of the type return order, with the Inretrn return order number as the key and a line per returned row. Every message is logged in Web Connect [Entries](../../general/entries.md), where it can be inspected and resent.
+Web Connect sends each posted sales invoice that matches the filter to Inretrn, one invoice per message, with `POST` to `/v2/salesorder/create`. When a customer registers a return, Inretrn sends a webhook with the ID of the return order. Web Connect answers the webhook, fetches the return order with `GET` on `/v2/returnOrder/` and creates a [WMS document](../../general/wms-documents.md) of the type return order, with the Inretrn return order number as the key and a line per returned row. The [logistics setup](../../general/logistics-setup.md) for Inretrn then creates a sales return order, sends it on to the warehouse as an expected receipt when the warehouse is also connected through Web Connect, and decides whether the return receipt is posted automatically when the warehouse reports it. Every message is logged in Web Connect [Entries](../../general/entries.md), where it can be inspected and resent.
 
 ```mermaid
 graph LR
@@ -144,7 +144,7 @@ All configuration and logic in the integration is visible and editable in Busine
 | Conditions | [Condition List](../../general/condition-list.md) | Use the unit cost in the invoice currency only when the invoice has a currency code |
 | Value mapping | [Text Mapping](../../general/text-mapping.md) | Send freight and gift card rows with another line type than item rows |
 | Field mapping on incoming returns | [Incoming Data mapping](../../general/incoming-data/mapping.md) | Store another field from the Inretrn return order on the WMS document |
-| Return orders in Business Central | [Logistics Setup](../../general/logistics-setup.md) and [WMS Documents](../../general/wms-documents.md) | Release the created return order automatically, or require a reference to the original sales document |
+| What happens with a return | [Logistics Setup](../../general/logistics-setup.md) and [WMS Documents](../../general/wms-documents.md) | Send the return order to the warehouse, and post the return receipt automatically when the warehouse reports it |
 | Monitoring and resending | [Entries](../../general/entries.md) | See every order sent and every return received, and [resend a message](../../../../how-to/web-connect/resend-outgoing-message.md) |
 
 ## Configuration choices
@@ -155,7 +155,8 @@ All configuration and logic in the integration is visible and editable in Busine
 - **Line type:** which item or account numbers, for example freight and gift cards, are sent with another line type than ordinary item rows.
 - **Currency:** the currency code sent when the invoice is in local currency.
 - **Brand and other row data:** fields from your own extensions, such as brand, can be added to the rows.
-- **Return order handling:** how the WMS document becomes a return order in Business Central, set in [Logistics Setup](../../general/logistics-setup.md).
+- **Return order handling:** the sales return order is created from the WMS document by the [Logistics Setup](../../general/logistics-setup.md), which also decides whether it is sent to the warehouse and whether the return receipt is posted automatically.
+- **Return order number:** whether the return order in Business Central gets the Inretrn number or a number from your number series.
 
 ## Limitations
 

@@ -28,7 +28,7 @@ When a customer registers a return in Inretrn, Inretrn sends a webhook to Web Co
 |---|---|
 | **Direction** | Inretrn → Business Central |
 | **Trigger** | Webhook from Inretrn when a return order is registered |
-| **Result** | A WMS document of the type return order in Business Central, with a line per returned row |
+| **Result** | A WMS document of the type return order and a sales return order in Business Central, with a line per returned row |
 | **Part of** | [Business Central and Inretrn integration](../overview.md) |
 
 ## Step by step
@@ -38,7 +38,8 @@ When a customer registers a return in Inretrn, Inretrn sends a webhook to Web Co
 3. Web Connect reads the return order ID from the webhook and fetches the return order with `GET` on `/v2/returnOrder/?returnOrderId=`.
 4. Web Connect creates a [WMS document](../../../general/wms-documents.md) of the type return order with the logistics code for Inretrn. The Inretrn return order number is the key, and the original order number is stored on the document.
 5. Each returned row becomes a line on the WMS document with item, variant, returned quantity and refund value. Freight rows are marked as freight.
-6. The return order in Business Central is created from the WMS document according to [Logistics Setup](../../../general/logistics-setup.md). [ATT FYLLA I: is the return order created, released and received automatically, and is it based on the posted sales invoice?]
+6. The [logistics setup](../../../general/logistics-setup.md) for Inretrn creates the sales return order from the WMS document and, when your warehouse system is also connected through Web Connect, sends it on to the warehouse as an expected receipt (Business Central).
+7. The logistics setup decides whether the return receipt is posted automatically when the warehouse reports that the goods have arrived. The credit memo and the refund follow in the system where the payment was captured.
 
 ```mermaid
 sequenceDiagram
@@ -52,7 +53,7 @@ sequenceDiagram
     IR-->>WC: Return order with rows
     WC->>BC: WMS document: return order
     alt Order found
-        BC-->>BC: Return order according to Logistics Setup
+        BC-->>BC: Sales return order, sent to the warehouse as expected receipt
     else Error
         WC-->>WC: Shown on the WMS document ⚠️
     end
