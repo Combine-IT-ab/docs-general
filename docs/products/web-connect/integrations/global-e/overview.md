@@ -41,7 +41,7 @@ Web Connect by CombineIT connects Microsoft Dynamics 365 Business Central with G
 | **Runs in** | Your own Business Central environment, as an extension. Returns come in as webhooks from Global-e, received by an Azure endpoint that passes them on to Web Connect. Refunds are sent from Business Central when the credit memo is posted. All processing and configuration stays in Business Central. |
 | **Configured by** | You, in Business Central: mappings, conditions, triggers and flows. You can do all of it yourself. If you want, CombineIT takes part in any step, as a sounding board or by doing the work. |
 | **Connection** | Global-e REST API (JSON) and webhooks from Global-e |
-| **Global-e API** | [ATT FYLLA I: name of and link to the Global-e API documentation for return notifications and CreateOrderRefund] |
+| **Global-e API** | [Global-e API integration guides](https://docs-nce.global-e.com/api-integration-guides) |
 | **Data flows** | 2: returns with return fee, and refunds |
 | **Business Central editions** | All editions, Essentials and Premium, including the latest version |
 | **Available from** | [Web Connect on Microsoft AppSource](https://marketplace.microsoft.com/sv-se/product/PUBID.martitab1633951001710%7CAID.webconnect%7CPAPPID.9f3a7223-19db-4ac7-832f-cf8e4699186f?tab=Overview). The Global-e returns integration is not part of the Web Connect Ready Integrations app. It is set up as a configuration in Web Connect |
@@ -118,7 +118,7 @@ The return itself, the RMA number, the return label and the shopper's return rea
 - Web Connect installed from Microsoft AppSource, with an activated Web Connect license
 - Your approval for Web Connect to be installed and to act in your Business Central environment
 - Your Global-e merchant GUID, which Web Connect sends with every refund
-- A return notification webhook in Global-e that points to your Web Connect webhook endpoint. [ATT FYLLA I: who sets up the webhook in Global-e, the merchant or Global-e]
+- A return notification webhook in Global-e that points to your Web Connect webhook endpoint. The webhook is set up in Global-e, by Global-e or by you
 - Global-e SKUs that can be translated to Business Central item numbers through the Web Connect SKU table
 - A WMS document mapping and a Web Connect logistics setup that create return orders from incoming WMS documents, see [Logistics Setup](../../general/logistics-setup.md)
 
@@ -150,8 +150,8 @@ All configuration and logic in the integration is visible and editable in Busine
 
 - **Return document:** returns arrive as WMS documents of type Return Order with a logistics code for Global-e returns. The WMS document mapping decides which values are written to the return order header and lines.
 - **Item lookup:** the Global-e SKU is translated to a Business Central item number through the Web Connect SKU table. If no item is found, the item number is left blank.
-- **Return reasons:** Global-e sends both the shopper's return reason and the merchant's return reason code. Which one is translated to a Business Central return reason code is set in the mapping. [ATT FYLLA I: which of the two return reasons is used in the standard setup]
-- **Return fee:** the return shipping cost from Global-e becomes a separate line with quantity 1. [ATT FYLLA I: which item or account the return fee line is posted to in Business Central]
+- **Return reasons:** Global-e sends both the shopper's return reason and the merchant's return reason code. Which one is translated, and to which Business Central return reason code, depends on the return reasons you have in Global-e and in Business Central. It is decided in the mapping at setup.
+- **Return fee:** the return shipping cost from Global-e becomes a separate line with quantity 1. You choose the item or account the return fee line uses, and it is set up in the mapping.
 - **Process condition:** a condition decides which returns create a return order, for example by currency.
 - **Refund filter:** which posted credit memos are sent to Global-e. In the standard setup it is the credit memos whose External Document No. starts with `GE`.
 
@@ -159,7 +159,7 @@ All configuration and logic in the integration is visible and editable in Busine
 
 - **Refunds carry items and quantities, not amounts.** Web Connect sends the cart item ID and the refunded quantity for each line. No amounts are sent from Business Central, and the return fee line is not part of the refund call.
 - **Only lines with a Global-e cart item ID are refunded.** Credit memo lines without a cart item ID, for example lines added by hand in Business Central, are not sent to Global-e.
-- **The External Document No. must hold the Global-e order ID.** The refund is only sent for credit memos whose External Document No. starts with `GE`, and that value is sent to Global-e as the order ID. [ATT FYLLA I: how the Global-e order ID reaches the External Document No. on the credit memo]
+- **The External Document No. must hold the Global-e order ID.** The refund is only sent for credit memos whose External Document No. starts with `GE`, and that value is sent to Global-e as the order ID. The Global-e order ID is written to External Document No. on the sales order when the order is imported from the e-commerce platform, for example from an order attribute that holds the Global-e order ID. [ATT FYLLA I: how the value carries over from the sales order to the return order and the posted credit memo]
 - **Unknown SKUs are not created as items.** A SKU that is not found in the Web Connect SKU table gives a return line without an item number. Add the SKU to the SKU table before the return is processed.
 - **Return status is not sent back to Global-e.** The integration does not tell Global-e when the goods are received in the warehouse. Only the refund is sent.
 
@@ -187,7 +187,7 @@ Yes. A condition on the return object decides which returns are processed. It ca
 - [Web Connect WMS Documents](../../general/wms-documents.md) · [WMS/Return Reason Codes](../../general/wms-return-reason-codes.md) · [Webhooks](../../general/webhooks.md)
 - How-to: [Resend an outgoing message](../../../../how-to/web-connect/resend-outgoing-message.md) · [Nothing downloads to Business Central](../../../../how-to/web-connect/nothing-downloads-to-business-central.md)
 - [Web Connect general documentation](../../general/README.md)
-- [ATT FYLLA I: link to the Global-e API documentation]
+- [Global-e API integration guides](https://docs-nce.global-e.com/api-integration-guides)
 
 ## About Web Connect
 
