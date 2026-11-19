@@ -25,7 +25,7 @@ Web Connect searches Plytix PIM for a product whose SKU equals the Business Cent
 | | |
 |---|---|
 | **Direction** | Plytix → Business Central |
-| **Trigger** | [ATT FYLLA I: how the search is started, for example manually for selected items or from the job queue. No trigger or job queue entry for the search is in the configuration export] |
+| **Trigger** | Outgoing sync triggers, set per integration to fit how you work. Usually the fields that are sent to Plytix are the trigger fields, so a change in one of them sends the record again. The search sends the item number |
 | **Result** | The item has the Plytix product ID as External ID in Web Connect. Nothing else on the item changes |
 | **Part of** | [Business Central and Plytix PIM integration](../overview.md) |
 
