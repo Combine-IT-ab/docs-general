@@ -42,7 +42,7 @@ Web Connect by CombineIT connects Microsoft Dynamics 365 Business Central with C
 | **Connection** | Crystallize PIM API (GraphQL), authenticated with a Crystallize access token |
 | **Crystallize API** | [Crystallize PIM API](https://crystallize.com/learn/developer-guides/pim-api) |
 | **Data flows** | 5: orders, order status, stock, prices and product matching |
-| **Business Central editions** | Essentials and Premium |
+| **Business Central editions** | All editions, Essentials and Premium, including the latest version |
 | **Available from** | [Web Connect on Microsoft AppSource](https://marketplace.microsoft.com/sv-se/product/PUBID.martitab1633951001710%7CAID.webconnect%7CPAPPID.9f3a7223-19db-4ac7-832f-cf8e4699186f?tab=Overview). [ATT FYLLA I: whether the Crystallize integration is included in the Web Connect Ready Integrations app] |
 
 ## What can be synchronized
@@ -176,7 +176,7 @@ Products, variants, product content and the order pipeline with its stages are a
 
 ## What you need
 
-- Microsoft Dynamics 365 Business Central, Essentials or Premium
+- Microsoft Dynamics 365 Business Central, any edition (Essentials or Premium), including the latest version
 - Web Connect installed from Microsoft AppSource, with an activated Web Connect license
 - Your approval for Web Connect to be installed and to act in your Business Central environment
 - A Crystallize access token (token ID and secret) with access to orders and products, created in Crystallize. [ATT FYLLA I: where in Crystallize the token is created and which permissions it needs]
