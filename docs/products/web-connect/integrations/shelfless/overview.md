@@ -182,7 +182,7 @@ Picking, packing, carrier booking and the stock locations inside the warehouse a
 - Web Connect installed from Microsoft AppSource, with an activated Web Connect license
 - Your approval for Web Connect to be installed and to act in your Business Central environment
 - An API user (username and password) for the Shelfless DreamREST API. Shelfless decides how the API user is issued, so ask Shelfless for one
-- Webhooks set up in Shelfless for shipped deliveries, received incoming deliveries and handled returns, pointing to the Web Connect endpoint. [ATT FYLLA I: who registers the webhooks, Shelfless or the customer?]
+- Webhooks set up in Shelfless for shipped deliveries, received incoming deliveries and handled returns, pointing to the Web Connect endpoint. Shelfless registers the webhooks
 - A location in Business Central for the stock at Shelfless
 
 ## Setting it up
@@ -228,7 +228,6 @@ All configuration and logic in the integration is visible and editable in Busine
 - **Orders created or copied in Shelfless have no external ID.** Web Connect can fall back to the order reference on the packing slip, but rows without an external ID are skipped. Create orders in Business Central, not in Shelfless.
 - **Products created only in Shelfless are not counted.** The stock count only includes products that came from Business Central.
 - **The stock count is not posted automatically.** The physical inventory journal must be reviewed and posted by a person.
-- **Stock adjustments between counts.** [ATT FYLLA I: Web Connect has a webhook object for stock adjustments from Shelfless, but no adjustment has been received or verified. Confirm whether adjustments are part of the integration.]
 - **Return orders are not sent to Shelfless.** Returns are registered in Shelfless, and the return order is created in Business Central afterwards.
 - **Item variants.** [ATT FYLLA I: are item variants sent to Shelfless as separate products?]
 

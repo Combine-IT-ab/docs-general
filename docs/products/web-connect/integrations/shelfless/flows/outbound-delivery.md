@@ -92,7 +92,6 @@ sequenceDiagram
 |---|---|---|
 | Shelfless rejects the delivery | The error is shown on the WMS document and in Entries | Correct the order and [resend the message](../../../../../how-to/web-connect/resend-outgoing-message.md) |
 | The delivery already exists in Shelfless | Shelfless rejects a new create with the same order number | See [WMS document shows "Request not sent"](../../../../../how-to/web-connect/wms-request-not-sent-error.md) |
-| The order is changed after it was sent | [ATT FYLLA I: is an update sent to Shelfless, and until which Shelfless status?] | |
 
 ## Frequently asked questions
 
