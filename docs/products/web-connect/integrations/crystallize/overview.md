@@ -22,8 +22,6 @@ faq:
     answer: "Web Connect fetches the orders that are in a chosen stage of a Crystallize order pipeline. When the sales order has been created in Business Central, the order is moved to another stage, so it is not fetched again."
   - question: "How are Business Central items matched to Crystallize products?"
     answer: "By SKU. Web Connect asks Crystallize for the product ID of each SKU and stores it in Business Central. Stock and prices are then sent to the right product and variant in Crystallize."
-  - question: "[ATT FYLLA I: a real question from support or a customer meeting about Crystallize]"
-    answer: "[ATT FYLLA I: answer]"
 last_reviewed: 2026-11-19
 ---
 
@@ -39,7 +37,7 @@ Web Connect by CombineIT connects Microsoft Dynamics 365 Business Central with C
 | **Integration product** | Web Connect for Microsoft Dynamics 365 Business Central |
 | **Runs in** | Your own Business Central environment, as an extension. Web Connect fetches new orders from Crystallize on a schedule in the Business Central job queue and sends order status, stock and prices to Crystallize. The integration does not use incoming webhooks, and no external integration platform is involved. |
 | **Configured by** | You, in Business Central: mappings, conditions, triggers and flows. You can do all of it yourself. If you want, CombineIT takes part in any step, as a sounding board or by doing the work. |
-| **Connection** | Crystallize PIM API (GraphQL), authenticated with a Crystallize access token |
+| **Connection** | Crystallize PIM API (GraphQL), and the Crystallize Order API for the expected delivery date. Both are authenticated with a Crystallize access token |
 | **Crystallize API** | [Crystallize PIM API](https://crystallize.com/learn/developer-guides/pim-api) |
 | **Data flows** | 5: orders, order status, stock, prices and product matching |
 | **Business Central editions** | All editions, Essentials and Premium, including the latest version |
@@ -52,7 +50,7 @@ Web Connect has five data flows between Business Central and Crystallize.
 | Data | Direction | What happens |
 |---|---|---|
 | [Orders](flows/order-inbound.md) | Crystallize → Business Central | Orders in a chosen pipeline stage are fetched, the customer is found or created and a sales order is created |
-| [Order status](flows/order-status.md) | Business Central → Crystallize | The order is moved between stages in the Crystallize order pipeline: in Business Central, confirmed, shipment booked, shipped and cancelled |
+| [Order status](flows/order-status.md) | Business Central → Crystallize | The order is moved between stages in the Crystallize order pipeline: in Business Central, confirmed, shipment booked, shipped and cancelled. The promised delivery date is sent as the expected delivery date |
 | [Stock](flows/stock-update.md) | Business Central → Crystallize | Available stock per location is sent to the matching Crystallize stock location |
 | [Prices](flows/prices.md) | Business Central → Crystallize | Prices are set on the price variants of each Crystallize product variant, one per currency |
 | [Product matching](flows/product-matching.md) | Crystallize → Business Central | The Crystallize product ID is fetched for each SKU and stored in Business Central |
@@ -212,6 +210,7 @@ All configuration and logic in the integration is visible and editable in Busine
 
 ## Configuration choices
 
+- **Expected delivery date:** the promised delivery date in Business Central is sent to the order in Crystallize as metadata, under a key the web shop reads.
 - **Pipeline and stages:** which Crystallize pipeline is used, which stage new orders are fetched from, and which stages Web Connect moves orders to.
 - **Fetch schedule:** how often the job queue fetches new orders from Crystallize. It can be adjusted to what your business needs.
 - **Orders per run:** how many orders are fetched each time the job runs.
@@ -232,7 +231,6 @@ All configuration and logic in the integration is visible and editable in Busine
 - **Order fetching follows the pipeline stage.** An order that is moved out of the stage for new orders in Crystallize before Web Connect has fetched it is not imported.
 - **Negative stock is sent as 0.**
 - **Prices are set on a fixed set of price variants.** Adding a currency or price variant in Crystallize means adding it to the mapping in Web Connect as well.
-- [ATT FYLLA I: known limitations from support, for example token expiry or API rate limits in Crystallize]
 
 ## Frequently asked questions
 
@@ -247,10 +245,6 @@ Web Connect fetches the orders that are in a chosen stage of a Crystallize order
 ### How are Business Central items matched to Crystallize products?
 
 By SKU. Web Connect asks Crystallize for the product ID of each SKU and stores it in Business Central. Stock and prices are then sent to the right product and variant in Crystallize.
-
-### [ATT FYLLA I: a real question from support or a customer meeting about Crystallize]
-
-[ATT FYLLA I: answer]
 
 ## Related
 

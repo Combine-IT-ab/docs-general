@@ -1,7 +1,7 @@
 ---
 title: "Business Central to Crystallize: order status"
 description: "Web Connect moves Crystallize orders between pipeline stages as they are handled in Business Central: in Business Central, confirmed, shipped and cancelled."
-summary: "As an order is handled in Business Central, Web Connect moves it between stages in the Crystallize order pipeline. The stages are In BC, Confirmed, Shipment Booked, Shipped and Cancelled, and each is linked to Web Connect with an integration variable."
+summary: "As an order is handled in Business Central, Web Connect moves it between stages in the Crystallize order pipeline. The stages are In BC, Confirmed, Shipment Booked, Shipped and Cancelled. When the promised delivery date is set, it is also sent to the order in Crystallize as the expected delivery date."
 slug: integrations/business-central-crystallize/order-status
 lang: en
 translation_key: integration-crystallize-order-status
@@ -26,7 +26,7 @@ As an order is handled in Business Central, Web Connect moves it between stages 
 |---|---|
 | **Direction** | Business Central → Crystallize |
 | **Trigger** | A change on the sales order in Business Central, see the table below |
-| **Result** | The order is in the matching stage of the Crystallize order pipeline |
+| **Result** | The order is in the matching stage of the Crystallize order pipeline, and has the expected delivery date |
 | **Part of** | [Business Central and Crystallize integration](../overview.md) |
 
 ## Stages
@@ -63,6 +63,15 @@ sequenceDiagram
     end
 ```
 
+## Expected delivery date
+
+When the promised delivery date is set on a sales order that came from Crystallize, Web Connect also sends the date to the order in Crystallize. It is stored as order metadata with the key `expectedDeliveryDate`, so the web shop can show it to the customer. This call goes to the Crystallize Order API (`orders.setMetadata`), not the PIM API, and uses the same access token.
+
+| Business Central field | Crystallize field | Note |
+|---|---|---|
+| Crystallize order ID on the sales order | `id` | |
+| Promised Delivery Date | Metadata `expectedDeliveryDate` | Sent when the promised delivery date changes |
+
 ## Data mapping
 
 | Business Central | Crystallize field | Note |
@@ -78,6 +87,7 @@ sequenceDiagram
 | `CRYST-SET-ORDER-IN-BC-PIPELINE` | Sets the stage In BC |
 | `CRYST-SET-CONFIRMED-PIPELINE` | Sets the stage Confirmed. Triggered on the promised delivery date on the sales header and sales line |
 | `CRYST-SET-SHIPMENT-BOOKED` | Sets the stage Shipment Booked |
+| `CRYST-SET-SHIPMENTDATE` | Sends the promised delivery date as the expected delivery date, through the Crystallize Order API. Triggered on the promised delivery date |
 | `CRYST-SET-FULLFILLMENT` | Sets the stage Shipped, from the posted sales shipment |
 | `CRYST-SET-ORDER-CANCELLED-PIPELINE` | Sets the stage Cancelled |
 

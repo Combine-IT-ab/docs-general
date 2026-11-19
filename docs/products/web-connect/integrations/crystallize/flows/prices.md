@@ -63,14 +63,13 @@ sequenceDiagram
 | Dynamic flow field per currency | `priceVariants.identifier` | The identifier of the Crystallize price variant |
 | Price in Web Connect Item Price | `priceVariants.price` | One per price variant |
 
-The language of the product variant is set in the query. [ATT FYLLA I: whether more than one language is needed and how it is handled]
+The language of the product variant is set in the query. One language is used.
 
 ## Web Connect objects
 
 | Object | Role |
 |---|---|
 | `CRYST-PRICEUPDATE` | Sends all price variants for a product variant in one call, from Web Connect Item Price |
-| `CRYST-UPDATE-PRICE` | Sends one price variant per call, from Web Connect Item SKU, with the price variant chosen from the customer price group. [ATT FYLLA I: whether this object is still in use or replaced by `CRYST-PRICEUPDATE`] |
 
 ## Error handling
 
