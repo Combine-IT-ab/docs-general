@@ -14,7 +14,7 @@ keywords:
   - ongoing wms inbound order business central
 faq:
   - question: "What happens if we change a purchase order after it has been sent?"
-    answer: "[ATT FYLLA I: hur en ändrad inköpsorder hanteras efter att den skickats till Ongoing]"
+    answer: "Send it again with the action Send to Warehouse on the purchase order. Web Connect sends the updated purchase order to Ongoing."
 last_reviewed: 2026-11-19
 ---
 
@@ -25,7 +25,7 @@ When a purchase order is released in Business Central for the location your 3PL 
 | | |
 |---|---|
 | **Direction** | Business Central → Ongoing WMS |
-| **Trigger** | The purchase order is released in Business Central |
+| **Trigger** | The purchase order is released in Business Central, or the action Send to Warehouse on the purchase order |
 | **Result** | An inbound order in Ongoing, and a warehouse document in Business Central with the Ongoing purchase order ID |
 | **Part of** | [Business Central and Ongoing WMS integration](../overview.md) |
 
@@ -85,7 +85,7 @@ sequenceDiagram
 
 ### What happens if we change a purchase order after it has been sent?
 
-[ATT FYLLA I: hur en ändrad inköpsorder hanteras efter att den skickats till Ongoing]
+Send it again with the action Send to Warehouse on the purchase order. Web Connect sends the updated purchase order to Ongoing.
 
 ## Related
 

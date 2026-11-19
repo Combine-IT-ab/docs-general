@@ -14,7 +14,7 @@ keywords:
   - ongoing wms return order business central
 faq:
   - question: "Should returns be sent as return orders or as inbound orders in Ongoing?"
-    answer: "As return orders when every order ships from Ongoing. Ongoing links the return to the original order and its lines, but only accepts it when the original order was shipped from Ongoing. If some orders ship from another warehouse or are drop shipped, send returns as inbound orders instead."
+    answer: "CombineIT's standard is inbound orders. Return orders are possible when every order ships from Ongoing. Ongoing links the return to the original order and its lines, but only accepts it when the original order was shipped from Ongoing. If some orders ship from another warehouse or are drop shipped, send returns as inbound orders instead."
 last_reviewed: 2026-11-19
 ---
 
@@ -78,7 +78,7 @@ Inbound order in Ongoing: the same fields as a [purchase order](purchase-order.m
 |---|---|
 | `ONGOING-RETURNORDER` | Sends the return as a return order linked to the original order |
 | `ONGOING-RETURNORDERLINES`, `ONGOING-CUSTOMERORDERLINE`, `ONGOING-RETURNCAUSE` | Return lines, original order line and return reason |
-| `ONGOING-PURCHASEORDER` | Sends the return as an inbound order. [ATT FYLLA I: bekräfta att returen skickas med inköpsorderobjektet när inget returobjekt är valt i logistikinställningen] |
+| `ONGOING-PURCHASEORDER` | Sends the return as an inbound order. This is CombineIT's standard, used when no return object is chosen in the logistics setup |
 | `ONGOING-INSTATUSCHANGE`, `ONGOING-INSTATUS` | Receive and fetch the status of the received goods |
 
 ## Error handling
@@ -92,7 +92,7 @@ Inbound order in Ongoing: the same fields as a [purchase order](purchase-order.m
 
 ### Should returns be sent as return orders or as inbound orders in Ongoing?
 
-As return orders when every order ships from Ongoing. Ongoing links the return to the original order and its lines, but only accepts it when the original order was shipped from Ongoing. If some orders ship from another warehouse or are drop shipped, send returns as inbound orders instead.
+CombineIT's standard is inbound orders. Return orders are possible when every order ships from Ongoing. Ongoing links the return to the original order and its lines, but only accepts it when the original order was shipped from Ongoing. If some orders ship from another warehouse or are drop shipped, send returns as inbound orders instead.
 
 ## Related
 

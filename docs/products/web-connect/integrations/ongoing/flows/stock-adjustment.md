@@ -61,7 +61,6 @@ sequenceDiagram
 | `system` | Logistics code | The Ongoing system name is translated to the logistics setup with a text mapping |
 | `article` | Item No. | |
 | `inventory` | Quantity on the journal line | The change in stock |
-| `transaction` | Reason for the change | [ATT FYLLA I: vilka fält från transaktionen som hamnar på journalraden] |
 
 ## Web Connect objects
 

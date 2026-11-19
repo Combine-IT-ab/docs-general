@@ -25,14 +25,14 @@ Web Connect creates and updates items from Business Central as articles in Ongoi
 | | |
 |---|---|
 | **Direction** | Business Central → Ongoing WMS |
-| **Trigger** | Change on the item or its item references in Business Central, for the fields you choose. [ATT FYLLA I: hur artikeln skickas i konfigurationer som saknar trigger på artikeltabellen] |
+| **Trigger** | Change on the item or its item references in Business Central, for the fields you choose. Without a trigger, the item is sent with the action Send Item to External System on the item card |
 | **Result** | The article exists in Ongoing with the same number as the item in Business Central |
 | **Part of** | [Business Central and Ongoing WMS integration](../overview.md) |
 
 ## Step by step
 
 1. An item is created or changed in Business Central (Business Central).
-2. An outgoing sync trigger detects the change, optionally only for items with a given status (Web Connect).
+2. An outgoing sync trigger detects the change, optionally only for items with a given status. Or someone chooses Send Item to External System on the item card (Web Connect).
 3. Web Connect builds the article from the item and its units of measure, and sends it to `articles/{article number}` (Web Connect).
 4. Ongoing creates or updates the article for your goods owner (Ongoing).
 

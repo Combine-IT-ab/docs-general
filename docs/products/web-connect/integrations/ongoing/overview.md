@@ -108,15 +108,24 @@ Each flow has to fit how your business works: which system owns the data, where 
 | Option | How it works | When it fits |
 |---|---|---|
 | **Sent when the sales order is released** (common setup) | Releasing the sales order in Business Central creates the outbound order in Ongoing. Lines without stock, such as freight, are not sent, but they are posted together with the shipment | Business Central is where orders are handled, for example from a web shop integration |
+| **Sent with Send to Warehouse** | The sales order is released as usual, but nothing is sent until someone chooses the action Send to Warehouse on the order | You want to decide yourself when each order goes to the warehouse |
 | **Sales orders and transfer orders** (common setup) | Transfer orders from the integrated location are also sent to Ongoing as outbound orders | You have more than one location in Business Central, and goods move between them |
 
-[ATT FYLLA I: en av fem konfigurationer skickar inte ordern vid release. Hur ordern skickas där är inte verifierat.]
 
 #### Outbound orders sent when the sales order is released
 
 ```mermaid
 flowchart LR
     BC["🔄 Business Central<br/>sales order released"] -->|Warehouse document| WC["⚙️ Web Connect"]
+    WC -->|Outbound order| OG["📦 Ongoing WMS"]
+```
+
+#### Outbound orders sent with Send to Warehouse
+
+```mermaid
+flowchart LR
+    U["👤 You choose Send to Warehouse"] --> BC["🔄 Business Central<br/>released sales order"]
+    BC -->|Warehouse document| WC["⚙️ Web Connect"]
     WC -->|Outbound order| OG["📦 Ongoing WMS"]
 ```
 
@@ -186,9 +195,9 @@ flowchart LR
 |---|---|---|
 | **Not integrated** | Returns are handled outside the integration | Few returns, or returns go to another location |
 | **Return order in Ongoing, linked to the original order** | The sales return order is created in Business Central from the posted shipment or invoice and sent to Ongoing as a return order, with the Ongoing ID of the original order and its lines. When the goods are received, the return receipt is posted in Business Central | Every order ships from Ongoing, and you want the warehouse to see which order the return belongs to |
-| **Inbound order in Ongoing** | The sales return order is sent to Ongoing as an inbound order, the same way as a purchase order. When the goods are received, the return receipt is posted in Business Central | Some orders ship from another warehouse or are drop shipped, so Ongoing cannot link the return to an order |
+| **Inbound order in Ongoing** (recommended) | The sales return order is sent to Ongoing as an inbound order, the same way as a purchase order. When the goods are received, the return receipt is posted in Business Central | Some orders ship from another warehouse or are drop shipped, so Ongoing cannot link the return to an order |
 
-Two of five configurations send returns as inbound orders in production. Return orders linked to the original order are set up in a test environment so far, so there is no common setup yet.
+CombineIT recommends inbound orders as the standard, because Ongoing does not accept return orders on orders that were not shipped from Ongoing. Two of five configurations send returns as inbound orders in production. Return orders linked to the original order are set up in a test environment so far.
 
 #### Returns not integrated
 
@@ -315,7 +324,7 @@ All configuration and logic in the integration is visible and editable in Busine
 - **Ongoing only accepts a return order when the original order was shipped from Ongoing.** If some orders ship from another warehouse or are drop shipped, returns are sent as inbound purchase orders instead.
 - **The status texts that trigger posting differ between 3PLs.** They are set per integration, and a wrong value means nothing is posted.
 - **Receipts and shipments depend on webhooks from Ongoing.** If a webhook stops, Business Central is not told about the change. Status can be fetched manually for a single document.
-- **Orders the warehouse has started on cannot always be changed or cancelled.** [ATT FYLLA I: vad Ongoing svarar när en order som plockas avbokas, och vad Web Connect gör då]
+- **Orders the warehouse has started on cannot be cancelled.** When an order has come further than allocated in Ongoing, Ongoing returns an error when you choose Send Cancel to Warehouse, and the order stays in Ongoing. Contact the warehouse to stop it.
 - **The stock reconciliation journal is not posted automatically.** Differences are put in a physical inventory journal for you to review and post.
 
 ## Frequently asked questions

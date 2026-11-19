@@ -25,7 +25,7 @@ When a sales order is released in Business Central for the location your 3PL run
 | | |
 |---|---|
 | **Direction** | Business Central → Ongoing WMS |
-| **Trigger** | The sales order or transfer order is released in Business Central |
+| **Trigger** | The sales order or transfer order is released in Business Central, or the action Send to Warehouse on the order |
 | **Result** | An outbound order in Ongoing, and a warehouse document in Business Central with the Ongoing order ID |
 | **Part of** | [Business Central and Ongoing WMS integration](../overview.md) |
 
@@ -80,7 +80,7 @@ The warehouse document copies the values from the sales order or transfer order 
 | `ONGOING-CONSIGNEE` | Consignee and invoice address |
 | `ONGOING-ORDERLINES` | Order lines with prices and VAT |
 | `ONGOING-WAYOFDELIVERY`, `ONGOING-TRANSPORTER` | Delivery method and carrier |
-| `ONGOING-PICKABLE` | Reads whether the order can be picked. [ATT FYLLA I: hur plockbarheten hämtas och var den visas i Business Central] |
+| `ONGOING-PICKABLE` | Reads whether the order can be picked. It is fetched when Ongoing reports that the order has changed status, and stored on the warehouse document |
 
 ## Error handling
 

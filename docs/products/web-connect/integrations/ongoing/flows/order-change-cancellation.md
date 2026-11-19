@@ -31,7 +31,7 @@ When a sales order that is already in Ongoing WMS is reopened or released again 
 
 ## Step by step
 
-1. Customer service reopens, releases or cancels an order that has been sent to Ongoing (Business Central).
+1. Customer service reopens or releases an order that has been sent to Ongoing, or cancels it with the action Send Cancel to Warehouse (Business Central).
 2. An outgoing sync trigger on the sales order detects the change, as long as the warehouse has not reported the order as shipped (Web Connect).
 3. For a status change, Web Connect translates the Business Central status to an Ongoing status number and sends it to `orders/{order ID}/orderStatus` (Web Connect).
 4. For a cancellation of the whole order, Web Connect sends the order again with the method DELETE, which removes it from Ongoing (Web Connect).
@@ -76,7 +76,7 @@ sequenceDiagram
 
 | Situation | What happens | What to do |
 |---|---|---|
-| The warehouse has started on the order | [ATT FYLLA I: vad Ongoing svarar och vad Web Connect gör då] | Contact the warehouse to stop the order |
+| The order has come further than allocated in Ongoing, for example it is being picked | Ongoing returns an error when you choose Send Cancel to Warehouse, and the order stays in Ongoing | Contact the warehouse to stop the order |
 | No trigger on the sales order | Status changes in Business Central are not sent | Add an outgoing sync trigger from the sales header to `ONGOING-STATUSUPDATE` |
 | The order has no Ongoing order ID | The update cannot be sent | Check that the order was created in Ongoing, see Entries |
 
@@ -84,7 +84,7 @@ sequenceDiagram
 
 ### Can we cancel a single line on an order that is already in Ongoing?
 
-It depends on the setting WMS Cancel Possibility in the logistics setup. Most Ongoing configurations allow only the whole order to be cancelled. It can also be set to allow selected lines. [ATT FYLLA I: hur en avbokad rad skickas till Ongoing när Select Lines är valt]
+It depends on the setting WMS Cancel Possibility in the logistics setup. Most Ongoing configurations allow only the whole order to be cancelled. It can also be set to allow selected lines.
 
 ## Related
 
