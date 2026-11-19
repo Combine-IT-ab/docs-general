@@ -45,7 +45,7 @@ Web Connect by CombineIT connects Microsoft Dynamics 365 Business Central with N
 | **Connection** | REST: Norce Commerce Connect API for imports and order status, Norce Commerce Query API for reading products and categories, incoming webhook for orders. OAuth 2.0 client credentials |
 | **Norce Commerce API** | [Norce Commerce documentation](https://docs.norce.io/) |
 | **Data flows** | 10: orders, order status, shipments, stock, products, product images, categories, price lists, prices, customers and companies |
-| **Business Central editions** | [ATT FYLLA I: Essentials, Premium or both, verified with CombineIT] |
+| **Business Central editions** | All editions, Essentials and Premium, including the latest version |
 | **Available from** | [Web Connect on Microsoft AppSource](https://marketplace.microsoft.com/sv-se/product/PUBID.martitab1633951001710%7CAID.webconnect%7CPAPPID.9f3a7223-19db-4ac7-832f-cf8e4699186f?tab=Overview). [ATT FYLLA I: whether the Norce Commerce integration is included in the Web Connect Ready Integrations app] |
 
 ## What can be synchronized
@@ -197,7 +197,7 @@ Product enrichment (images, texts beyond what Business Central sends, category s
 
 ## What you need
 
-- Microsoft Dynamics 365 Business Central [ATT FYLLA I: edition and version]
+- Microsoft Dynamics 365 Business Central, any edition (Essentials or Premium), including the latest version
 - Web Connect installed from Microsoft AppSource, with an activated Web Connect license
 - Your approval for Web Connect to be installed and to act in your Business Central environment
 - An API client in Norce Commerce for the OAuth 2.0 client credentials flow (client ID and client secret), and the application ID and account ID that the Connect API needs. [ATT FYLLA I: where in Norce Commerce the API client is created]
