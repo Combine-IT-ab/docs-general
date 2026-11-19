@@ -56,7 +56,7 @@ sequenceDiagram
 
 ## Next available date
 
-Web Connect can also send the next available date from Web Connect Item Inventory to a separate stock location in Crystallize, for items that have one. It uses its own location mapping. [ATT FYLLA I: in which format the date is sent in the stock field, and how the web shop uses it]
+Web Connect can also send the next available date from Web Connect Item Inventory to a separate stock location in Crystallize, for items that have one. It uses its own location mapping. The date is sent in the stock field as an integer, a Unix timestamp, because the field only takes whole numbers. The web shop uses it to show when an item that is out of stock is available again.
 
 ## Data mapping
 
@@ -65,6 +65,7 @@ Web Connect can also send the next available date from Web Connect Item Inventor
 | Product ID in Web Connect Item SKU | `productId` | From [product matching](product-matching.md) |
 | SKU in Web Connect Item SKU | `sku` | With or without variant |
 | Web Inventory | `stock` | Negative values are sent as 0 |
+| Next Available Date | `stock` on the stock location for the next available date | Sent as a Unix timestamp (integer) |
 | Location | `stockLocationIdentifier` | Mapped with a text mapping |
 
 ## Web Connect objects

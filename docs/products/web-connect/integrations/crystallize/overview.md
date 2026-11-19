@@ -41,7 +41,7 @@ Web Connect by CombineIT connects Microsoft Dynamics 365 Business Central with C
 | **Crystallize API** | [Crystallize PIM API](https://crystallize.com/learn/developer-guides/pim-api) |
 | **Data flows** | 5: orders, order status, stock, prices and product matching |
 | **Business Central editions** | All editions, Essentials and Premium, including the latest version |
-| **Available from** | [Web Connect on Microsoft AppSource](https://marketplace.microsoft.com/sv-se/product/PUBID.martitab1633951001710%7CAID.webconnect%7CPAPPID.9f3a7223-19db-4ac7-832f-cf8e4699186f?tab=Overview). [ATT FYLLA I: whether the Crystallize integration is included in the Web Connect Ready Integrations app] |
+| **Available from** | [Web Connect on Microsoft AppSource](https://marketplace.microsoft.com/sv-se/product/PUBID.martitab1633951001710%7CAID.webconnect%7CPAPPID.9f3a7223-19db-4ac7-832f-cf8e4699186f?tab=Overview). The Crystallize integration is not part of the Web Connect Ready Integrations app. It is set up as a configuration in Web Connect |
 
 ## What can be synchronized
 
@@ -185,7 +185,7 @@ Products, variants, product content and the order pipeline with its stages are a
 ## Setting it up
 
 1. Decide which flows to use and which option to choose for each, see [Choose your setup](#choose-your-setup).
-2. Install Web Connect in Business Central, activate the license and give your approval. [ATT FYLLA I: how the Crystallize integration is installed, as a ready integration or by importing a configuration]
+2. Install Web Connect in Business Central, activate the license and give your approval. The Crystallize integration is not part of the Ready Integrations app, so it is set up as a configuration in Web Connect.
 3. Store the Crystallize access token in Web Connect [Secret Value Storage](../../general/secret-value-storage.md).
 4. Enter the tenant ID, the pipeline ID and the ID of each pipeline stage as integration variables.
 5. Set up the configuration choices below.
