@@ -27,7 +27,7 @@ When an article is sent from Resourced, Web Connect creates the item in Business
 | | |
 |---|---|
 | **Direction** | Resourced → Business Central |
-| **Trigger** | Webhook from Resourced with the article. [ATT FYLLA I: which event in Resourced sends it] |
+| **Trigger** | Webhook from Resourced with the article. Which changes send it is decided when the webhook is set up in Resourced |
 | **Result** | The item exists in Business Central with the product number as item number, and its item category, colors and season are created where they were missing |
 | **Part of** | [Business Central and Resourced PLM integration](../overview.md) |
 

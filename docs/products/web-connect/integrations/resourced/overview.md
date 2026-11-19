@@ -41,10 +41,10 @@ Web Connect by CombineIT connects Microsoft Dynamics 365 Business Central with R
 | **Runs in** | Your own Business Central environment, as an extension. Resourced sends each article as a webhook. An Azure endpoint receives it and passes it on to Web Connect, which processes it from the Business Central job queue. All processing and configuration stays in Business Central. |
 | **Configured by** | You, in Business Central: mappings, conditions, triggers and flows. You can do all of it yourself. If you want, CombineIT takes part in any step, as a sounding board or by doing the work. |
 | **Connection** | Resourced REST API (JSON) and webhooks from Resourced, with an API key from your Resourced account |
-| **Resourced API** | [ATT FYLLA I: link to the Resourced API documentation] |
+| **Resourced API** | The Resourced REST API, which Resourced offers for connecting ERP, WMS and BI tools, see [Resourced integrations](https://www.resourced.com/platform/#integrations). The API documentation is not public |
 | **Data flows** | 4: product data, variants and barcodes, sales prices, and purchase prices and costs |
 | **Business Central editions** | All editions, Essentials and Premium, including the latest version |
-| **Available from** | [Web Connect on Microsoft AppSource](https://marketplace.microsoft.com/sv-se/product/PUBID.martitab1633951001710%7CAID.webconnect%7CPAPPID.9f3a7223-19db-4ac7-832f-cf8e4699186f?tab=Overview). [ATT FYLLA I: is Resourced part of the Web Connect Ready Integrations app, or set up as part of the implementation?] |
+| **Available from** | [Web Connect on Microsoft AppSource](https://marketplace.microsoft.com/sv-se/product/PUBID.martitab1633951001710%7CAID.webconnect%7CPAPPID.9f3a7223-19db-4ac7-832f-cf8e4699186f?tab=Overview). The Resourced integration is not part of the Web Connect Ready Integrations app. It is set up in Web Connect as part of the implementation |
 
 ## What can be synchronized
 
@@ -63,7 +63,7 @@ Product data is the core of the integration. The other flows are chosen at setup
 
 When an article is sent from Resourced, the webhook reaches Web Connect through an Azure endpoint that only passes the call on. Web Connect creates an incoming message from the article and processes it from the Business Central job queue: first the item, then colors, variants, barcodes, prices and item categories, in an order that you can see and change on the objects. Web Connect can also fetch an article from the Resourced API by its article number, so a single article can be loaded again without a new webhook. Every message is kept in Web Connect [Entries](../../general/entries.md), where you can see what arrived and what was created.
 
-[ATT FYLLA I: which event in Resourced sends the webhook, for example a status change on the article or a manual export]
+Which changes in Resourced send an article is decided when the webhook is set up in Resourced.
 
 ```mermaid
 graph LR
@@ -121,14 +121,14 @@ Product development, materials, compositions and supplier collaboration are alwa
 - Web Connect installed from Microsoft AppSource, with an activated Web Connect license
 - Your approval for Web Connect to be installed and to act in your Business Central environment
 - An API key from your Resourced account, created in Resourced
-- A webhook in Resourced that sends articles to the Web Connect endpoint [ATT FYLLA I: where the webhook is set up in Resourced]
+- A webhook in Resourced that sends articles to the Web Connect endpoint. It is set up in Resourced
 - A configuration template for new items in Business Central, and the price lists that prices are written to
 - Vendors in Business Central with the same number as the supplier number in Resourced
 
 ## Setting it up
 
 1. Decide which flows to use and which option to choose for each, see [Choose your setup](#choose-your-setup).
-2. Install Web Connect in Business Central, activate the license and give your approval. [ATT FYLLA I: install the ready integration for Resourced, or set up its objects as part of the implementation]
+2. Install Web Connect in Business Central, activate the license and give your approval. The Resourced integration is not part of the Ready Integrations app, so its objects, mappings and conditions are set up in Web Connect as part of the implementation.
 3. Store the Resourced API key in Web Connect [Secret Value Storage](../../general/secret-value-storage.md) and set up the connection to the Resourced API.
 4. Set up the webhook in Resourced so that articles are sent to Web Connect.
 5. Map the configuration choices below: item template, price lists, size systems, statuses and the product hierarchy.
@@ -187,7 +187,7 @@ Yes. Each price in Resourced, for example one per sales channel and currency, is
 
 - Flows: [Product data](flows/product-data.md) · [Variants and barcodes](flows/variants-and-barcodes.md) · [Sales prices](flows/sales-prices.md) · [Purchase prices and costs](flows/purchase-prices-and-costs.md)
 - [Web Connect general documentation](../../general/README.md)
-- [Resourced](https://www.resourced.com/)
+- [Resourced integrations](https://www.resourced.com/platform/#integrations)
 
 ## About Web Connect
 
