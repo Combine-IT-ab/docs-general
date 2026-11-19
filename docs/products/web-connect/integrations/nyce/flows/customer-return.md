@@ -1,7 +1,7 @@
 ---
 title: "Nyce Logic WMS to Business Central: customer returns"
 description: "Web Connect fetches customer returns registered in Nyce Logic WMS and logs them in Business Central with item, quantity, original order and return cause."
-summary: "When the warehouse registers a customer return, Web Connect fetches it from Nyce Logic WMS on a schedule. The return is logged in Business Central as a WMS document of type Return Order, with the returned item, quantity, the original order and the return cause."
+summary: "When the warehouse registers a customer return, usually from the original customer order or delivery, Web Connect fetches it from Nyce Logic WMS on a schedule. The return is logged in Business Central as a WMS document of type Return Order, with the returned item, quantity, the original order and the return cause."
 slug: integrations/business-central-nyce/customer-return
 lang: en
 translation_key: integration-nyce-customer-return
@@ -19,7 +19,7 @@ last_reviewed: 2026-11-19
 
 # Nyce Logic WMS to Business Central: customer returns
 
-When the warehouse registers a customer return, Web Connect fetches it from Nyce Logic WMS on a schedule. The return is logged in Business Central as a WMS document of type Return Order, with the returned item, quantity, the original order and the return cause.
+When the warehouse registers a customer return, usually from the original customer order or delivery, Web Connect fetches it from Nyce Logic WMS on a schedule. The return is logged in Business Central as a WMS document of type Return Order, with the returned item, quantity, the original order and the return cause.
 
 | | |
 |---|---|

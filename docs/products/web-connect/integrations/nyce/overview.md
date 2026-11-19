@@ -162,6 +162,7 @@ All configuration and logic in the integration is visible and editable in Busine
 - **Location:** which Business Central location is the Nyce warehouse.
 - **Documents sent to Nyce:** sales orders, purchase orders, outgoing and incoming transfer orders and sales returns can each be switched on. Orders are sent when they are released.
 - **Quantity sent:** whether the outstanding quantity or the full ordered quantity is sent on sales orders.
+- **Rest orders:** whether Nyce may accept an order for handling even when not every line has stock. If not, Nyce cancels the lines that have no stock. The value is sent from Business Central on each order.
 - **Units of measure:** whether quantities are converted to the base unit of measure, and how Nyce unit codes map to Business Central units.
 - **Variants:** item variants are sent as one SKU, made of the item number and the variant code with a delimiter you choose.
 - **Barcodes:** the item's GTIN is sent as EAN. Additional barcodes can be sent from item references.
@@ -175,8 +176,8 @@ All configuration and logic in the integration is visible and editable in Busine
 - **The Nyce API varies between installations.** Nyce is configured per customer, and the API can differ between Nyce customers. Expect to verify the API against your own Nyce installation during setup.
 - **Reversals in Nyce are not integrated.** A receipt that is reversed and posted again in Nyce stops with an error in Business Central, because the purchase order is already received. It is corrected manually in Business Central.
 - **The full stock balance is fetched once a day.** During the day, stock in Business Central follows shipments, receipts and adjustments from Nyce.
-- **Cancellations are not part of the standard setup.** [ATT FYLLA I: how an order that has already been sent to Nyce is cancelled]
-- **Customer returns are registered in Nyce.** [ATT FYLLA I: whether returns can be announced from Business Central to Nyce in advance, and whether the return receipt is posted automatically]
+- **Orders cannot normally be changed once picking has started.** Nyce does not normally accept changes to a customer order after picking orders have been created for its lines. Cancellation is not part of the standard setup. [ATT FYLLA I: how an order that has already been sent to Nyce is cancelled]
+- **Customer returns are registered in Nyce.** The warehouse registers the return when it arrives, usually from the original customer order or delivery. Nyce can also receive returns announced in advance from the ERP, but that is not part of the standard setup. [ATT FYLLA I: whether the return receipt is posted automatically in Business Central]
 
 ## Frequently asked questions
 
