@@ -59,7 +59,7 @@ sequenceDiagram
 |---|---|---|
 | `Sku` | Item No. | |
 | `Quantity` | Quantity | Sign set by the reason code |
-| `DestStockAvailabilityReasonCode` | Reason on the line | Decides plus or minus. [ATT FYLLA I: vad orsakskoderna 10, 20 och 300 betyder i Astro WMS] |
+| `DestStockAvailabilityReasonCode` | Reason on the line | Decides plus or minus. Which codes add and which remove is set in the Condition List |
 | `DateTime` | Date and time | |
 
 ## Web Connect objects
