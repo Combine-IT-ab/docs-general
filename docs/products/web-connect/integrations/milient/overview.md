@@ -45,7 +45,7 @@ Web Connect by CombineIT connects Microsoft Dynamics 365 Business Central with M
 | **Connection** | Milient REST API (version 3), with OAuth 2.0 |
 | **Milient API** | [ATT FYLLA I: name and link to Milient's API documentation] |
 | **Data flows** | 5: customer invoices and credit notes, posted invoice numbers, customers, projects and supplier costs on projects |
-| **Business Central editions** | [ATT FYLLA I: Essentials, Premium] |
+| **Business Central editions** | All editions, Essentials and Premium, including the latest version |
 | **Available from** | [Web Connect on Microsoft AppSource](https://marketplace.microsoft.com/sv-se/product/PUBID.martitab1633951001710%7CAID.webconnect%7CPAPPID.9f3a7223-19db-4ac7-832f-cf8e4699186f?tab=Overview). [ATT FYLLA I: whether the Milient integration is included in the Web Connect Ready Integrations app] |
 
 ## What can be synchronized
@@ -159,7 +159,7 @@ Time reporting, invoice preparation and the invoice date are always handled in M
 
 ## What you need
 
-- Microsoft Dynamics 365 Business Central [ATT FYLLA I: edition and version]
+- Microsoft Dynamics 365 Business Central, any edition (Essentials or Premium), including the latest version
 - Web Connect installed from Microsoft AppSource, with an activated Web Connect license
 - Your approval for Web Connect to be installed and to act in your Business Central environment
 - API access to your Milient environment: a client ID and client secret for OAuth 2.0. [ATT FYLLA I: where the API client is created in Milient, or whether Milient support creates it]
