@@ -29,7 +29,7 @@ This page covers three data flows: products (Business Central → Norce Commerce
 | | |
 |---|---|
 | **Direction** | Business Central → Norce Commerce, with references, images and categories read back |
-| **Trigger** | Products: [ATT FYLLA I: what starts the product export; the configuration export has no outgoing sync trigger on the product object]. References: job queue, for items that have no Norce Commerce reference yet. Images: a change of the image reference on the item. Categories: [ATT FYLLA I: what starts the category read] |
+| **Trigger** | Products: outgoing sync triggers, set per integration. Usually the fields that are sent to Norce Commerce are the trigger fields, so a change in one of them sends the record again. References: job queue, for items that have no Norce Commerce reference yet. Images: a change of the image reference on the item. Categories: set per integration, in the same way |
 | **Result** | The product exists in Norce Commerce, and the item in Business Central has the Norce Commerce variant group, SKU status, image reference and image |
 | **Part of** | [Business Central and Norce Commerce integration](../overview.md) |
 

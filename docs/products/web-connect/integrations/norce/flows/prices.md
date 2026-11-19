@@ -27,7 +27,7 @@ This page covers two data flows: price lists and prices.
 | | |
 |---|---|
 | **Direction** | Business Central → Norce Commerce |
-| **Trigger** | [ATT FYLLA I: what starts the price list and price export; the configuration export has no outgoing sync trigger on these objects] |
+| **Trigger** | Outgoing sync triggers, set per integration. Usually the fields that are sent to Norce Commerce are the trigger fields, so a change in one of them sends the record again |
 | **Result** | Price lists and SKU prices in Norce Commerce |
 | **Part of** | [Business Central and Norce Commerce integration](../overview.md) |
 
