@@ -33,12 +33,12 @@ Web Connect by CombineIT connects Microsoft Dynamics 365 Business Central with A
 
 | | |
 |---|---|
-| **System** | Addimotion (delivery management) |
+| **System** | Addimotion and its OurBoxes service (delivery management) |
 | **Integration product** | Web Connect for Microsoft Dynamics 365 Business Central |
 | **Runs in** | Your own Business Central environment, as an extension. An order is queued when its trigger fields change in Business Central, and the Business Central job queue sends it to Addimotion. Nothing is fetched from Addimotion, and there are no webhooks. All processing and configuration stays in Business Central. |
 | **Configured by** | You, in Business Central: mappings, conditions, triggers and flows. You can do all of it yourself. If you want, CombineIT takes part in any step, as a sounding board or by doing the work. |
-| **Connection** | REST API with JSON. An API key from Addimotion is sent in a request header |
-| **Addimotion API** | [ATT FYLLA I: name of and link to the Addimotion API documentation, if it is public] |
+| **Connection** | The Addimotion AddBoxes REST API with JSON. The API key of an API user in OurBoxes is sent in a request header |
+| **Addimotion API** | [AddBoxes API](https://addboxes.addimotion.com/docs/), which adds order information to OurBoxes. Order status can be read with the [YourBoxes API](https://api.addimotion.com/docs/), which this integration does not use |
 | **Data flows** | 1: sales orders |
 | **Business Central editions** | All editions, Essentials and Premium, including the latest version |
 | **Available from** | [Web Connect on Microsoft AppSource](https://marketplace.microsoft.com/sv-se/product/PUBID.martitab1633951001710%7CAID.webconnect%7CPAPPID.9f3a7223-19db-4ac7-832f-cf8e4699186f?tab=Overview). The Addimotion integration is not part of the Web Connect Ready Integrations app. It is set up as a configuration in Web Connect |
@@ -55,7 +55,7 @@ The sales order flow is the whole integration. See [Choose your setup](#choose-y
 
 ## How it works
 
-Web Connect watches two fields on the sales order header: the external order number and the order source. When one of them changes, Web Connect queues the order, and the job queue sends it to the Addimotion customer order endpoint. [ATT FYLLA I: what Addimotion does with the order, for example delivery tracking and notifications to the recipient.] Every message is logged in Web Connect [Entries](../../general/entries.md), where it can be inspected and resent.
+Web Connect watches two fields on the sales order header: the external order number and the order source. When one of them changes, Web Connect queues the order, and the job queue sends it to the customer order endpoint of the AddBoxes API. Addimotion shows the customer order in the Warehouse Operations view in OurBoxes, where warehouse orders and shipments can refer to it. Every message is logged in Web Connect [Entries](../../general/entries.md), where it can be inspected and resent.
 
 ```mermaid
 graph LR
@@ -87,22 +87,22 @@ flowchart LR
     WC -->|Customer order| AD["📦 Addimotion"]
 ```
 
-[ATT FYLLA I: what is always maintained in Addimotion, for example carriers and the communication with the recipient.]
+Warehouses, departures and the API user are always set up in OurBoxes settings.
 
 ## What you need
 
 - Microsoft Dynamics 365 Business Central, any edition (Essentials or Premium), including the latest version
 - Web Connect installed from Microsoft AppSource, with an activated Web Connect license
 - Your approval for Web Connect to be installed and to act in your Business Central environment
-- An API key, created in Addimotion
-- [ATT FYLLA I: the values Addimotion gives you for the order, such as the view, the warehouse and departure keys and the event code]
+- An API user in OurBoxes, whose API key is sent with every request
+- The warehouse and departure keys set up in OurBoxes settings, and the event code for new orders from the AddBoxes API appendix
 
 ## Setting it up
 
 1. Decide which flows to use and which option to choose for each, see [Choose your setup](#choose-your-setup).
 2. Install Web Connect in Business Central, activate the license and give your approval.
 3. Import the Addimotion configuration with the integration turned off.
-4. Add the API key from Addimotion to the request header object.
+4. Add the API key of your OurBoxes API user to the request header object.
 5. Set the fixed values Addimotion expects on the order, and translate a blank currency code to your local currency.
 6. Test with a few orders before going live.
 
@@ -123,7 +123,7 @@ All configuration and logic in the integration is visible and editable in Busine
 
 - **Trigger:** which fields on the sales order start the flow. In the standard setup they are the external order number and the order source.
 - **Addimotion setups:** how many Addimotion setups get the order. Each one is its own object in Web Connect with its own API key.
-- **Fixed values:** the sender name, view, warehouse and departure keys, event code and location that Addimotion expects on every order.
+- **Fixed values:** the sender name, the view (2000 for Warehouse Operations or 3000 for Outbound Shipments), the warehouse and departure keys, the event code and the location that Addimotion expects on every order.
 - **Order currency:** a blank currency code on the order means your local currency, and it is translated with a text mapping.
 - **Order lines:** only lines of type item are sent.
 - **Error handling:** how many times a failed message is retried, and who receives the daily error summary email.
@@ -135,7 +135,7 @@ All configuration and logic in the integration is visible and editable in Busine
 - **Only item lines are sent.** Lines for shipping fees, resources or G/L accounts are left out.
 - **Not every Addimotion field is mapped.** Weight, volume, freight cost, dangerous goods and planned dispatch per line are not taken from the order in the standard setup. They can be added in the mapping.
 - **Item names are cut.** The item name on the order line is sent with at most 50 characters.
-- [ATT FYLLA I: whether a change to an order that has already been sent updates the order in Addimotion, or whether a cancellation is sent]
+- **Only a change to the order reference sends the order again.** When it is sent again, Addimotion updates the customer order with the same number. Changes to other fields and cancellations are not sent.
 
 ## Frequently asked questions
 
@@ -157,7 +157,7 @@ Yes. The fields on the order, the trigger fields and the currency translation ar
 - How-to: [Resend an outgoing message](../../../../how-to/web-connect/resend-outgoing-message.md) · [Integrations not running](../../../../how-to/web-connect/integration-not-running.md)
 - Web Connect: [Outgoing Mapping](../../general/outgoing-mapping/README.md) · [Outgoing Sync Triggers](../../general/outgoing-mapping/outgoing-sync-triggers.md) · [Text Mapping](../../general/text-mapping.md) · [Dynamic Flow Fields](../../general/dynamic-flow-fields.md)
 - [Web Connect general documentation](../../general/README.md)
-- [Addimotion](https://www.addimotion.com/)
+- [Addimotion](https://www.addimotion.com/) · [AddBoxes API](https://addboxes.addimotion.com/docs/)
 
 ## About Web Connect
 

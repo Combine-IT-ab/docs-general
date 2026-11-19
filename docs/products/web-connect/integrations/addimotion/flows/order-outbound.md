@@ -26,7 +26,7 @@ When the external order number or the order source changes on a sales order, Web
 |---|---|
 | **Direction** | Business Central → Addimotion |
 | **Trigger** | Change in Business Central: the external order number or the order source on the sales order header |
-| **Result** | A customer order in Addimotion, and a logged message in Web Connect Entries |
+| **Result** | A customer order in the Warehouse Operations view in OurBoxes, and a logged message in Web Connect Entries |
 | **Part of** | [Business Central and Addimotion integration](../overview.md) |
 
 ## Step by step
@@ -34,7 +34,7 @@ When the external order number or the order source changes on a sales order, Web
 1. The external order number or the order source is set or changed on a sales order (Business Central).
 2. Web Connect queues the order as outgoing data (Web Connect).
 3. The job queue builds the customer order with lines, recipient, payer, payment and event, and sends it with the API key in the request header (Web Connect).
-4. Addimotion creates the customer order (Addimotion).
+4. Addimotion creates the customer order, or updates it if an order with the same number exists (Addimotion).
 
 ```mermaid
 sequenceDiagram
@@ -59,18 +59,19 @@ sequenceDiagram
 
 | Business Central field | Addimotion field | Note |
 |---|---|---|
-| | `postedBy`, `view` | Fixed values in the mapping |
+| | `postedBy` | Fixed text in the mapping that names the source of the data |
+| | `view` | Fixed value in the mapping: 2000 for Warehouse Operations or 3000 for Outbound Shipments |
 | No. | `customerOrderNo` | |
 | Order Date | `orderDate` | |
 | Ship-to Post Code, Ship-to Country/Region Code | `zipCode`, `countryKey` | |
-| | `warehouseKey`, `departureKey` | Fixed values in the mapping |
+| | `warehouseKey`, `departureKey` | Fixed values in the mapping, matching the keys set up in OurBoxes |
 | Sell-to Customer No., Sell-to E-Mail, Ship-to Phone No. | `recipient`: `identifier`, `eMail`, `mobile` | |
 | Ship-to Name, Ship-to Address, Ship-to Address 2, Ship-to Post Code, Ship-to City, Ship-to Country/Region Code | `recipient`: `firstName`, `address1`, `address2`, `zipCode`, `city`, `countryKey` | The whole name is sent in `firstName` |
 | | `recipient`: `languageKey` | Fixed value in the mapping |
 | Bill-to Customer No., Sell-to E-Mail, Sell-to Phone No. | `payer`: `identifier`, `eMail`, `mobile` | |
 | Bill-to Name, Bill-to Address, Bill-to Address 2, Bill-to Post Code, Bill-to City, Bill-to Country/Region Code | `payer`: `firstName`, `address1`, `address2`, `zipCode`, `city`, `countryKey` | The whole name is sent in `firstName` |
 | Payment Method Code, Amount Including VAT, Currency Code | `payer.payment`: `methodKey`, `amount`, `currency` | A blank currency code is translated to the local currency |
-| Created date and time of the order | `events`: `dateTime` | The event `code` and the `location` are fixed values in the mapping |
+| Created date and time of the order | `events`: `dateTime` | The event `code`, from the AddBoxes API appendix, and the `location` are fixed values in the mapping |
 | Line No., No. | `orderLines`: `lineNumber`, `articleNo` | Only lines of type item |
 | Description, Description 2 | `orderLines`: `name`, `description` | `name` at most 50 characters |
 | Quantity, Unit of Measure | `orderLines`: `orderedQuantity`, `unit` | |
@@ -97,7 +98,7 @@ When the same order goes to more than one Addimotion setup, each setup has its o
 | Situation | What happens | What to do |
 |---|---|---|
 | Addimotion rejects the order | Retried up to the maximum error count, then included in the daily error email | Read the error in [Entries](../../../general/entries.md), fix the order and [resend the message](../../../../../how-to/web-connect/resend-outgoing-message.md) |
-| The API key is wrong or has expired | Addimotion rejects every order | Create a new API key in Addimotion, update the request header and resend the failed messages |
+| The API key is wrong or has expired | Addimotion rejects every order | Get the API key of the API user in OurBoxes settings, update the request header and resend the failed messages |
 | Orders are not sent at all | The outgoing data stays in the queue | See [Integrations not running](../../../../../how-to/web-connect/integration-not-running.md) |
 
 ## Frequently asked questions
