@@ -1,7 +1,7 @@
 ---
 title: "WooCommerce to Business Central: order inbound"
-description: "Orders placed in a WooCommerce store are read by Web Connect through the WooCommerce REST API and created as sales orders in Business Central."
-summary: "When a customer places an order in WooCommerce, Web Connect reads it through the WooCommerce REST API and creates a sales order in Business Central. [ATT FYLLA I: what starts the flow, schedule or webhook.]"
+description: "Web Connect fetches paid WooCommerce orders on a schedule and creates sales orders in Business Central with lines, delivery address and a totals check."
+summary: "Web Connect fetches orders with status processing or completed from WooCommerce on a schedule and creates a sales order in Business Central for each one. It only asks for orders created after the last imported order, and checks the order total and VAT against WooCommerce."
 slug: integrations/business-central-woocommerce/order-inbound
 lang: en
 translation_key: integration-woocommerce-order-inbound
@@ -13,28 +13,31 @@ keywords:
   - business central woocommerce order
   - woocommerce orders business central
 faq:
-  - question: "[ATT FYLLA I: a real question about this flow]"
-    answer: "[ATT FYLLA I: answer]"
+  - question: "Why was a WooCommerce order not imported?"
+    answer: "Only orders with status processing or completed are fetched, so an order that waits for payment or is on hold comes in once it reaches processing. If it has that status, check the error in Web Connect Entries, for example an unknown SKU or a total that does not match."
 last_reviewed: 2026-11-19
 ---
 
 # WooCommerce to Business Central: order inbound
 
-When a customer places an order in WooCommerce, Web Connect reads it through the WooCommerce REST API and creates a sales order in Business Central. [ATT FYLLA I: what starts the flow, schedule or webhook, verified in the configuration export.]
+Web Connect fetches orders with status processing or completed from WooCommerce on a schedule and creates a sales order in Business Central for each one. It only asks for orders created after the last imported order, and checks the order total and VAT against WooCommerce.
 
 | | |
 |---|---|
 | **Direction** | WooCommerce → Business Central |
-| **Trigger** | [ATT FYLLA I: schedule in the job queue or WooCommerce webhook] |
-| **Result** | A sales order in Business Central. [ATT FYLLA I: whether anything is written back to the order in WooCommerce] |
+| **Trigger** | Schedule in the Business Central job queue |
+| **Result** | A sales order in Business Central that is not released, with the WooCommerce order number as order number and external document number |
 | **Part of** | [Business Central and WooCommerce integration](../overview.md) |
 
 ## Step by step
 
-1. The customer places an order in WooCommerce.
-2. Web Connect reads the order from the WooCommerce REST API. [ATT FYLLA I: how new orders are found, for example by status or by date modified.]
-3. Web Connect creates a sales order in Business Central with the order lines.
-4. [ATT FYLLA I: whether the order status is updated in WooCommerce afterwards.]
+1. The customer places and pays an order in WooCommerce.
+2. Web Connect asks WooCommerce for orders with status processing or completed, created after the last imported order. It reads 100 orders at a time, oldest first.
+3. The customer is found from the WooCommerce customer ID, among the customers fetched in [Customer inbound](customer-inbound.md).
+4. Web Connect creates the sales order with the delivery address and one item line per order line.
+5. The order total and the VAT amount are checked against WooCommerce.
+6. The creation time of the order is saved, so the next run starts after it.
+7. The order is left unreleased, for someone to check in Business Central.
 
 ```mermaid
 sequenceDiagram
@@ -42,12 +45,14 @@ sequenceDiagram
     participant WC as ⚙️ Web Connect
     participant BC as 🔄 Business Central
 
-    WC->>W: Read new orders (REST API)
-    W-->>WC: Order with lines and addresses
-    alt Customer and all items matched
-        WC->>BC: Create sales order
+    WC->>W: GET orders, status processing or completed, after last import
+    W-->>WC: Orders with lines and addresses
+    WC->>WC: Find customer from WooCommerce customer ID
+    alt Customer and items found, totals match
+        WC->>BC: Create sales order (not released)
         BC-->>WC: Sales order created
-    else Mapping missing or validation error
+        WC->>WC: Save creation time of the order
+    else Unknown SKU, order already exists or totals differ
         WC-->>WC: Error logged in Entries ⚠️
     end
 ```
@@ -56,33 +61,45 @@ sequenceDiagram
 
 | WooCommerce field | Business Central field | Note |
 |---|---|---|
-| [ATT FYLLA I: order number] | [ATT FYLLA I] | [ATT FYLLA I] |
-| [ATT FYLLA I: line SKU] | [ATT FYLLA I: item and variant] | [ATT FYLLA I] |
-| [ATT FYLLA I: billing and shipping address] | [ATT FYLLA I: sell-to and ship-to] | [ATT FYLLA I] |
-| [ATT FYLLA I: shipping lines] | [ATT FYLLA I] | [ATT FYLLA I] |
+| `number` | No. and External Document No. | Unique. An order that already exists raises an error |
+| `id` | External ID in Web Connect | Used to update the order in WooCommerce later |
+| `customer_id` | Sell-to Customer No. | Looked up among the customers fetched from WooCommerce |
+| `date_created` | Document Date | Also saved as the starting point for the next run |
+| `currency` | Currency Code | The local currency is mapped to blank |
+| `shipping` name, company, address, postcode, city, state, country, phone | Ship-to fields | |
+| `line_items` `sku` | Item No. on the sales line | Line type is Item |
+| `line_items` `quantity` | Quantity | |
+| `line_items` `price` | Unit Price | Prices on the order are excluding VAT |
+| `total` and `total_tax` | Totals check | Compared with the sales order |
+
+A fixed location can be set on the order, and a location per line can be read from a field on the item.
 
 ## Web Connect objects
 
 | Object | Role |
 |---|---|
-| [ATT FYLLA I: `OBJECT_CODE`] | [ATT FYLLA I: objects for the order, its lines and addresses, from the configuration export] |
+| `WOC-INC-ORDER` | Fetches orders and creates the sales order header |
+| `WOC-LINE_ITEMS` | Creates the sales lines |
+| `WOC-SHIPPING` | Delivery address on the sales order |
+| `WOC-WOOCOMMERCE-LAST-ORDER-URL` | Adds the time of the last imported order to the request |
 
 ## Error handling
 
 | Situation | What happens | What to do |
 |---|---|---|
-| WooCommerce API not reachable or credentials rejected | No orders are read | Check the stored credentials in [Secret Value Storage](../../../general/secret-value-storage.md) and see [Integrations not running](../../../../../how-to/web-connect/integration-not-running.md) |
-| An item on the order is not found in Business Central | The error is logged in [Entries](../../../general/entries.md). [ATT FYLLA I: confirm that the sales order is not created] | [ATT FYLLA I: action] |
-| [ATT FYLLA I: other errors] | [ATT FYLLA I] | [ATT FYLLA I] |
+| The SKU is not an item in Business Central | The order is not created and the error is logged in [Entries](../../../general/entries.md) | Create the item or correct the SKU in WooCommerce, then process the incoming record again from Entries |
+| The order number already exists | The order is stopped with an error | Check that the order is not a duplicate |
+| Total or VAT differs from WooCommerce | The totals check fails | Compare the order in both systems. [ATT FYLLA I: whether the order is created anyway] |
+| WooCommerce not reachable or credentials rejected | No orders are fetched. The next successful run continues from the last imported order | Check the stored secret and see [Integrations not running](../../../../../how-to/web-connect/integration-not-running.md) |
 
 ## Frequently asked questions
 
-### [ATT FYLLA I: a real question about this flow]
+### Why was a WooCommerce order not imported?
 
-[ATT FYLLA I: answer]
+Only orders with status processing or completed are fetched, so an order that waits for payment or is on hold comes in once it reaches processing. If it has that status, check the error in Web Connect Entries, for example an unknown SKU or a total that does not match.
 
 ## Related
 
 - [Business Central and WooCommerce integration](../overview.md)
+- [Customer inbound](customer-inbound.md) · [Order completion](order-completion.md)
 - [WooCommerce REST API: orders](https://woocommerce.github.io/woocommerce-rest-api-docs/#orders)
-- [Web Connect Entries](../../../general/entries.md)
