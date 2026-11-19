@@ -54,8 +54,6 @@ sequenceDiagram
 | Available stock in Item Inventory | `stock_quantity` | |
 | Stored product ID | Product in the URL | From [Product matching](product-matching.md) |
 
-Stock is sent to one language version of the product. [ATT FYLLA I: confirm that the store shares stock between language versions]
-
 ## Web Connect objects
 
 | Object | Role |

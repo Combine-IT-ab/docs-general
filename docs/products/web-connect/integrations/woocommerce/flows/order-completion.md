@@ -58,8 +58,7 @@ sequenceDiagram
 
 ## Limitations
 
-- No tracking number or carrier is sent, only the status.
-- A partial shipment also sets the order to completed. [ATT FYLLA I: confirm]
+- In the setup used in production, only the status is sent, and the first posted shipment sets the order to completed. Tracking numbers and when an order counts as completed can be set per integration.
 
 ## Related
 

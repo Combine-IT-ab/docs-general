@@ -51,7 +51,6 @@ sequenceDiagram
 |---|---|---|
 | `id` | External ID in Web Connect | Used by [Order inbound](order-inbound.md) to find the customer |
 | Meta data field with the customer number | No. | Existing customer is updated |
-| `email` | Customer template | Selects the template for new customers. [ATT FYLLA I: confirm] |
 
 ## Web Connect objects
 

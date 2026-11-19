@@ -43,7 +43,7 @@ Web Connect by CombineIT connects Microsoft Dynamics 365 Business Central with W
 | **WooCommerce API** | [WooCommerce REST API documentation](https://woocommerce.github.io/woocommerce-rest-api-docs/) |
 | **Data flows** | 6: orders, customers, product matching, prices, stock and order completion |
 | **Business Central editions** | All editions, Essentials and Premium, including the latest version |
-| **Available from** | [Web Connect on Microsoft AppSource](https://marketplace.microsoft.com/sv-se/product/PUBID.martitab1633951001710%7CAID.webconnect%7CPAPPID.9f3a7223-19db-4ac7-832f-cf8e4699186f?tab=Overview). [ATT FYLLA I: is WooCommerce included in the Web Connect Ready Integrations app?] |
+| **Available from** | [Web Connect on Microsoft AppSource](https://marketplace.microsoft.com/sv-se/product/PUBID.martitab1633951001710%7CAID.webconnect%7CPAPPID.9f3a7223-19db-4ac7-832f-cf8e4699186f?tab=Overview). The WooCommerce integration is set up as a configuration in Web Connect. It is not part of the Web Connect Ready Integrations app |
 
 ## What can be synchronized
 
@@ -181,7 +181,7 @@ Product creation, texts, images, categories and translations are always maintain
 ## Setting it up
 
 1. Decide which flows to use and which option to choose for each, see [Choose your setup](#choose-your-setup).
-2. Install Web Connect in Business Central, activate the license and give your approval. [ATT FYLLA I: install the ready integration for WooCommerce, if there is one.]
+2. Install Web Connect in Business Central, activate the license and give your approval. Set up the WooCommerce configuration in Web Connect.
 3. Create REST API keys in WooCommerce under WooCommerce, Settings, Advanced, REST API, and store the secret in Web Connect [Secret Value Storage](../../general/secret-value-storage.md).
 4. Set the date and time from which orders should be fetched, so old orders are not imported.
 5. Set up the configuration choices below.
@@ -210,14 +210,13 @@ All configuration and logic in the integration is visible and editable in Busine
 - **Location:** a fixed location on the order, or a location per line from a field on the item.
 - **Release:** whether orders are released automatically.
 - **Price list:** which Business Central price list gives the regular price in WooCommerce.
-- **Languages:** one product lookup per language version of the store.
+- **Languages:** a store with several language versions gets one product lookup per language.
 
 ## Limitations
 
-- **Products are not created in WooCommerce.** Web Connect only finds existing products by SKU. Products, texts, images and categories are created in WooCommerce.
-- **Only the regular price is sent.** Sale prices and scheduled prices are set in WooCommerce. [ATT FYLLA I: confirm]
-- **No tracking number is sent.** Order completion only sets the status to completed.
-- **Coupons, fees and refunds are not mapped** on incoming orders. [ATT FYLLA I: how discounts and shipping cost reach the sales order, and how the totals check handles them]
+The flows on this page are the ones that have been used in production. Web Connect works with the WooCommerce REST API, so other data the API supports, for example creating products, sale prices, tracking numbers or refunds, can be added with configuration. What is sent, and when, is decided per integration.
+
+- **Totals must match.** If the order total or the VAT amount differs from WooCommerce, the order stops in Incoming Data with an error message, as in every Web Connect integration. How discounts, coupons and shipping cost are posted on the sales order is decided when the integration is set up.
 - **Unpaid orders are not imported.** Orders on hold or pending payment are fetched only once they reach processing.
 - **Products without a SKU cannot be matched** to an item in Business Central.
 

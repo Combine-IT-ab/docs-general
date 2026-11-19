@@ -89,7 +89,7 @@ A fixed location can be set on the order, and a location per line can be read fr
 |---|---|---|
 | The SKU is not an item in Business Central | The order is not created and the error is logged in [Entries](../../../general/entries.md) | Create the item or correct the SKU in WooCommerce, then process the incoming record again from Entries |
 | The order number already exists | The order is stopped with an error | Check that the order is not a duplicate |
-| Total or VAT differs from WooCommerce | The totals check fails | Compare the order in both systems. [ATT FYLLA I: whether the order is created anyway] |
+| Total or VAT differs from WooCommerce | The order stops in Incoming Data with an error message, and no sales order is created | Compare the order in both systems, correct the cause and process the record again |
 | WooCommerce not reachable or credentials rejected | No orders are fetched. The next successful run continues from the last imported order | Check the stored secret and see [Integrations not running](../../../../../how-to/web-connect/integration-not-running.md) |
 
 ## Frequently asked questions
