@@ -80,7 +80,7 @@ sequenceDiagram
 | Situation | What happens | What to do |
 |---|---|---|
 | Nowaste rejects the item | The message is retried up to the maximum error count | Read the answer from Nowaste in [Entries](../../../general/entries.md), fix the item and resend |
-| An item is missing in Nowaste when an order arrives | Nowaste cannot handle the order or receipt line | Resend the item, then resend the order. [ATT FYLLA I: whether Web Connect can send item data automatically before a purchase order] |
+| An item is missing in Nowaste when an order arrives | Nowaste cannot handle the order or receipt line | Resend the item, then resend the order. Outgoing Sync Triggers can be set so that item data is also sent when a purchase order is sent to the warehouse |
 
 ## Frequently asked questions
 

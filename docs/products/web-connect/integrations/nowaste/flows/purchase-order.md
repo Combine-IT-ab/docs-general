@@ -82,7 +82,7 @@ sequenceDiagram
 | Situation | What happens | What to do |
 |---|---|---|
 | Nowaste rejects the purchase order, for example because an item is missing | The warehouse document gets an error and the message is retried up to the maximum error count | Send the missing item, then resend. See [WMS request not sent](../../../../../how-to/web-connect/wms-request-not-sent-error.md) |
-| The purchase order changes after it was sent | [ATT FYLLA I: whether a changed purchase order is sent to Nowaste again, and how] | |
+| The purchase order changes after it was sent | Nowaste still has the earlier version | Send the purchase order to the warehouse again with the action on the order, and the changed order is sent to Nowaste |
 
 ## Frequently asked questions
 

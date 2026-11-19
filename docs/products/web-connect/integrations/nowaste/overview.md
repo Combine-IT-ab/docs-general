@@ -22,7 +22,7 @@ faq:
   - question: "Can an order that has already been sent to Nowaste be cancelled from Business Central?"
     answer: "Yes, for the whole order. When you send a cancellation to the warehouse from Business Central, Web Connect sends a delete request for the order to Nowaste. Single lines cannot be cancelled this way."
   - question: "Does an item have to exist in Nowaste before an order or purchase order is sent?"
-    answer: "Yes. Nowaste needs the item to handle the order or the receipt. Web Connect sends item data to Nowaste when the item data in Business Central changes, so new items and variants reach Nowaste before they are ordered. [ATT FYLLA I: whether item data is also sent automatically right before a purchase order is sent]"
+    answer: "Yes. Nowaste needs the item to handle the order or the receipt. Web Connect sends item data to Nowaste when the item data in Business Central changes, so new items and variants reach Nowaste before they are ordered. Which events send item data is set in Outgoing Sync Triggers, so item data can also be sent when a purchase order is sent to the warehouse."
   - question: "Is the stock in Business Central overwritten with the stock in Nowaste?"
     answer: "No. The stock balance from Nowaste is put in a physical inventory journal. Single stock adjustments from Nowaste are posted through an item journal with the warehouse's reason, so every change can be traced."
 last_reviewed: 2026-11-19
@@ -214,8 +214,8 @@ All configuration and logic in the integration is visible and editable in Busine
 - **Tolerances:** whether more than ordered may be received or shipped, and by how many percent.
 - **Cancellations:** whether a whole order sent to Nowaste may be cancelled from Business Central.
 - **Stock adjustments:** which item journal batch is used, whether it is posted automatically, and how the warehouse's transaction types are translated to text.
-- **Stock reconciliation:** which physical inventory journal batch is used, the earliest time of day it is processed, and whether lines without a difference are removed.
-- **Item data:** which item fields are sent, and how the item number and variant code are combined into one Nowaste item ID.
+- **Stock reconciliation:** which physical inventory journal batch is used, the earliest time of day it is processed, whether lines without a difference are removed, and whether the journal is posted automatically.
+- **Item data:** which item fields are sent, which events send them (for example a changed variant, or a purchase order sent to the warehouse), and how the item number and variant code are combined into one Nowaste item ID.
 - **Order details:** how delivery terms, haulier, the customer's order number and prices with or without VAT are set, with conditions per sales channel, market or carrier.
 - **Error handling:** how many times a failed message is retried, and how long old transactions are kept.
 
@@ -224,8 +224,8 @@ All configuration and logic in the integration is visible and editable in Busine
 - **Cancellations are for whole orders only.** Single lines on an order that has been sent cannot be cancelled from Business Central.
 - **Items are sent per Nowaste warehouse.** If you use more than one Nowaste warehouse, there is one item object for each warehouse.
 - **Pallet details are not stored.** Pallet IDs on receipts are not saved in Business Central, and weight and volume on deliveries are not saved either.
-- **Reports depend on Nowaste's webhooks.** Web Connect does not ask Nowaste for shipments, receipts or stock. If a webhook does not arrive, the report has to be sent again from Nowaste. [ATT FYLLA I: confirm that Nowaste can resend a report, and how]
-- **The stock balance is reconciled through a journal.** Differences in the inventory report are put in a physical inventory journal. [ATT FYLLA I: whether the physical inventory journal is posted automatically or by you]
+- **Reports depend on Nowaste's webhooks.** Web Connect does not ask Nowaste for shipments, receipts or stock. If a report does not arrive, contact Nowaste.
+- **The stock balance is reconciled through a journal.** Differences in the inventory report are put in a physical inventory journal. Whether the journal is posted automatically or by you is your choice in the logistics setup.
 
 ## Frequently asked questions
 
@@ -239,7 +239,7 @@ Yes, for the whole order. When you send a cancellation to the warehouse from Bus
 
 ### Does an item have to exist in Nowaste before an order or purchase order is sent?
 
-Yes. Nowaste needs the item to handle the order or the receipt. Web Connect sends item data to Nowaste when the item data in Business Central changes, so new items and variants reach Nowaste before they are ordered. [ATT FYLLA I: whether item data is also sent automatically right before a purchase order is sent]
+Yes. Nowaste needs the item to handle the order or the receipt. Web Connect sends item data to Nowaste when the item data in Business Central changes, so new items and variants reach Nowaste before they are ordered. Which events send item data is set in Outgoing Sync Triggers, so item data can also be sent when a purchase order is sent to the warehouse.
 
 ### Is the stock in Business Central overwritten with the stock in Nowaste?
 

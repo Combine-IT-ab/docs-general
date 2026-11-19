@@ -79,7 +79,7 @@ Pallet details in the receipt report are not stored.
 |---|---|---|
 | More is received than ordered | Accepted within the over receipt tolerance, otherwise an error | Check the tolerance in the [Logistics Setup](../../../general/logistics-setup.md), or adjust the order |
 | The posting fails | Retried up to the maximum error count | Fix the cause in Business Central and process the entry again in [Entries](../../../general/entries.md) |
-| Nothing arrives | No webhook has reached Web Connect | Check the webhook in [Entries](../../../general/entries.md), and ask Nowaste to resend the report |
+| Nothing arrives | No webhook has reached Web Connect | Check the webhook in [Entries](../../../general/entries.md), and contact Nowaste if the report was never sent |
 
 ## Frequently asked questions
 

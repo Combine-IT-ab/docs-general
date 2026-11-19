@@ -14,7 +14,7 @@ keywords:
   - nowaste inventory report business central
 faq:
   - question: "Is the stock in Business Central overwritten with the stock in Nowaste?"
-    answer: "No. The quantities are put in a physical inventory journal, and the stock changes only when that journal is posted."
+    answer: "No. The quantities are put in a physical inventory journal, and the stock changes only when that journal is posted, automatically or by you, as chosen in the logistics setup."
 last_reviewed: 2026-11-19
 ---
 
@@ -25,7 +25,7 @@ Nowaste sends an inventory report with the quantity per item and warehouse locat
 | | |
 |---|---|
 | **Direction** | Nowaste → Business Central |
-| **Trigger** | Webhook from Nowaste with an inventory report. [ATT FYLLA I: how often Nowaste sends the inventory report] |
+| **Trigger** | Webhook from Nowaste with an inventory report, as often as is set up for each customer |
 | **Result** | A physical inventory journal per location in Business Central with the quantities from Nowaste |
 | **Part of** | [Business Central and Nowaste integration](../overview.md) |
 
@@ -35,7 +35,7 @@ Nowaste sends an inventory report with the quantity per item and warehouse locat
 2. Web Connect reads the document type and hands the report to the stock balance object (Web Connect).
 3. For each item, the quantity for the Nowaste warehouse location is read. If the report holds more than one warehouse location, each one is read into its own Business Central location (Web Connect).
 4. The quantities are written to the physical inventory journal batch set in the logistics setup, no earlier than the time of day set there. Lines without a difference can be removed (Business Central).
-5. The journal is posted (Business Central). [ATT FYLLA I: whether the physical inventory journal is posted automatically or by you]
+5. The journal is posted automatically or by you, as chosen in the logistics setup (Business Central).
 
 ```mermaid
 sequenceDiagram
@@ -70,14 +70,14 @@ sequenceDiagram
 
 | Situation | What happens | What to do |
 |---|---|---|
-| No inventory report has arrived | No new quantities in the journal | Check the webhook in [Entries](../../../general/entries.md), and ask Nowaste to resend the report |
+| No inventory report has arrived | No new quantities in the journal | Check the webhook in [Entries](../../../general/entries.md), and contact Nowaste if the report was never sent |
 | Large differences in the journal | Shipments, receipts or adjustments may be missing | Check those flows in [Entries](../../../general/entries.md) before the journal is posted |
 
 ## Frequently asked questions
 
 ### Is the stock in Business Central overwritten with the stock in Nowaste?
 
-No. The quantities are put in a physical inventory journal, and the stock changes only when that journal is posted.
+No. The quantities are put in a physical inventory journal, and the stock changes only when that journal is posted, automatically or by you, as chosen in the logistics setup.
 
 ## Related
 
