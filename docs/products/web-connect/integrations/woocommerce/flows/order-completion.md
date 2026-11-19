@@ -22,7 +22,7 @@ When a sales shipment for a WooCommerce order is posted in Business Central, Web
 | | |
 |---|---|
 | **Direction** | Business Central → WooCommerce |
-| **Trigger** | A posted sales shipment. [ATT FYLLA I: the outgoing sync trigger is not in the configuration export, confirm] |
+| **Trigger** | A posted sales shipment, through an outgoing sync trigger. Triggers are set per integration. Usually the fields that are sent to WooCommerce are the trigger fields, so a change in one of them sends the record again |
 | **Result** | The order has status completed in WooCommerce |
 | **Part of** | [Business Central and WooCommerce integration](../overview.md) |
 
