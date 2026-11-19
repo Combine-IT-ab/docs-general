@@ -1,0 +1,111 @@
+---
+title: "Business Central to Crystallize: order status"
+description: "Web Connect moves Crystallize orders between pipeline stages as they are handled in Business Central: in Business Central, confirmed, shipped and cancelled."
+summary: "As an order is handled in Business Central, Web Connect moves it between stages in the Crystallize order pipeline. The stages are In BC, Confirmed, Shipment Booked, Shipped and Cancelled. When the promised delivery date is set, it is also sent to the order in Crystallize as the expected delivery date."
+slug: integrations/business-central-crystallize/order-status
+lang: en
+translation_key: integration-crystallize-order-status
+product: web-connect
+type: integration-flow
+system: "Crystallize"
+system_category: "e-commerce"
+keywords:
+  - business central crystallize order status
+  - crystallize pipeline stage business central
+faq:
+  - question: "When is a Crystallize order moved to Confirmed?"
+    answer: "When the promised delivery date is set on the sales order or a sales line in Business Central. An outgoing sync trigger on that field moves the order to the stage Confirmed in Crystallize."
+last_reviewed: 2026-11-19
+---
+
+# Business Central to Crystallize: order status
+
+As an order is handled in Business Central, Web Connect moves it between stages in the Crystallize order pipeline. The stages are In BC, Confirmed, Shipment Booked, Shipped and Cancelled, and each is linked to Web Connect with an integration variable.
+
+| | |
+|---|---|
+| **Direction** | Business Central → Crystallize |
+| **Trigger** | A change on the sales order in Business Central, see the table below |
+| **Result** | The order is in the matching stage of the Crystallize order pipeline, and has the expected delivery date |
+| **Part of** | [Business Central and Crystallize integration](../overview.md) |
+
+## Stages
+
+| Stage in Crystallize | When Web Connect sets it | Business Central record |
+|---|---|---|
+| In BC | When the sales order has been created from the Crystallize order | Sales order |
+| Confirmed | When the promised delivery date is set on the sales order or on a sales line | Sales order and sales line |
+| Shipment Booked | An outgoing sync trigger set per integration, for example when the shipment is booked with the carrier | Sales order |
+| Shipped | An outgoing sync trigger set per integration, for example when the sales shipment is posted | Posted sales shipment |
+| Cancelled | An outgoing sync trigger set per integration, for example when the sales order is cancelled in Business Central | Sales order |
+
+Outgoing sync triggers are set per integration after what the business needs, and they are flexible. Usually the fields that are sent to Crystallize are the trigger fields, so a change in one of them sends the record again. Only sales orders that have a Crystallize order ID are sent.
+
+## Step by step
+
+1. Something changes on the sales order in Business Central, for example the promised delivery date is set.
+2. The outgoing sync trigger creates an outgoing message for the order.
+3. Web Connect sends a GraphQL mutation (`setPipelineStage`) to Crystallize with the order ID, the pipeline ID and the ID of the new stage.
+4. Crystallize moves the order to the new stage.
+
+```mermaid
+sequenceDiagram
+    participant BC as 🔄 Business Central
+    participant WC as ⚙️ Web Connect
+    participant CR as 🛒 Crystallize
+
+    BC-->>WC: Promised delivery date set
+    WC->>CR: setPipelineStage (order ID, pipeline, Confirmed)
+    alt Success
+        CR-->>WC: Order ID
+    else Error
+        WC-->>WC: Logged in Entries ⚠️
+    end
+```
+
+## Expected delivery date
+
+When the promised delivery date is set on a sales order that came from Crystallize, Web Connect also sends the date to the order in Crystallize. It is stored as order metadata with the key `expectedDeliveryDate`, so the web shop can show it to the customer. This call goes to the Crystallize Order API (`orders.setMetadata`), not the PIM API, and uses the same access token.
+
+| Business Central field | Crystallize field | Note |
+|---|---|---|
+| Crystallize order ID on the sales order | `id` | |
+| Promised Delivery Date | Metadata `expectedDeliveryDate` | Sent when the promised delivery date changes |
+
+## Data mapping
+
+| Business Central | Crystallize field | Note |
+|---|---|---|
+| Crystallize order ID on the sales order | `orderId` | Saved when the order was imported |
+| Integration variable for the pipeline | `pipelineId` | |
+| Integration variable for the stage | `stageId` | One variable per stage |
+
+## Web Connect objects
+
+| Object | Role |
+|---|---|
+| `CRYST-SET-ORDER-IN-BC-PIPELINE` | Sets the stage In BC |
+| `CRYST-SET-CONFIRMED-PIPELINE` | Sets the stage Confirmed. Triggered on the promised delivery date on the sales header and sales line |
+| `CRYST-SET-SHIPMENT-BOOKED` | Sets the stage Shipment Booked |
+| `CRYST-SET-SHIPMENTDATE` | Sends the promised delivery date as the expected delivery date, through the Crystallize Order API. Triggered on the promised delivery date |
+| `CRYST-SET-FULLFILLMENT` | Sets the stage Shipped, from the posted sales shipment |
+| `CRYST-SET-ORDER-CANCELLED-PIPELINE` | Sets the stage Cancelled |
+
+## Error handling
+
+| Situation | What happens | What to do |
+|---|---|---|
+| A stage ID is wrong or has been removed in Crystallize | The call fails and is logged in Entries | Update the integration variable with the right stage ID and [resend the message](../../../../../how-to/web-connect/resend-outgoing-message.md) |
+| The sales order has no Crystallize order ID | Nothing is sent | Expected for orders that did not come from Crystallize |
+
+## Frequently asked questions
+
+### When is a Crystallize order moved to Confirmed?
+
+When the promised delivery date is set on the sales order or a sales line in Business Central. An outgoing sync trigger on that field moves the order to the stage Confirmed in Crystallize.
+
+## Related
+
+- [Business Central and Crystallize integration](../overview.md)
+- [Orders](order-inbound.md)
+- [Outgoing Sync Triggers](../../../general/outgoing-mapping/outgoing-sync-triggers.md)
