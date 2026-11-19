@@ -86,7 +86,7 @@ graph LR
 
 Each flow has to fit how your business works: which system owns the data, where people do their work, and what the accounting needs. That is why the flows are decided together when a new integration is set up. The options below are the ones Web Connect customers use today. **Common setup** marks the option most Web Connect customers with Nyce Logic WMS use. **Recommended** marks CombineIT's best practice, where there is one.
 
-[ATT FYLLA I: which option is the common setup in each area. It needs configuration exports from more Nyce customers (docs-internal#61).]
+No option is marked as common setup yet, because the options have not yet been compared across enough Nyce customers.
 
 ### Item dimensions and weights
 
