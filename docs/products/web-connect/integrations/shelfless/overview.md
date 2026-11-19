@@ -45,7 +45,7 @@ Web Connect by CombineIT connects Microsoft Dynamics 365 Business Central with S
 | **Shelfless API** | [Shelfless DreamREST API](https://rest.dreamlogistics.se/swagger/index.html) |
 | **Data flows** | 7: outbound deliveries, shipment confirmations, inbound deliveries, goods receipts, products, returns and stock count |
 | **Business Central editions** | All editions, Essentials and Premium, including the latest version |
-| **Available from** | [Web Connect on Microsoft AppSource](https://marketplace.microsoft.com/sv-se/product/PUBID.martitab1633951001710%7CAID.webconnect%7CPAPPID.9f3a7223-19db-4ac7-832f-cf8e4699186f?tab=Overview). [ATT FYLLA I: is the Shelfless integration included in the Web Connect Ready Integrations app?] |
+| **Available from** | [Web Connect on Microsoft AppSource](https://marketplace.microsoft.com/sv-se/product/PUBID.martitab1633951001710%7CAID.webconnect%7CPAPPID.9f3a7223-19db-4ac7-832f-cf8e4699186f?tab=Overview). The Shelfless integration is not part of the Web Connect Ready Integrations app. It is set up as a configuration in Web Connect |
 
 ## What can be synchronized
 
@@ -181,14 +181,14 @@ Picking, packing, carrier booking and the stock locations inside the warehouse a
 - Microsoft Dynamics 365 Business Central, any edition (Essentials or Premium), including the latest version
 - Web Connect installed from Microsoft AppSource, with an activated Web Connect license
 - Your approval for Web Connect to be installed and to act in your Business Central environment
-- An API user (username and password) for the Shelfless DreamREST API. [ATT FYLLA I: how the customer gets the API user, from Shelfless support?]
+- An API user (username and password) for the Shelfless DreamREST API. Shelfless decides how the API user is issued, so ask Shelfless for one
 - Webhooks set up in Shelfless for shipped deliveries, received incoming deliveries and handled returns, pointing to the Web Connect endpoint. [ATT FYLLA I: who registers the webhooks, Shelfless or the customer?]
 - A location in Business Central for the stock at Shelfless
 
 ## Setting it up
 
 1. Decide which flows to use and which option to choose for each, see [Choose your setup](#choose-your-setup).
-2. Install Web Connect in Business Central, activate the license and give your approval. [ATT FYLLA I: install the Shelfless integration, from the Ready Integrations app or as a configuration package?]
+2. Install Web Connect in Business Central, activate the license and give your approval. The Shelfless integration is not part of the Ready Integrations app, so it is set up as a configuration in Web Connect.
 3. Store the Shelfless API user in Web Connect [Secret Value Storage](../../general/secret-value-storage.md) and set up a test site and a production site.
 4. Set up [Logistics Setup](../../general/logistics-setup.md) for Shelfless: location, which documents to integrate, posting and journals.
 5. Set up the configuration choices below.
