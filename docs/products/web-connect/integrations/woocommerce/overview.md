@@ -42,7 +42,7 @@ Web Connect by CombineIT connects Microsoft Dynamics 365 Business Central with W
 | **Connection** | WooCommerce REST API (version 3, JSON) with basic authentication |
 | **WooCommerce API** | [WooCommerce REST API documentation](https://woocommerce.github.io/woocommerce-rest-api-docs/) |
 | **Data flows** | 6: orders, customers, product matching, prices, stock and order completion |
-| **Business Central editions** | [ATT FYLLA I: Essentials, Premium] |
+| **Business Central editions** | All editions, Essentials and Premium, including the latest version |
 | **Available from** | [Web Connect on Microsoft AppSource](https://marketplace.microsoft.com/sv-se/product/PUBID.martitab1633951001710%7CAID.webconnect%7CPAPPID.9f3a7223-19db-4ac7-832f-cf8e4699186f?tab=Overview). [ATT FYLLA I: is WooCommerce included in the Web Connect Ready Integrations app?] |
 
 ## What can be synchronized
@@ -172,7 +172,7 @@ Product creation, texts, images, categories and translations are always maintain
 
 ## What you need
 
-- Microsoft Dynamics 365 Business Central [ATT FYLLA I: edition and version]
+- Microsoft Dynamics 365 Business Central, any edition (Essentials or Premium), including the latest version
 - Web Connect installed from Microsoft AppSource, with an activated Web Connect license
 - Your approval for Web Connect to be installed and to act in your Business Central environment
 - WooCommerce REST API keys (consumer key and consumer secret), with read and write access to orders, customers and products. The secret is stored in Web Connect [Secret Value Storage](../../general/secret-value-storage.md)
