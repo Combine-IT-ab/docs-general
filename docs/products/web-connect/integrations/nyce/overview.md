@@ -42,7 +42,7 @@ Web Connect by CombineIT connects Microsoft Dynamics 365 Business Central with N
 | **Connection** | Nyce REST API (JSON), with a token from the Nyce authenticate endpoint |
 | **Nyce API** | Nyce REST API. The API documentation is not public: your Nyce supplier gives access to it once you are a customer |
 | **Data flows** | 9: items, item dimensions and weights, outbound orders, shipments, inbound orders, receipts, customer returns, stock adjustments and stock balance |
-| **Business Central editions** | [ATT FYLLA I: Essentials and Premium, confirm] |
+| **Business Central editions** | All editions, Essentials and Premium, including the latest version |
 | **Available from** | [Web Connect on Microsoft AppSource](https://marketplace.microsoft.com/sv-se/product/PUBID.martitab1633951001710%7CAID.webconnect%7CPAPPID.9f3a7223-19db-4ac7-832f-cf8e4699186f?tab=Overview). [ATT FYLLA I: whether the Nyce integration is included in the Web Connect Ready Integrations app] |
 
 ## What can be synchronized
@@ -127,7 +127,7 @@ Picking, packing, carrier booking and the warehouse locations are always handled
 
 ## What you need
 
-- Microsoft Dynamics 365 Business Central [ATT FYLLA I: edition and version]
+- Microsoft Dynamics 365 Business Central, any edition (Essentials or Premium), including the latest version
 - Web Connect installed from Microsoft AppSource, with an activated Web Connect license
 - Your approval for Web Connect to be installed and to act in your Business Central environment
 - An API user in Nyce, and the client, warehouse and client group that the user logs in to. These are created by your Nyce supplier
