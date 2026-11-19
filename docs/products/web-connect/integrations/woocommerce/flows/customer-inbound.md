@@ -21,7 +21,7 @@ Web Connect fetches customers from WooCommerce and creates or updates them in Bu
 | | |
 |---|---|
 | **Direction** | WooCommerce → Business Central |
-| **Trigger** | [ATT FYLLA I: schedule in the job queue, and how often] |
+| **Trigger** | Schedule in the Business Central job queue. How often the job runs can be adjusted to what your business needs |
 | **Result** | A customer in Business Central, linked to the WooCommerce customer ID |
 | **Part of** | [Business Central and WooCommerce integration](../overview.md) |
 

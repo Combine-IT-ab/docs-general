@@ -21,7 +21,7 @@ Web Connect sends the price from a chosen Business Central price list to WooComm
 | | |
 |---|---|
 | **Direction** | Business Central → WooCommerce |
-| **Trigger** | Web Connect price export. [ATT FYLLA I: when it runs, on a schedule or when a price changes] |
+| **Trigger** | Web Connect price export in the Business Central job queue. How often the job runs can be adjusted to what your business needs |
 | **Result** | The regular price updated on the WooCommerce product |
 | **Part of** | [Business Central and WooCommerce integration](../overview.md) |
 

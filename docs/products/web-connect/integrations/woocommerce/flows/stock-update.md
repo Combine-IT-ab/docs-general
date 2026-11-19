@@ -22,7 +22,7 @@ Web Connect calculates available stock in Business Central and sends it to WooCo
 | | |
 |---|---|
 | **Direction** | Business Central → WooCommerce |
-| **Trigger** | Web Connect [Item Inventory](../../../general/item-inventory.md). [ATT FYLLA I: when it runs] |
+| **Trigger** | Web Connect [Item Inventory](../../../general/item-inventory.md) in the Business Central job queue. How often the job runs can be adjusted to what your business needs |
 | **Result** | The stock quantity updated on the WooCommerce product |
 | **Part of** | [Business Central and WooCommerce integration](../overview.md) |
 
