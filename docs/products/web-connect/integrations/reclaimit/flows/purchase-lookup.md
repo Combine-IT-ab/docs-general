@@ -27,7 +27,7 @@ When a customer starts a return in Reclaimit, Reclaimit looks up the original pu
 | | |
 |---|---|
 | **Direction** | Business Central → Reclaimit, on request from Reclaimit |
-| **Trigger** | A call from Reclaimit, received by an Azure endpoint that passes it on to Web Connect. [ATT FYLLA I: confirm that the lookup goes through the same Azure endpoint as other webhooks] |
+| **Trigger** | A call from Reclaimit, received by an Azure endpoint that passes it on to Web Connect. |
 | **Result** | Reclaimit has the purchase and can register the return against it. Nothing changes in Business Central |
 | **Part of** | [Business Central and Reclaimit integration](../overview.md) |
 
