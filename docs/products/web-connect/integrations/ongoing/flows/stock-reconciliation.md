@@ -32,7 +32,7 @@ On a schedule in the Business Central job queue, usually at night, Web Connect r
 ## Step by step
 
 1. The job queue starts the reconciliation (Business Central).
-2. Web Connect selects the inventory items and asks Ongoing for stock per warehouse, using `articles/inventoryPerWarehouse` (Web Connect).
+2. Web Connect selects the inventory items and asks Ongoing for their stock, either per warehouse with `articles/inventoryPerWarehouse` or per article with `articles` (Web Connect).
 3. Ongoing returns the stock per article (Ongoing).
 4. The quantities are written to the physical inventory journal set in the logistics setup. Lines without a difference can be cleared (Business Central).
 5. You review the journal and post it (you).
@@ -62,6 +62,8 @@ sequenceDiagram
 | Object | Role |
 |---|---|
 | `ONGOING-INVENTORY-PER-WAREHOUSE` | Reads stock per warehouse from Ongoing |
+| `ONGOING-BALANCE` | Reads stock per article from Ongoing. Used instead of stock per warehouse in two of five configurations |
+| `ONGOING-MOVEMENTCHANGE` | Receives a webhook when goods move in Ongoing and fetches the stock for that article. Used together with `ONGOING-BALANCE` |
 
 ## Error handling
 

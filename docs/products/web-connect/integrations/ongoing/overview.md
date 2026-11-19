@@ -101,16 +101,16 @@ stateDiagram-v2
 
 ## Choose your setup
 
-Each flow has to fit how your business works: which system owns the data, where people do their work, and what the accounting needs. That is why the flows are decided together when a new integration is set up. The options below are the ones found in the Web Connect configurations for Ongoing today. **Common setup** marks the option most of them use. **Recommended** marks CombineIT's best practice, where there is one.
+Each flow has to fit how your business works: which system owns the data, where people do their work, and what the accounting needs. That is why the flows are decided together when a new integration is set up. The options below are the ones found in the five Web Connect configurations for Ongoing today. **Common setup** marks the option at least three of them use. **Recommended** marks CombineIT's best practice, where there is one.
 
 ### Outbound orders
 
 | Option | How it works | When it fits |
 |---|---|---|
 | **Sent when the sales order is released** (common setup) | Releasing the sales order in Business Central creates the outbound order in Ongoing. Lines without stock, such as freight, are not sent, but they are posted together with the shipment | Business Central is where orders are handled, for example from a web shop integration |
-| **Sales orders and transfer orders** | Transfer orders from the integrated location are also sent to Ongoing as outbound orders | You have more than one location in Business Central, and goods move between them |
+| **Sales orders and transfer orders** (common setup) | Transfer orders from the integrated location are also sent to Ongoing as outbound orders | You have more than one location in Business Central, and goods move between them |
 
-[ATT FYLLA I: en av fyra konfigurationer skickar inte ordern vid release. Hur ordern skickas där är inte verifierat.]
+[ATT FYLLA I: en av fem konfigurationer skickar inte ordern vid release. Hur ordern skickas där är inte verifierat.]
 
 #### Outbound orders sent when the sales order is released
 
@@ -133,10 +133,10 @@ flowchart LR
 
 | Option | How it works | When it fits |
 |---|---|---|
-| **Status follows the sales order** | When the sales order is reopened or released again in Business Central, Web Connect updates the order status in Ongoing, so the warehouse knows whether the order may be picked. Cancelling the order in Business Central removes it from Ongoing | Customer service changes orders after they are released |
+| **Status follows the sales order** (common setup) | When the sales order is reopened or released again in Business Central, Web Connect updates the order status in Ongoing, so the warehouse knows whether the order may be picked. Cancelling the order in Business Central removes it from Ongoing | Customer service changes orders after they are released |
 | **Whole order cancellation only** | A cancelled order is removed from Ongoing. Other changes are made by the warehouse | Orders are rarely changed after release |
 
-Two of four configurations use each option, so there is no common setup yet. Cancellation always applies to the whole order.
+Cancellation applies to the whole order in four of five configurations. One configuration allows selected lines to be cancelled.
 
 #### Order status follows the sales order
 
@@ -160,10 +160,8 @@ flowchart LR
 
 | Option | How it works | When it fits |
 |---|---|---|
-| **Posted automatically** | When the purchase order gets a status set in the logistics setup, for example Lagerlagd or Avvikelse, the received quantities are posted as a receipt in Business Central | The warehouse's received quantities can be trusted without a manual check |
+| **Posted automatically** (common setup) | When the purchase order gets a status set in the logistics setup, for example Lagerlagd or Avvikelse, the received quantities are posted as a receipt in Business Central | The warehouse's received quantities can be trusted without a manual check |
 | **Registered, posted by you** | Received quantities are written to the purchase order, and you post the receipt yourself | You want to check deviations before anything is posted |
-
-Two of four configurations post automatically, so there is no common setup yet.
 
 #### Receipts posted automatically
 
@@ -186,11 +184,11 @@ flowchart LR
 
 | Option | How it works | When it fits |
 |---|---|---|
-| **Not integrated** (common setup) | Returns are handled outside the integration | Few returns, or returns go to another location |
+| **Not integrated** | Returns are handled outside the integration | Few returns, or returns go to another location |
 | **Return order in Ongoing, linked to the original order** | The sales return order is created in Business Central from the posted shipment or invoice and sent to Ongoing as a return order, with the Ongoing ID of the original order and its lines. When the goods are received, the return receipt is posted in Business Central | Every order ships from Ongoing, and you want the warehouse to see which order the return belongs to |
 | **Inbound order in Ongoing** | The sales return order is sent to Ongoing as an inbound order, the same way as a purchase order. When the goods are received, the return receipt is posted in Business Central | Some orders ship from another warehouse or are drop shipped, so Ongoing cannot link the return to an order |
 
-Return orders linked to the original order are set up in a test environment so far. Inbound orders are used in production.
+Two of five configurations send returns as inbound orders in production. Return orders linked to the original order are set up in a test environment so far, so there is no common setup yet.
 
 #### Returns not integrated
 
@@ -223,7 +221,7 @@ flowchart LR
 
 | Option | How it works | When it fits |
 |---|---|---|
-| **Posted automatically** (recommended) | Each adjustment from Ongoing is written to the item journal and posted | You want Business Central stock to follow the warehouse without a manual step |
+| **Posted automatically** (common setup, recommended) | Each adjustment from Ongoing is written to the item journal and posted | You want Business Central stock to follow the warehouse without a manual step |
 | **Written to the journal, posted by you** | Adjustments are collected in the item journal, and you post it | You want to review adjustments before they affect stock value |
 
 #### Stock adjustments posted automatically
@@ -309,7 +307,7 @@ All configuration and logic in the integration is visible and editable in Busine
 - **Posting rules:** whether shipments, receipts, returns and stock adjustments are posted automatically, and at which Ongoing status.
 - **Lines without stock:** whether freight and other service lines are sent to Ongoing, and whether they are posted with the shipment.
 - **Item data:** which item fields are sent, and in which currency the purchase price is shown in Ongoing.
-- **Cancellation:** whether cancellation applies to the whole order.
+- **Cancellation:** whether cancellation applies to the whole order or to selected lines.
 - **Error handling:** how many times a failed message is retried, and who receives error emails.
 
 ## Limitations

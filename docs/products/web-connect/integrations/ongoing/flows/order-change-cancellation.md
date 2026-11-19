@@ -14,7 +14,7 @@ keywords:
   - ongoing wms order status business central
 faq:
   - question: "Can we cancel a single line on an order that is already in Ongoing?"
-    answer: "No. In the Ongoing configurations, cancellation is set to apply to the whole order (WMS Cancel Possibility in the logistics setup). Ask the warehouse if a single line has to be removed."
+    answer: "It depends on the setting WMS Cancel Possibility in the logistics setup. Most Ongoing configurations allow only the whole order to be cancelled. It can also be set to allow selected lines."
 last_reviewed: 2026-11-19
 ---
 
@@ -34,7 +34,7 @@ When a sales order that is already in Ongoing WMS is reopened or released again 
 1. Customer service reopens, releases or cancels an order that has been sent to Ongoing (Business Central).
 2. An outgoing sync trigger on the sales order detects the change, as long as the warehouse has not reported the order as shipped (Web Connect).
 3. For a status change, Web Connect translates the Business Central status to an Ongoing status number and sends it to `orders/{order ID}/orderStatus` (Web Connect).
-4. For a cancellation, Web Connect sends the order again with the method DELETE, which removes it from Ongoing (Web Connect).
+4. For a cancellation of the whole order, Web Connect sends the order again with the method DELETE, which removes it from Ongoing (Web Connect).
 5. Ongoing updates or removes the order (Ongoing).
 
 ```mermaid
@@ -84,7 +84,7 @@ sequenceDiagram
 
 ### Can we cancel a single line on an order that is already in Ongoing?
 
-No. In the Ongoing configurations, cancellation is set to apply to the whole order (WMS Cancel Possibility in the logistics setup). Ask the warehouse if a single line has to be removed.
+It depends on the setting WMS Cancel Possibility in the logistics setup. Most Ongoing configurations allow only the whole order to be cancelled. It can also be set to allow selected lines. [ATT FYLLA I: hur en avbokad rad skickas till Ongoing när Select Lines är valt]
 
 ## Related
 
