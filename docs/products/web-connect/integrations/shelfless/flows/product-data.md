@@ -53,7 +53,7 @@ sequenceDiagram
 
 | Shelfless field | Business Central field | Note |
 |---|---|---|
-| `productNumber`, `externalId` | Item number | |
+| `productNumber`, `externalId` | Item number | With item variants, each variant becomes its own product, with the variant code added after a delimiter |
 | `productName` | Description | |
 | `category` | Item category code | |
 | `barcodes` | GTIN | |

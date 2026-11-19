@@ -57,7 +57,7 @@ Web Connect has seven data flows between Business Central and Shelfless.
 | [Shipment confirmations](flows/shipment-confirmation.md) | Shelfless → Business Central | When Shelfless has shipped, the shipment is posted in Business Central with tracking numbers |
 | [Inbound deliveries](flows/inbound-delivery.md) | Business Central → Shelfless | A released purchase order or incoming transfer order is announced to Shelfless as an incoming delivery |
 | [Goods receipts](flows/goods-receipt.md) | Shelfless → Business Central | When Shelfless has received the goods, the receipt is posted in Business Central with the received quantity |
-| [Products](flows/product-data.md) | Business Central → Shelfless | New and changed items are created or updated in Shelfless, with barcode and customs data |
+| [Products](flows/product-data.md) | Business Central → Shelfless | New and changed items are created or updated in Shelfless, with barcode and customs data. Each item variant becomes its own product |
 | [Returns](flows/returns.md) | Shelfless → Business Central | When Shelfless has handled a customer return, a return order is created in Business Central |
 | [Stock count](flows/stock-reconciliation.md) | Shelfless → Business Central | Each night the stock in Shelfless is fetched into a physical inventory journal for review |
 
@@ -216,7 +216,7 @@ All configuration and logic in the integration is visible and editable in Busine
 - **Posting:** whether shipments and receipts are posted automatically, which Shelfless status counts as shipped, and whether the posting date is the work date.
 - **Over receipt:** whether Shelfless may report more than ordered on a purchase, and with which tolerance.
 - **Item price on order rows:** which value is sent as item price, for example unit cost or the net sales price per unit excluding VAT, which Shelfless can use for customs.
-- **Product number:** the item number, with the variant code added after a delimiter when variants are used.
+- **Product number:** the item number, with the variant code added after a delimiter when variants are used. Each item variant becomes its own product in Shelfless.
 - **Sender profile and freight service:** which freight service code and sender profile are sent. The sender profile can be left empty so Shelfless chooses it from the country and the type of customer.
 - **Return reasons and locations:** which Business Central return reason code and location each Shelfless return reason and row status maps to.
 - **Stock count:** which journal the count is written to, and whether rows without a difference are removed.
@@ -229,7 +229,6 @@ All configuration and logic in the integration is visible and editable in Busine
 - **Products created only in Shelfless are not counted.** The stock count only includes products that came from Business Central.
 - **The stock count is not posted automatically.** The physical inventory journal must be reviewed and posted by a person.
 - **Return orders are not sent to Shelfless.** Returns are registered in Shelfless, and the return order is created in Business Central afterwards.
-- **Item variants.** [ATT FYLLA I: are item variants sent to Shelfless as separate products?]
 
 ## Frequently asked questions
 
