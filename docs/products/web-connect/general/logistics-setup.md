@@ -1,184 +1,247 @@
 # Web Connect Logistics Setup
 
-_Swedish Business Central view name: Web Connect Logistikinställningar_
+> **BC view name:** Web Connect Logistikinställningar
 
-Web Connect Logistics Setup defines how Microsoft Business Central communicates with external logistics systems such as Warehouse Management Systems, Point-of-Sale systems, and Return & Exchange platforms.\
-It builds on the foundation created in **Web Connect Integrations** and the structure defined in **Web Connect Objects**.
+## Overview
 
-_As always: we recommend modifying object structure through [Web Connect Incoming Data](incoming-data/README.md) or [Web Connect Outgoing Data](outgoing-mapping/outgoing-data-web.md) not manually on the object tree._
+Logistics Setup decides how Business Central works with an external system that handles stock: a warehouse management system (WMS) run by a 3PL, a point of sale system with store warehouses, or a returns system. There is one logistics setup per system and location, with a code such as `ONGOING`, `NYCE` or `RECLAIMIT`.
 
-### General Object setup
+The setup says which documents are sent to the system, which [Web Connect Objects](objects.md) build the messages, when shipments and receipts reported back are posted, and which journals receive stock adjustments and stock counts. Every message in both directions is logged as a [WMS document](wms-documents.md) with the code of the logistics setup.
 
-![](../../../assets/bilder/Skarmavbild-2025-12-09-kl.-13.29.05.png)
+The integration pages describe how each system uses the setup: [Ongoing WMS](../integrations/ongoing/overview.md), [Nyce Logic WMS](../integrations/nyce/overview.md), [Astro WMS](../integrations/astro/overview.md), [Nowaste](../integrations/nowaste/overview.md), [Shelfless](../integrations/shelfless/overview.md), [Sitoo POS](../integrations/sitoo/overview.md), [Reclaimit](../integrations/reclaimit/overview.md) and [Sello](../integrations/sello/overview.md).
 
-Defines the base settings and behaviour for how this logistics integration interacts with Microsoft Business Central.
+All logistics setups live in your own Business Central. You can see and change every field yourself.
 
-Field| Description
----|---
-**Code**| Unique identifier for the logistics integration (e.g. “ONGOING”, “SITOO”, “RETURN”).
-**Description**| A readable description of the connected system.
-**Enabled**| Toggles whether the integration is active. Only enabled setups participate in Web Connect processing.
-**Location Code**| The Microsoft Business Central warehouse/location this integration manages.
-**Web Object – item**| Which web object should be used in item documents
-**Web Object – Goods In**| Which web object should be used in goods receival processes.
-Web Object – Goods Out| Which web object should be used in in goods out processes.
-Web Object – Status in request| Which web object should be used to check status change on goods receival orders.
-Web Object – Status out request| Which web object should be used to check status change on goods out orders.
+The tables use the names shown on the card. When a field has another name in a configuration export, that name is shown below it.
 
-### General Card Setup
+## Objects
 
-Defines the foundational behaviour for how this logistics integration interacts with Microsoft Business Central. These settings apply across all inbound, outbound, transfer, and return flows.
+![The list of logistics setups](../../../assets/bilder/Skarmavbild-2025-12-09-kl.-13.29.05.png)
 
-![](../../../assets/bilder/Skarmavbild-2025-12-08-kl.-12.18.43.png) Field| Description| Common for
----|---|---
-**Code**| Unique identifier for the logistics integration (e.g. “ONGOING”, “SITOO”, “RETURN”).| All logistics integrations
-**Description**| A readable description of the connected system.| All logistics integrations
-**Enabled**| Toggles whether the integration is active. Only enabled setups participate in Web Connect processing.| All logistics integrations
-**Location Code**| The Microsoft Business Central warehouse/location this integration manages.| All logistics integrations
-**No. Series Warehouse Document**| Optional number series used when Web Connect creates warehouse documents.| Integrations where Microsoft Business Central handles posting
-**Error Max Count**| Maximum number of retry attempts before marking the entry as failed (typically 3–5).| All logistics integrations
-**Max Transactions per Run**| Limits how many documents are processed per job-queue execution.| Optional / high-volume environments
-**Post Line by Line on Multi-Retry**| After 3 failed attempts, Web Connect posts each line individually. Useful for partial shipments/receivals.| Optional
-**Send Email on Error**| Sends an email immediately for every failed transaction.| Recommended
-**Send Email Summary**| Sends a summary email with grouped errors.| Recommended
-**Send Email Summary at Time**| Time of day when summary email is sent.| Recommended
-**Error Email Recipient List**| Comma-separated email addresses receiving error notifications.| Recommended
-**Delete Old Transactions After**| Date formula (e.g. `-3M`) for clearing historical logistics entries.| Recommended on high-volume environments
-**Delete Old Item Balance After**| Date formula for clearing Item Balance posts (does not delete physical inventory journals).| Optional
-**Last Run Date Time**| Timestamp of the last successful job-queue run.| All logistics integrations
-**Location Filter for Identification**| Optional filter to identify warehouse-specific documents.| Optional
-**Cancel Possibility**| Defines if the external system may cancel orders: No Cancel / Whole Order / Line Level.| Recommended
-**Convert to Base Unit of Measure**| Converts all quantities to Base Unit of Measure before sending to the external system.| Optional
+The list shows one row per logistics setup, with the objects that build the messages to the system.
 
-### Inbound Document
+| Field | Description |
+|-------|-------------|
+| **Web Object - Item**<br>`Web Object Item` | The object that sends item data to the system. |
+| **Web Object - Goods In**<br>`Web Object Goods In` | The object that sends expected receipts, such as purchase orders and incoming transfers. |
+| **Web Object - Goods Out**<br>`Web Object Goods Out` | The object that sends orders to pick and ship, such as sales orders and outgoing transfers. |
+| **Web Object Goods In Return** | The object that sends return orders to the warehouse. When it is empty, the goods in object is used. |
+| **Sitoo Warehouse Id**<br>`WCM Sitoo Warehouse Id` | Only for Sitoo POS. The ID of the Sitoo warehouse that this setup handles, which links the Sitoo warehouse to the location. In some versions of Web Connect the field is called `WCM Sitoo Warehouse Id`. |
 
-Defines how Microsoft Business Central receives inbound logistics data such as purchase orders, warehouse receipts, and put-aways from connected systems. These settings control how Web Connect interprets, validates, and posts incoming warehouse-related information.
+## General
 
-![](../../../assets/bilder/Skarmavbild-2025-12-08-kl.-12.20.01.png) Field| Description| Common for
----|---|---
-**Integrate Purchase Order**| Enables inbound integration for Purchase Orders created or updated by the external system.| All integrations where Purchase Orders are handled (WMS and POS with store receiving)
-**Integrate Inventory Put-Away**| Allows external systems to send Inventory Put-Away documents for processing in Business Central.| Optional
-**Integrate Warehouse Receival**| Enables Warehouse Receipt documents to be integrated and posted.| Optional
-**Auto-Send on Document Release**| When a document is released in Business Central, it is automatically sent to the external system.| Optional
-**Auto-Send Non-Sent Inventory Put-Away**| Job queue automatically sends unsent Put-Away documents.| Optional
-**Allow Over Receival**| Permits receiving more quantity than ordered.| Optional
-**Tolerance % – Over Receival**| Percentage limit for allowable over-receivals.| Required for “**Allow Over Receival** ” to work
-**Post Receipt**| Automatically posts the receipt when received from the external system.| Recommended for all system that handles inbound transactions
-**Post Receipt View**| Business Central filter defining which warehouse receipts should be posted (commonly based on external status).| Required for “Post Receipt ” to work
-**Send Outstanding Quantity on Receival**| Sends outstanding quantity instead of ordered quantity to the external system.| Optional
-**Serial No. on Receival**| Requires serial numbers for inbound operations.| Optional when handling serialized inventory
-**Batch No. on Receival**| Requires batch numbers for inbound operations.| Optional when handling batch-tracked inventory
+![The General section of the card](../../../assets/bilder/Skarmavbild-2025-12-08-kl.-12.18.43.png)
 
-### Outbound Document
+| Field | Description |
+|-------|-------------|
+| **Code** | The code of the logistics setup, for example `ONGOING` or `SITOO`. Messages from the system are linked to the setup through this code. |
+| **Description** | A readable name for the system or the store. |
+| **Enabled** | Only enabled setups send and process documents. |
+| **Location Code** | The location in Business Central that the system handles. Documents for this location are sent to the system. |
+| **No. Series Warehouse Document** | The number series for the WMS documents of this setup. |
+| **Error Max Count** | How many times a WMS document is processed again after an error before it waits for you, for example `3`. |
+| **Max transactions per Run** | Limits how many documents are processed in each run of the job queue. |
+| **Post Line by Line on Multi-Retry**<br>`Post Line by Line on Retry` | When a document has failed several times, Web Connect posts it one line at a time, so that the lines without errors are posted. |
+| **Send mail on Error** | Sends an e-mail for every failed document. |
+| **Send E-mail Summary** | Sends one e-mail a day with the documents that have errors. |
+| **Send E-mail-summary at Time**<br>`E-mail Summary Time` | The time of day the summary is sent, for example `15:00`. |
+| **Error E-Mail Receipient List** | The e-mail addresses that receive error e-mails, separated by commas. |
+| **Last Summary Sent** | When the last summary was sent. Filled in by Web Connect. |
+| **Delete Old Transactions after** | A date formula for how long old logistics transactions are kept, for example `-1M` or `-3M`. Older ones are deleted. |
+| **Delete Old Item Balance after**<br>`Delete Item Balance after` | A date formula for how long item balances from the system are kept, for example `-10D`. Posted physical inventory journals are not affected. |
+| **Last Run Date Time** | When the job queue last ran for this setup. Filled in by Web Connect. |
+| **Cancel Possibility**<br>`WMS Cancel Possibility` | Whether an order already sent can be cancelled in the system: `No Cancel Possible`, `Whole Order` or `Select Lines`. See [order changes and cancellation](../integrations/ongoing/flows/order-change-cancellation.md) for Ongoing. |
+| **Convert to Base Unit of Measure**<br>`Convert to Base UOM` | Quantities are converted to the base unit of measure before they are sent. |
+| **Item Variant Delimiter** | The character between item number and variant code when a variant is sent as its own item, for example `-`. See item data for [Nyce](../integrations/nyce/flows/item-data.md) and [Nowaste](../integrations/nowaste/flows/items.md). |
 
-Controls how sales orders, picks, and outbound shipments flow from Microsoft Business Central to external systems such as WMS or POS. Determines how data is transmitted, validated, and posted.
+## Inbound documents
 
-![](../../../assets/bilder/Skarmavbild-2025-12-08-kl.-12.20.55.png) Field| Description| Common for
----|---|---
-**Integrate Sales Order**| Sends Sales Orders to the external logistics system.| All integrations where Sales Orders are handled (mainly WMS)
-**Integrate Inventory Pick**| Enables external integration for Inventory Pick documents.| Optional
-**Integrate Warehouse Shipment**| Enables Warehouse Shipment documents to be sent to the external system.| Optional
-**Include Service/Non-Inventory Items**| Determines whether non-inventory lines (e.g., freight) should be included.| Optional
-**Auto-Send on Document Release**| Sales Orders are automatically sent when released.| Optional
-**Sales Document Released**| Controls if the document must be released before it can be manually sent.| Recommended for all integrations where Sales Orders are handled (Mainly WMS)
-**Auto-Send Non-Sent Inventory Pick**| Automatically sends unsent Inventory Picks via job queue.| Optional
-**Allow Over Shipment**| Allows shipping more quantity than ordered.| Optional
-**Tolerance % – Over Shipment**| Maximum allowed overshipment percentage.| Required for “**Allow Over Shipment** ” to work
-**Post Shipping**| Automatically posts shipment documents.| Recommended for all system that handles outbound transactions
-**Post Shipment View**| Business Central filter used to determine which shipments should be posted (commonly based on external status).| Required for “Post Shipping ” to work
-**Change Posting Date to Work Date**| Changes posting date to the job-queue execution date.| Recommended
-**Invoice & Ship Sales Document**| Invoices and ships the document in a single operation.| Optional
-**Post Serv./Non-Invent. Items**| Ensures non-inventory lines are posted when shipping.| Optional
-**Update Always Allowed**| Allows updates even after partial shipment.| Optional
-**Send Outstanding Quantity on Shipment**| Sends outstanding quantity instead of full ordered quantity.| Optional
-**Serial No. on Shipment**| Requires serial numbers on shipments.| Optional when handling serialized inventory
-**Batch No. on Shipment**| Requires batch numbers on shipments.| Optional when handling batch-tracked inventory
+Expected receipts that are sent to the system, and the receipts it reports back.
 
-### Transfer Documents
+![The Inbound Document section of the card](../../../assets/bilder/Skarmavbild-2025-12-08-kl.-12.20.01.png)
 
-Defines how Transfer Orders move between Microsoft Business Central and external logistics systems. Controls both outbound (transfer-out) and inbound (transfer-in) flows.
+| Field | Description |
+|-------|-------------|
+| **Integrate Purchase Order** | Purchase orders for the location are sent to the system. |
+| **Integrate Inventory Put-Away** | Inventory put-aways are sent to the system. |
+| **Integrate Warehouse Receival** | Warehouse receipts are sent to the system. |
+| **Integrate Purch. Return Order** | Purchase return orders are sent to the system. |
+| **Auto-Send on Document Release**<br>`Send Goods In on Release` | The document is sent when it is released in Business Central. |
+| **Auto-Send Non-Sent Inv. Put Away**<br>`Auto-Send Non-Sent Inv.Put.A` | The job queue sends inventory put-aways that have not been sent yet. |
+| **Allow Over Receival** | The system may report more received than ordered. |
+| **Tolerance % - Over Receival** | How much more than ordered may be received, in percent. Above the tolerance the receipt is not posted and shows up as an error. |
+| **Post Receipt** | The receipt is posted automatically when the system reports it. |
+| **Post Receipt View** | A filter on the WMS documents that decides which receipts are posted, usually on the status from the system. |
+| **Send Outstanding Quantity on Receival**<br>`Send Outstanding Quantity` | The outstanding quantity is sent instead of the ordered quantity. |
+| **Serial No. on Receival**<br>`Serial No. - Receival` | Serial numbers from the system are used on the receipt. |
+| **Batch No. on Receival**<br>`Batch No. - Receival` | Lot numbers (batch numbers) from the system are used on the receipt. |
 
-![](../../../assets/bilder/Skarmavbild-2025-12-08-kl.-12.21.47.png) Field| Description| Common for
----|---|---
-**Integrate Transfer Order**| Enables Transfer Orders as part of the logistics integration.| Required for “Transfer order in and/orout ” to work
-**Integrate Transfer Order Out**| Sends outbound Transfer Orders to the external system.| Required for if external system should handle transfer order out, normally “delivery order out in” in WMS or POS
-**Integrate Transfer Order In**| Enables inbound transfer receipts from external systems.| Required for if external system should handle transfer order in, normally “delivery order out in” in WMS or POS
-**Allow Negative Inventory on Transfer**| Allows posting negative inventory (must also be enabled in Inventory Setup).| Optional
-**Close Transfer with Adjustment when Receipt Qty < Shipped Qty**| Auto-closes the transfer and adjusts remaining quantity.| Optional
-**Transfer Close Option when Receipt Qty > Shipped Qty**| Defines behaviour when receiving more than shipped: Ignore / Raise Shipped Qty / Adjust Receipt Qty.| Optional
-**Maximum Tolerance for Transfer Adjustments**| Maximum allowed automatic adjustment; 0 = no limit.|
+## Outbound documents
 
-### Return and Exchange
+Orders that are sent to the system to pick and ship, and the shipments it reports back.
 
-Used primarily by Return & Exchange systems. Controls how return orders flow into Microsoft Business Central and how exchanges are handled.
+![The Outbound Document section of the card](../../../assets/bilder/Skarmavbild-2025-12-08-kl.-12.20.55.png)
 
-![](../../../assets/bilder/Skarmavbild-2025-12-08-kl.-12.22.21.png) Field| Description| Common for
----|---|---
-**Integrate Sales Return Orders**| Enables inbound return orders from external systems.| Required for external system that should handle sales return orders
-**Send Return Order as Receival**| Sends return orders to WMS as receivals.| Optional
-**Original Sales Ref. Required for Return Order**| Requires reference to original sales document.| Optional
-**Add Return of Serv./Non-Invent. Items**| Includes service or non-inventory return lines.| Optional
-**Use WMS Document No. as Return Order No.**| Uses external ID instead of BC numbering.| Optional
-**Auto-Send Return to WMS**| Automatically sends return orders to WMS when created.| Optional
-**Auto-Release Created Return**| Automatically releases return orders.| Optional
-**Post Receival of Return**| Automatically posts return receivals.| Recommended for external system that should handle sales return orders
-**Payment Method on Exchange**| Determines payment method when creating exchange orders.| Optional
-**Add Item On Return**| Adds a predefined service item (e.g. “Not Picked”).| Optional
-**Return Fee Qty/Price Negative**| Determines whether qty or unit price is negative.| Optional
+| Field | Description |
+|-------|-------------|
+| **Integrate Sales Order** | Sales orders for the location are sent to the system. |
+| **Integrate Inventory Pick**<br>`Integrate Warehouse Pick` | Inventory picks are sent to the system, as in [Astro WMS](../integrations/astro/overview.md). |
+| **Integrate Warehouse Shipment** | Warehouse shipments are sent to the system. |
+| **Include Service/Non-Inventory Items**<br>`Include Serv./Non-Inv. Items` | Lines without stock, such as freight, are sent with the order. Without it they are left out. |
+| **Auto-Send on Document Release**<br>`Send on Goods Out on Release` | The order is sent when it is released in Business Central. |
+| **Sales Document Released** | The order must be released before it can be sent. |
+| **Auto-Send Non-Sent Inv. Pick**<br>`Auto-Send Non-Sent Inv.Pick` | The job queue sends inventory picks that have not been sent yet. |
+| **Allow Over Shipment** | The system may report more shipped than ordered. |
+| **Tolerance % - Over Shipment** | How much more than ordered may be shipped, in percent. |
+| **Post Shipping** | The shipment is posted automatically when the system reports it. |
+| **Post Shipment View** | A filter on the WMS documents that decides which shipments are posted, usually on the status from the system, for example `Sent` in Ongoing. |
+| **Change Posting Date to Work Date**<br>`Posting Date to Work Date` | The shipment or receipt is posted with the work date of the job queue run instead of the date from the system. |
+| **Invoice & Ship Sales Document**<br>`Invoice and Ship` | The sales order is shipped and invoiced in one posting. |
+| **Post Serv/Non-Invent. Items**<br>`Post Serv. Items` | Lines without stock, such as freight, are posted together with the shipment. |
+| **Update Always Allowed** | The order can be updated after it has been sent, also after a partial shipment. |
+| **Send Outstanding Quantity on Shipment**<br>`Send Outst. Quantity Sales` | The outstanding quantity is sent instead of the ordered quantity. |
+| **Serial No. on Shipment**<br>`Serial No. - Shipment` | Serial numbers from the system are used on the shipment. |
+| **Batch No. on Shipment**<br>`Batch No. - Shipment` | Lot numbers (batch numbers) from the system are used on the shipment. |
 
-### Item
+## Transfer documents
 
-Controls which items are synchronized with the external system and how item structures are handled.
+Transfer orders between the location and other locations, for example between a central warehouse and a store.
 
-![](../../../assets/bilder/Skarmavbild-2025-12-08-kl.-12.23.28.png) Field| Description| Common for
----|---|---
-**All Items Enabled**| Sends all items unless filtered.| Required for external system that receives items from Business Central and have item transactions
-**Item Available Filter View**| Business Central filter that limits which items are synchronized.| Optional
-**Assembly BOM Management**| Controls if BOM/assembly structures are included.| Optional
+![The Transfer Documents section of the card](../../../assets/bilder/Skarmavbild-2025-12-08-kl.-12.21.47.png)
 
-### Item Journals
+| Field | Description |
+|-------|-------------|
+| **Integrate Transfer Order** | Transfer orders are part of the integration. Choose the direction with the next two fields. |
+| **Integrate Transfer Order Out**<br>`Integrate Trans. Order Out` | Transfer orders from the location are sent to the system as orders to pick and ship. |
+| **Integrate Transfer Order In**<br>`Integrate Trans. Order In` | Transfer orders to the location are sent to the system as expected receipts. |
+| **Allow Negative Inventory on Transfer**<br>`Allow Neg. Inv. on Transfer` | The transfer may be posted even if the stock goes negative. Negative inventory must also be allowed in the inventory setup of Business Central. |
+| **Close Transfer with Adjustment when Receipt Qty < Shipped Qty**<br>`Close Trans. on Low Receipt` | When less is received than was shipped, the transfer is closed and the difference is adjusted. |
+| **Transfer Close Option when Receipt Qty > Shipped Qty**<br>`Transfer Close on High Receipt` | What happens when more is received than was shipped: `Ignore`, `Raise Shipped Qty.` or `Adjust Receipt Qty.` |
+| **Maximum Tolerance for Transfer Adjustments**<br>`Max Tol. Transfer Adjustment` | The largest difference that is adjusted automatically. `0` means no limit. |
 
-Defines how external systems update Microsoft Business Central with adjustments, movements, and physical inventory.
+## Returns and exchanges
 
-![](../../../assets/bilder/Skarmavbild-2025-12-08-kl.-12.24.23.png) Field| Description| Common for
----|---|---
-**Adjustment Item Journal Template**| Template used for adjustment journals.| Required for external system that reports stock adjustments
-**Adjustment Item Journal Batch**| Batch used for adjustment journals.| Required for external system that reports stock adjustments
-**Auto-Post Adjustment**| Automatically posts adjustment journals.| Optional
-**Movement Item Journal Template / Batch**| Template and batch for movement journals.| Optional
-**Auto-Post Movement**| Automatically posts movement journals.| Optional
-**Physical Inventory Journal Template / Batch**| Template used when external system submits inventory counts.| Required for external system that reports stock counts.
-**Physical Inventory Journal Batch**| Batch used when external system submits inventory counts.| Required for external system that reports stock counts.
-**Add Missing Items to Physical Inventory Journal**| Adds all items to PI journal, even if not included in external payload.| Optional
-**Auto-Post Balance**| Automatically posts PI journals.| Optional
-**Serial No. on Adjustments/Balance**| Requires serial numbers.| Optional when handling serialized inventory
-**Batch No. on Adjustments/Balance**| Requires batch numbers.| Optional when handling batch-tracked inventory
-**Clear Phys. Inv. on Both Zero**| Deletes PI lines with zero counted & zero difference.| Optional
-**Clear Phys. Inv. On Suggested Zero Change**| Removes PI lines where no adjustment is needed.| Optional
-**Balance Process After**| Earliest time of day allowed for processing PI entries.| Optional
+Return orders from the system, for example a returns portal or a warehouse that receives customer returns.
 
-### System
+![The Return and Exchange section of the card](../../../assets/bilder/Skarmavbild-2025-12-08-kl.-12.22.21.png)
 
-Defines the Web Connect technical link between Microsoft Business Central and the external integration source.
+| Field | Description |
+|-------|-------------|
+| **Integrate Sales Return Orders**<br>`Integrate Sales Return` | Return orders are part of the integration. Returns reported by the system become sales return orders in Business Central. |
+| **Send Return Order as Receival** | The return order is sent to the warehouse as an expected receipt. |
+| **Original Sales Ref. Required for Return Order**<br>`Org. Sales Ref. Req. for Ret.` | A return order is only created when the return refers to the original order. |
+| **Add Return of Serv/Non-Invent. Items**<br>`Include Serv. Items on Return` | Lines without stock, such as freight, are included in the return order. |
+| **Use WMS Document No. as Return Order No.**<br>`User WMS Doc. No. on Return` | The return order gets the number of the WMS document instead of a number from the number series. |
+| **Auto-Send Return to WMS** | The return order is sent to the warehouse when it is created. |
+| **Auto-Release Created Return** | The created return order is released automatically. |
+| **Post Receival of Return** | The return receipt is posted automatically when the warehouse reports it. |
+| **Auto-Release Exchange Order** | The exchange order is released automatically. |
+| **Payment Method on Exchange** | The payment method used on exchange orders. |
+| **Add Item On Return** | An item that is added to the return order, for example a return fee. Can be overridden per return reason in [WMS/Return Reason Codes](wms-return-reason-codes.md). |
+| **Return Fee Qty/Price Negative**<br>`Return Fee Qty./Price Neg.` | Whether the return fee line gets a negative quantity or a negative price. |
 
-![](../../../assets/bilder/Skarmavbild-2025-12-08-kl.-12.25.35.png) Field| Description| Common for
----|---|---
-**Integration Source**| The Web Connect Integration Source connected to this logistics setup.| Required for all external systems
-**Item Request Codeunit**| Codeunit used when Business Central sends item data.| Required for external system that receives items from Business Central and have item transactions
-**Shipment Request Codeunit**| Codeunit for outbound shipment requests.| All integrations where Sales Orders are handled (mainly WMS)
-**Send/Export Codeunit**| Codeunit used when sending data to the external system.| All
-**Receival Request Codeunit**| Codeunit used for inbound receivals.| All integrations where receivals are handled (WMS and POS with store receiving)
-**All Requests Codeunit**| Handles bulk operations for all logistics messages.| All
-**Web Object – Status In Request**| Defines which Web Object retrieves inbound status.| Required if “**Receival Request Codeunit** ” is used
-**Web Object – Status Out Request**| Defines which Web Object retrieves outbound status.| Required if “S** hipment Request Codeunit**” is used
-**Identifier**| The identifier/name used in all messages sent to the external system.| Optional
-**Disable Job Queue**| Disables all job queue processing for this integration.| Sensitive
-**Disable Updates from Warehouse**| Blocks WMS-to-Business Central updates.| Sensitive
-**Handle Data Duration (min)**| Delay before processing entries (typically 3–5 min).|
+## Items
 
-#### Related Web Connect Modules
+![The Item section of the card](../../../assets/bilder/Skarmavbild-2025-12-08-kl.-12.23.28.png)
 
-This setup interacts with:
+| Field | Description |
+|-------|-------------|
+| **All Items Enabled** | All items are sent to the system. |
+| **Item Available Filter View** | A filter that limits which items are sent. |
 
-- [Web Connect Outgoing Data](outgoing-mapping/outgoing-data-web.md)
+## Item journals
+
+Stock adjustments and stock counts from the system are written to item journals. Nothing changes the stock in Business Central until a journal is posted, by you or automatically.
+
+![The Item Journals section of the card](../../../assets/bilder/Skarmavbild-2025-12-08-kl.-12.24.23.png)
+
+| Field | Description |
+|-------|-------------|
+| **Adjustment Item Journal Template**<br>`Adjust. Item Journal Template` | The item journal template for stock adjustments. |
+| **Adjustment Item Journal Batch** | The item journal batch for stock adjustments. |
+| **Auto-Post Adjustment** | Stock adjustments are posted as soon as they arrive. Without it they wait in the journal until you post them. |
+| **Movement Item Journal Template** | The item journal template for movements. |
+| **Movement Item Journal Batch** | The item journal batch for movements. |
+| **Auto-Post Movement** | Movements are posted automatically. |
+| **Phys. Inventory Journal Template**<br>`Invent. Journal Template` | The physical inventory journal template for stock counts from the system. |
+| **Phys. Inventory Journal Batch**<br>`Invent. Journal Batch` | The physical inventory journal batch for stock counts. |
+| **Add Missing Items to Phys. Inv. Journal**<br>`Add Missing Items To Journal` | Items in stock in Business Central that are missing in the stock count are added to the journal. |
+| **Auto-Post Balance** | The physical inventory journal is posted automatically. |
+| **Serial No. on Adjustments/Balance**<br>`Serial No. - Journal` | Serial numbers from the system are used in the journals. |
+| **Batch No. on Adjustments/Balance**<br>`Batch No. - Journal` | Lot numbers (batch numbers) from the system are used in the journals. |
+| **Clear Phys. Inv. on Both Zero** | Journal lines where both the counted and the calculated quantity are zero are removed. |
+| **Clear Phys. Inv. On Suggested Zero Change**<br>`Clear Phys. Inv. On Zero Ch.` | Journal lines without a difference are removed, so only the differences are left to review. |
+| **Balance Process After** | The earliest time of day the stock count is processed, for example `04:00`. |
+
+## System
+
+The technical link to the integration.
+
+![The System section of the card](../../../assets/bilder/Skarmavbild-2025-12-08-kl.-12.25.35.png)
+
+| Field | Description |
+|-------|-------------|
+| **Integration Source**<br>`Integration Source Code` | The [integration](integrations.md) that sends and receives the messages of this setup. |
+| **Item Request Codeunit** | The codeunit that handles item data. `12096505` in the setups in use. |
+| **Shipment Request Codeunit** | The codeunit that handles orders to ship. `12096505` in the setups in use. |
+| **Send/Export Codeunit** | The codeunit that sends the messages to the system. `12096506` in the setups in use. |
+| **Receival Request Codeunit** | The codeunit that handles expected receipts. `12096505` in the setups in use. |
+| **All Requests Codeunit** | The codeunit that handles all other logistics messages. `12096505` in the setups in use. |
+| **Web Object - Status In Request**<br>`Web Status In Req.` | The object that asks the system for the status of expected receipts. |
+| **Web Object - Status Out Request**<br>`Web Status Out Req.` | The object that asks the system for the status of orders to ship. |
+| **Identifier** | The identifier used in the messages sent to the system, when the system needs one. |
+| **Disable Job Queue** | Stops all job queue processing for this setup. Use it with care. |
+| **Disable Updates From Warehouse** | Stops all updates from the system to Business Central. Use it with care. |
+| **Handle Data Duration (min)** | How many minutes Web Connect waits before it processes a message from the system, for example `3`. |
+
+## Advanced settings
+
+These fields are used in a few setups for special cases. Leave them as they are unless CombineIT has set them up for you.
+
+| Field | Description |
+|-------|-------------|
+| **Location Filter for Identification**<br>`Allowed Location Filter` | Advanced setting for which locations belong to the setup. |
+| **Assembly BOM Mgmt**<br>`Asembly BOM Mgmt` | Advanced setting for assembly BOMs. |
+| **Receive and Invoice** | Advanced setting for posting receipts. |
+| **Def.Delete Lines at Cancel** | Advanced setting for cancelled orders. |
+| **Validate Posting Date** | Advanced setting for the posting date. |
+| **Primary** | Advanced setting for several setups on the same location. |
+| **Balance Proces. Up-To-Date (h)** | Advanced setting for stock counts. |
+| **UoM Rounding Precision** | Advanced setting for rounding quantities. |
+| **Doc Type for Check** | Advanced setting for status checks. |
+| **Site Code** | Advanced setting for the integration site. |
+| **Sitoo Is External Warehouse**<br>`WCM Sitoo Is Ext. Warehouse` | Advanced setting for Sitoo POS. |
+| **Sitoo Auto Get Balance**<br>`WCM Sitoo Auto Get Balance` | Advanced setting for stock balances from Sitoo POS. |
+| **Sitoo Auto Get Balance Time**<br>`WCM Sitoo Auto Get Bal. Time` | Advanced setting for stock balances from Sitoo POS. |
+| **Sitoo Last Balance Time**<br>`WCM Sitoo Last Balance Time` | Advanced setting for stock balances from Sitoo POS. Filled in by Web Connect. |
+
+## Examples
+
+**A 3PL warehouse:** **Location Code** is the 3PL location, **Integrate Sales Order** and **Integrate Purchase Order** are on, both **Auto-Send on Document Release** are on, and **Post Shipping** and **Post Receipt** are on with views that only post when the warehouse status says the goods are shipped or put away.
+
+**A store in a POS system:** one setup per store location with **Integrate Transfer Order** and **Integrate Transfer Order In** on, so that shipments from the central warehouse become expected receipts in the store. **Transfer Close Option when Receipt Qty > Shipped Qty** decides what happens when the store counts more than was sent.
+
+**Stock counts reviewed before posting:** **Phys. Inventory Journal Template** and **Batch** are set, **Auto-Post Balance** is off and **Clear Phys. Inv. On Suggested Zero Change** is on, so the journal only shows the differences.
+
+## Configure it yourself in Business Central
+
+| What you can change | Where | Example |
+|---|---|---|
+| Which documents are sent to the system | **Integrate Sales Order**, **Integrate Purchase Order**, the transfer and return fields | Start sending transfer orders to a store |
+| When documents are sent | **Auto-Send on Document Release** | Send purchase orders when they are released |
+| When shipments and receipts are posted | **Post Shipping**, **Post Receipt** and their views | Post the shipment only when the warehouse reports it as sent |
+| How much may differ from the order | **Allow Over Receival** and **Tolerance % - Over Receival** | Accept up to 10 percent more on purchase orders |
+| Whether stock changes are posted automatically | **Auto-Post Adjustment**, **Auto-Post Balance** | Review the stock count before it is posted |
+| Who gets error e-mails | **Send E-mail Summary**, **Error E-Mail Receipient List** | Send a daily summary to customer service |
+| How long history is kept | **Delete Old Transactions after** | Keep one month of transactions |
+
+The objects, codeunits and status views are part of the integration. Change them only together with CombineIT.
+
+## Related
+
 - [Web Connect WMS Documents](wms-documents.md)
+- [Web Connect WMS/Return Reason Codes](wms-return-reason-codes.md)
+- [Web Connect Integrations](integrations.md)
+- [Web Connect Objects](objects.md)
+- [Web Connect Outgoing Data](outgoing-mapping/outgoing-data-web.md)
+- [Web Connect Incoming Data](incoming-data/README.md)
