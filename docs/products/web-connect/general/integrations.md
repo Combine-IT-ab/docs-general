@@ -44,7 +44,7 @@ Individual [objects](objects.md) can override the HTTP methods when one endpoint
 
 | Field | Description |
 |-------|-------------|
-| **Authentication Code** | The authentication setup that the integration uses. Keys and passwords are stored in [Secret Value Storage](secret-value-storage.md), not on the integration card. |
+| **Authentication Code** | The [authentication setup](authentication.md) that the integration uses, for example `Basic Auth`, a bearer token, an API key or OAuth 2.0. Every call that the integration makes carries this login. Keys and passwords are stored in [Secret Value Storage](secret-value-storage.md), not on the integration card. |
 | **Client Certificate** | A client certificate for integrations that require certificate authentication. |
 | **Client Certificate Password** | The password of the client certificate. |
 
@@ -68,7 +68,7 @@ Individual [objects](objects.md) can override the HTTP methods when one endpoint
 
 ### Fields not used in standard setups
 
-The card also has the fields **Shared External ID**, **Swagger / API Definition**, **Port Number**, **Acknowledge Link Jpath**, **Web URL Authentication**, **Authentication Token Download** and **Authentication Token Upload**. They are not used in the standard integrations and can be left empty. Authentication is set up through **Authentication Code**.
+The card also has the fields **Shared External ID**, **Swagger / API Definition**, **Port Number**, **Acknowledge Link Jpath**, **Web URL Authentication**, **Authentication Token Download** and **Authentication Token Upload**. They are not used in the standard integrations and can be left empty. Authentication is set up through **Authentication Code** and the [authentication setup](authentication.md).
 
 ## Configure it yourself in Business Central
 
@@ -83,6 +83,8 @@ The card also has the fields **Shared External ID**, **Swagger / API Definition*
 
 - [Web Connect General Setup](general-setup.md)
 - [Web Connect Objects](objects.md)
+- [Web Connect Authentication](authentication.md)
 - [Web Connect Secret Value Storage](secret-value-storage.md)
+- [Web Connect Integration Variables](integration-variables.md)
 - [Web Connect Incoming Data](incoming-data/README.md)
 - [Web Connect Outgoing Data](outgoing-mapping/outgoing-data-web.md)
