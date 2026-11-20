@@ -4,102 +4,96 @@
 
 ## Overview
 
-Web Connect Dynamic Flow Fields are used to calculate or construct values in Microsoft Business Central that cannot be achieved through simple field mappings.
+A dynamic flow field calculates a value that is not stored on the record itself. It can fetch a value from another table, add or subtract amounts, or put several texts together. For example the VAT amount of an invoice line, the description of a variant with both description fields, or the price of an item from the right price list.
 
-They allow you to build dynamic values based on BC data, table relationships, and logic — and use those values in outgoing or incoming Web Connect processes.
+The value is calculated for one record at a time, when Web Connect needs it. Nothing is written back to Business Central.
 
-## Purpose
+All dynamic flow fields live in your own Business Central. You can see and change every calculation yourself.
 
-Dynamic Flow Fields are commonly used to:
+## Where dynamic flow fields are used
 
-- Calculate available inventory to send to e-commerce or POS systems
-- Build tracking URLs by combining carrier links with shipment data
-- Derive values that do not exist directly on a record (for example, EAN codes from Item References)
-- Aggregate or transform data before it is sent to an external system
+| Where | Field | What it does |
+|---|---|---|
+| [Outgoing data](outgoing-mapping/outgoing-data-web.md) | **Dynamic Field** | Sends a calculated value instead of a field on the record. |
+| [Incoming data mapping](incoming-data/mapping.md) | **Value from Dyn. Flow Field** | Writes a calculated value instead of a value from the message. |
+| [Condition lines](condition-list.md) | **Lookup Dynamic Flow Field Code** | Checks a calculated value, for example whether the delivery country is in the EU. |
+| [Table relations](table-relations.md) | **Related Dynamic Flow Field** | Uses a calculated value in a filter, for example a date. |
+| Other dynamic flow fields | **Dynamic Flow Field Code** on a line | Uses one calculation inside another. |
 
-Unlike mappings, Dynamic Flow Fields do not write data back to Business Central — they calculate values that are consumed by Web Connect.
-
-## Dynamic Flow Field Header
-
-Each Dynamic Flow Field starts with a header definition.
-
-| Field | Description |
-|-------|-------------|
-| **Code** | Unique identifier for the Dynamic Flow Field. |
-| **Description** | User-friendly description explaining what the field calculates. |
-| **Fixed Value** | Optional fixed value. Typically left blank. |
-| **Table Name** | The table context where the calculation starts (same as the Web Object table). |
-| **Table No.** | Table number corresponding to the Table Name. |
-| **Field Type** | The result type: Text, Date, DateTime, Integer, Decimal, or Boolean. |
-
-## Flow Field Lines (Calculation Logic)
-
-The Flow Field Lines define how the value is calculated. Each line represents one step in the calculation.
+## Dynamic flow field header
 
 | Field | Description |
 |-------|-------------|
-| **Entry No.** | Order in which the calculation steps are applied. |
-| **Header Object** | Same table context as defined in the header. |
-| **Condition Code** | Optional condition that must be fulfilled for the line to run. See [Web Connect Condition List](condition-list.md). |
-| **Flow Calculation** | How the value is applied: Plus, Minus, Multiply, or Divide. |
-| **Relation Code** | Defines how to relate data from another table (required when the value does not exist on the header table). |
-| **Table Key** | Key used to retrieve records. 0 = Primary Key (default). |
-| **Table No.** | Table number of the related data source. |
-| **Field No.** | Field number of the related value to retrieve. |
-| **Dynamic Flow Field** | Allows chaining another Dynamic Flow Field instead of a direct field. |
-| **Field Calculation** | Lookup logic: Lookup, Lookup (Last), Sum, Count, or Exists. |
-| **Field Name** | Display name of the related field (informational). |
+| **Code** | Unique identifier for the dynamic flow field, for example `VAT-AMOUNT-LINE`. |
+| **Description** | What the field calculates, in plain words. |
+| **WCM Object** | The [object](objects.md) for the record the calculation starts from, for example the sales invoice line. It must be the same object as where the field is used. |
+| **Table No.** | The table of **WCM Object**. It is filled in from the object. |
+| **Field Type** | The type of the result: `Text`, `Decimal`, `Integer` or `Date`. |
+| **Fixed Value** | A fixed text that is returned instead of a calculation. The field then has no lines. Used for constants and separators, for example `-` or a space between two texts. |
 
-## Common Examples
+## Calculation lines
 
-### Example A — Available Inventory (Web Inventory)
+Each line fetches one value and adds it to the result. The lines are calculated in the order of **Entry No.**
 
-**Purpose:** Calculate how much inventory is available for sale by subtracting outstanding demand from physical inventory.
+### Where the value comes from
 
-**Header setup:**
+| Field | Description |
+|-------|-------------|
+| **Entry No.** | The order of the lines. |
+| **Relation Code** | The [table relation](table-relations.md) that finds the record the value is read from, starting from the record of the header. A relation from a table to itself, for example from the invoice line to the same invoice line, reads from the record itself. |
+| **WCM Object** | The object for the table the value is read from. It is filled in from the relation. |
+| **Table No.** | The table the value is read from. It is filled in from the relation. |
+| **Field No.** | The field whose value is read. |
+| **Dynamic Flow Field Code** | Reads the value of another dynamic flow field instead of a field, calculated for the record the relation finds. Use it to reuse a calculation or to add a separator. |
+| **Field Calculation** | How the value is read when the relation finds records: `Lookup` reads the field of the first record found, `Sum` adds the field of all records found. |
 
-- Code: `INVENTORY`
-- Description: Calculate inventory to site
-- Table Name: WCM Item Inventory
-- Field Type: Decimal
+### How the value is used
 
-**Calculation logic:**
+| Field | Description |
+|-------|-------------|
+| **Flow Calculation** | How the value is combined with the result of the lines above: `Addition`, `Subtraction`, `Multiplication` or `Divison`. For a `Text` field, `Addition` puts the texts together. |
+| **Condition Code** | A [condition](condition-list.md) that must be true for the line to be used, for example only divide when the quantity is not zero. |
+| **Include if Previous Blank** | The line is only used when the lines above gave an empty value. Use it for a fallback, for example the price of the variant first and the price of the item if the variant has none. |
 
-Available Inventory = Inventory − Qty. on Sales Orders − Qty. on Transfer Orders
+## Examples
 
-| Flow Calculation | Source Table | Field | Description |
-|-----------------|--------------|-------|-------------|
-| Add (+) | Item (Table 27) | Inventory | Physical inventory in BC |
-| Subtract (−) | Item (Table 27) | Qty. on Sales Orders | Reserved quantity on sales orders |
-| Subtract (−) | Item (Table 27) | Qty. on Transfer Orders | Quantity reserved for transfers |
+**VAT amount on an invoice line:** **Field Type** `Decimal`. The first line reads **Amount Including VAT** with `Addition`, the second reads **Amount** with `Subtraction`. Both use a relation from the invoice line to itself.
 
-A Relation Code links the Web Connect Item Inventory object to the Item table, since inventory values do not exist directly on the Web Connect table.
+**Unit price excluding VAT:** the first line reads **Amount** with `Addition`, the second reads **Quantity** with `Divison` and a **Condition Code** that checks that the quantity is not zero.
 
-The calculated value is stored as **Web Inventory** in [Web Connect Item Inventory](item-inventory.md) and recalculated automatically when underlying data changes.
+**Description 1 and 2:** **Field Type** `Text`. The first line reads **Description**, the second uses **Dynamic Flow Field Code** for a field with **Fixed Value** ` - `, and the third reads **Description 2**. All with `Addition`.
 
-### Example B — Tracking URL Generation
+**Shipping cost of an order:** **Field Type** `Decimal`, one line with a relation from the sales header to its freight lines, **Field Calculation** `Sum` on **Amount**.
 
-- Base URL retrieved from shipping agent setup
-- Combined with Package No. or Tracking No. from Shipment Header
+**Price with fallback:** the first line reads the price from a relation that finds the price list line of the variant. The second line reads the price from a relation that finds the price list line of the item, with **Include if Previous Blank**.
 
-### Example C — Variant EAN Resolution
+## Limits
 
-- EAN looked up from the Item Reference table
-- Returned dynamically per Item Variant
+A dynamic flow field is calculated for one record at a time. It cannot be used to select records, for example as a filter in a relation that should find many records. That would mean calculating the value for every record in the table, which is far too slow. Filter on a stored field instead.
 
-## Where Dynamic Flow Fields Are Used
+## Advanced settings
 
-Dynamic Flow Fields can be referenced in:
+These fields are used in a few setups for special cases. Leave them as they are unless CombineIT has set them up for you.
 
-- [Web Connect Destinations](destinations.md)
-- [Web Connect Outgoing Data](outgoing-mapping/outgoing-data-web.md)
-- [Web Connect Objects](objects.md)
-- Inventory and price calculations
-- Custom outbound payload structures
+| Field | Description |
+|-------|-------------|
+| **Flow Calculation** `Insert (Substring)` | Advanced setting for putting a value into a text, for example a tracking number into a tracking link. |
+
+## Configure it yourself in Business Central
+
+| What you can change | Where | Example |
+|---|---|---|
+| Which field is read | **Field No.** on the line | Send **Description 2** instead of **Description** |
+| Add a value | A new line with **Flow Calculation** | Subtract quantity on transfer orders |
+| Separator between texts | **Fixed Value** on a separate dynamic flow field | Use a space instead of a dash |
+| Fallback when a value is missing | **Include if Previous Blank** | Use the item price when the variant has none |
+
+Test a change on one record before you rely on it. A dynamic flow field can be used in several mappings, so a change affects all of them.
 
 ## Related
 
-- [Web Connect Destinations](destinations.md)
+- [Web Connect Table Relations](table-relations.md)
 - [Web Connect Condition List](condition-list.md)
+- [Web Connect Outgoing Data](outgoing-mapping/outgoing-data-web.md)
 - [Web Connect Item Inventory](item-inventory.md)
 - [Web Connect Objects](objects.md)
