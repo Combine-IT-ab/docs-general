@@ -4,49 +4,50 @@
 
 ## Overview
 
-Web Connect Entries is the technical log of all processed requests — both incoming and outgoing. Each entry represents one HTTP call or one processed payload.
+Web Connect Entries, also called web entries or web transactions, is the log of every message that Web Connect sends to or receives from an external system. Each entry is one call. It shows the address, the HTTP method, the request, the answer and the HTTP status code, so it works much like a request tool such as Postman.
 
-Entries are created automatically by the system. They are not edited manually.
+Entries are created by the job queues and by webhooks. They are not edited by hand.
 
-## Purpose
+## Types of entries
 
-Entries provide a full audit trail of:
+The list has a filter at the top for the type of entry: uploads, downloads or webhooks. When you open the page the first time no type is selected, so choose the type you want to see.
 
-- What was sent or received
-- When it happened
-- Whether it succeeded or failed
-- The raw request and response payloads
+| Type | Created by | Content |
+|------|------------|---------|
+| Upload | The upload job, from records in [Outgoing Data](outgoing-mapping/outgoing-data-web.md) | A message to the external system, built with the [outgoing mapping](outgoing-mapping/README.md). One entry can hold several records, as set with **MaxRecord per Entry** on the [object](objects.md). |
+| Download | The download job | A request to fetch data. The answer becomes [incoming data](incoming-data/README.md). |
+| Webhook | A [webhook](webhooks.md) from an external system | The message the external system pushed to Business Central, with its source. |
 
-## Status of an Outgoing Entry
+## Status of an entry
 
 | Status | Meaning |
 |--------|---------|
-| **Sent** | The upload job has sent the entry to the external system. |
+| **Sent** | The entry has been sent to the external system. |
 | **Sent and Confirmed** | The external system answered successfully. |
 
-An entry that stays on **Sent** without becoming **Sent and Confirmed** did not get a successful answer. Open the entry: the full request and response payloads and the HTTP status code are shown on the Web Entries page, which is where a failed call is diagnosed.
+An entry that stays on **Sent** without becoming **Sent and Confirmed** did not get a successful answer. Open the entry: the request, the answer and the HTTP status code show why. A status code of `200` means OK, while codes from `400` and up mean that the call failed.
 
-If the external system returns data in its answer, the upload job can create an Incoming Data record from the response so that the download job processes it (for example to store an ID assigned by the external system).
+The external system always answers with something. Depending on the [object](objects.md), the answer to an upload is ignored or becomes incoming data, so that the download job can process it, for example to save an ID that the external system has given the record.
 
-## When to Use Entries vs Other Views
+## When to use entries and when to use other views
 
 | Scenario | Use |
 |----------|-----|
-| Check if a specific record was sent | Web Connect Outgoing Data |
-| See what payload was received from an external system | Web Connect Incoming Data |
-| Debug a failed HTTP call — see full request/response | **Web Connect Entries** |
-| Audit all activity for a time period | **Web Connect Entries** |
-| Check retry history for a failed call | **Web Connect Entries** |
-| Review current mapping or object configuration | Objects / Integrations |
+| Check if a specific record was picked up for sending | [Web Connect Outgoing Data](outgoing-mapping/outgoing-data-web.md) |
+| See how a received message was interpreted and mapped | [Web Connect Incoming Data](incoming-data/README.md) |
+| See exactly what was sent or received, and the answer | **Web Connect Entries** |
+| Find out why a call to an external system failed | **Web Connect Entries** |
 
-## Best Practices
+## Configure it yourself in Business Central
 
-- Use retention policies to avoid unbounded growth. See [Web Connect General Setup](general-setup.md).
-- Filter by **Status = Error** to quickly find problems.
-- Use **Entry No.** to correlate an entry with its associated Incoming or Outgoing Data record.
+| What you can change | Where | Example |
+|---|---|---|
+| How many records are sent in one message | **MaxRecord per Entry** on the [object](objects.md) | Group inventory updates so that fewer calls are made |
+| How long entries are kept | Retention policies in [Web Connect General Setup](general-setup.md) | Enable the policy for blob data so that the database does not fill up |
 
 ## Related
 
-- [Web Connect General Setup](general-setup.md) — configure retention policies
+- [Web Connect General Setup](general-setup.md)
 - [Web Connect Incoming Data](incoming-data/README.md)
 - [Web Connect Outgoing Data](outgoing-mapping/outgoing-data-web.md)
+- [Web Connect Webhooks](webhooks.md)

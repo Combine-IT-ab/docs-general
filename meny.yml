@@ -8,6 +8,7 @@ nav:
       - Overview: products/web-connect/general/README.md
       - General Setup: products/web-connect/general/general-setup.md
       - Integrations: products/web-connect/general/integrations.md
+      - Integration Sites: products/web-connect/general/integration-sites.md
       - Objects: products/web-connect/general/objects.md
       - Condition List: products/web-connect/general/condition-list.md
       - Secret Value Storage: products/web-connect/general/secret-value-storage.md
