@@ -29,7 +29,6 @@ All mapping lines live in your own Business Central. You can see and change ever
 | **Validation Order** | The order in which the fields are written, and the order the lines are sorted in. Business Central runs the field's own logic when a value is set, so set the fields in the order you would enter them by hand. For example, the customer must be set on a sales order before the address and the prices. |
 | **No Validation** | The value is written without running the field's own logic in Business Central. Use it when the validation would overwrite other values or fail on data that is already correct. |
 | **Ignore if Blank** | An empty value in the message does not overwrite the value in Business Central. |
-| **Keep Record Value** | [ATT FYLLA I: does the line keep an existing value in Business Central and only write when the field is empty?] |
 | **Map to Dimension** | The value is written to a dimension instead of a field, for example `MARKET` or `PROJECT`. |
 | **Set Values From Template** | Fills several fields from a [Web Connect object template](../objects.md) at once, for example shipping data on an order. |
 | **Config. Template Identifier** | The value chooses which configuration template Business Central uses when the record is created. |
@@ -51,8 +50,6 @@ The transformations are applied before the value is written. Several can be comb
 | **Round Value** | Rounds a number to the given precision, for example `0,01`. |
 | **Abs** | Uses the absolute value of a number. |
 | **Minus** | Changes the sign of a number, for example when the external system sends a refund as a positive amount. |
-| **Add/Remove VAT** | [ATT FYLLA I: does it add VAT to an amount without VAT, remove it from an amount with VAT, or follow Prices Including VAT on the document?] |
-| **Numeric Sum** | [ATT FYLLA I: does it add up all values of the key in a list?] |
 | **Convert from UTC** | Converts a date and time from UTC to the time zone of Business Central. |
 | **Decode Base64** | Decodes a Base64 value, for example a file in the message. |
 
@@ -65,7 +62,6 @@ Underlying objects often need a value from the record above them, for example th
 | **Parent WCM Object** | The object that the value is taken from, for example the order object for its lines. |
 | **Parent Field No.** | The field on the parent record that the value is taken from, for example the document number. |
 | **Related JSON Key Name** | A key in the parent part of the message that the value is read from, instead of a field on the parent record. |
-| **Value From Content Field No.** | [ATT FYLLA I: what does the line read from here?] |
 
 ## Finding or creating the record
 
@@ -76,7 +72,7 @@ Underlying objects often need a value from the record above them, for example th
 | **External ID Identifier** | The value, for example the order reference, is shown in its own column on the incoming data, so that you can search for a message and troubleshoot it. |
 | **Set to External ID** | The value is saved as the external ID of the record in Business Central. |
 | **Unique Identifier** | The fields marked here are used together as a filter to find a record that already exists, for example a delivery row ID together with the document type and number. Only needed when the same message can arrive more than once. Fields with the same **Validation Order** form one key, so you can have alternative keys, for example VAT number first, then organization number, then email. |
-| **Unique Identity Action** | What happens when a record is found with the unique identifier: `Update` updates it, `No Action` ignores the object, and `Raise Error` stops the message as a duplicate. [ATT FYLLA I: what happens when the field is empty?] |
+| **Unique Identity Action** | What happens when a record is found with the unique identifier: `Update` updates it, `No Action` ignores the object, and `Raise Error` stops the message as a duplicate. |
 | **As Is Filter** | The value is used exactly as it is when Web Connect looks up a record. Without it, characters such as `&`, `*`, `=`, `<` and `>` are read as filter syntax, so a dimension value like `A&C` is not found. After changing it, set the incoming data back to not validated and run it again. Avoiding special characters in code fields is still the safest. |
 | **Source Identifier** | The value tells which source the message comes from, instead of the fixed source on the integration. |
 
@@ -92,9 +88,20 @@ Underlying objects often need a value from the record above them, for example th
 | Field | Description |
 |-------|-------------|
 | **Trigger Download Object** | Starts a download with another object, for example to fetch the full order when a message only contains its ID. |
-| **Execute After Under. Objects** | [ATT FYLLA I: is the line written after the underlying objects, for example after the order lines are created?] |
-| **Doc. Release Condition** | [ATT FYLLA I: does the value decide whether the document is released after it is created?] |
-| **Document Totals Function** | Points out where in the message the document totals are, so that Business Central can check them. When the document is complete and before it is released, Business Central calculates the total and compares it with the value from the message. This makes sure the order matches what the customer paid or what the payment provider reserved. `Total Amount Including VAT Check`, `Total Amount Excluding VAT Check` and `Total VAT Amount Check` compare the totals. `Freight Amount` and `Header Discount Amount` point out freight and document discount. The check is turned on with **Enable Totals Check** on the [object](../objects.md) for sales documents. [ATT FYLLA I: what happens when a check does not match?] |
+| **Document Totals Function** | Points out where in the message the document totals are, so that Business Central can check them. When the document is complete and before it is released, Business Central calculates the total and compares it with the value from the message. This makes sure the order matches what the customer paid or what the payment provider reserved. `Total Amount Including VAT Check`, `Total Amount Excluding VAT Check` and `Total VAT Amount Check` compare the totals. `Freight Amount` and `Header Discount Amount` point out freight and document discount. The check is turned on with **Enable Totals Check** on the [object](../objects.md) for sales documents. |
+
+## Advanced settings
+
+These fields are used in a few setups for special cases. Leave them as they are unless CombineIT has set them up for you.
+
+| Field | Description |
+|-------|-------------|
+| **Keep Record Value** | Advanced setting for when a value already in Business Central should be kept. |
+| **Add/Remove VAT** | Advanced setting for amounts with or without VAT. |
+| **Numeric Sum** | Advanced setting for numbers in a list. |
+| **Value From Content Field No.** | Advanced setting for reading a value from another line. |
+| **Execute After Under. Objects** | Advanced setting for the order in which a line is processed. |
+| **Doc. Release Condition** | Advanced setting for releasing the document. |
 
 ## Examples
 
