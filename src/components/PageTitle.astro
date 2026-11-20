@@ -4,6 +4,10 @@ import Default from '@astrojs/starlight/components/PageTitle.astro';
 const { data } = Astro.locals.starlightRoute.entry;
 const integration = data.type === 'integration';
 const granskad = data.last_reviewed?.toISOString().slice(0, 10);
+const text = {
+	en: { floden: 'Data flows', kors: 'Runs in', korsVarde: 'Your Business Central', konfig: 'Configured by', konfigVarde: 'You', granskad: 'Last reviewed' },
+	sv: { floden: 'Dataflöden', kors: 'Körs i', korsVarde: 'Ditt Business Central', konfig: 'Konfigureras av', konfigVarde: 'Dig', granskad: 'Senast granskad' },
+}[Astro.locals.starlightRoute.lang === 'sv' ? 'sv' : 'en'];
 ---
 
 <Default />
@@ -12,21 +16,21 @@ const granskad = data.last_reviewed?.toISOString().slice(0, 10);
 		<dl class="faktaruta">
 			{data.data_flows && (
 				<div>
-					<dt>Data flows</dt>
+					<dt>{text.floden}</dt>
 					<dd class="stor">{data.data_flows}</dd>
 				</div>
 			)}
 			<div>
-				<dt>Runs in</dt>
-				<dd>Your Business Central</dd>
+				<dt>{text.kors}</dt>
+				<dd>{text.korsVarde}</dd>
 			</div>
 			<div>
-				<dt>Configured by</dt>
-				<dd>You</dd>
+				<dt>{text.konfig}</dt>
+				<dd>{text.konfigVarde}</dd>
 			</div>
 			{granskad && (
 				<div>
-					<dt>Last reviewed</dt>
+					<dt>{text.granskad}</dt>
 					<dd>
 						<time datetime={granskad}>{granskad}</time>
 					</dd>

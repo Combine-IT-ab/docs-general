@@ -70,6 +70,17 @@ Mallarna bygger på nulägesmätningen i Combine-IT-ab/docs-internal#47: sökord
 
 Engelska: `/docs/integrations/business-central-<system>/`, svenska: `/docs/sv/integrations/business-central-<system>/`. Flöden ligger under integrationen: `/docs/integrations/business-central-centra/order-inbound/`.
 
+## Svensk version
+
+- Den svenska sidan heter som den engelska med `.sv` före `.md` och ligger bredvid: `overview.sv.md`, `flows/order-inbound.sv.md`.
+- Bygget ger den adressen `sv/` plus den engelska adressen, `lang: sv` och samma `translation_key`. Skriv inte `slug` själv. Står den där ska den vara exakt så, annars stoppar bygget.
+- Länka som på den engelska sidan, till `.md`-filen. Finns en svensk version av målet länkar bygget dit, annars till den engelska sidan.
+- Lägg in sidan i `nav_sv` i `meny.yml`, med svenska rubriker. Den svenska menyn pekar bara på `.sv.md`-filer.
+- Språkväljaren och `hreflang` kommer bara på sidor som finns på båda språken. Starlights engelska kopior under `/sv/` tas bort vid bygget. Ingen automatisk omdirigering mellan språken.
+- Samma fakta och samma struktur som den engelska sidan. Systemnamn, fältnamn i Business Central och Web Connect och kodexempel står kvar på engelska.
+- Rubriken: "Business Central och <system>: integration", till exempel "Business Central och Centra: integration".
+- Etiketter som bygget känner igen och hoppar över i beskrivningen: `Riktning:`, `Felmeddelande:` och `Namn i svenska Business Central:`.
+
 Inga integrationssidor finns på de gamla BetterDocs-adresserna, så de nya adresserna krockar inte med adresslistan i `adresser/gamla-adresser.csv`. En publicerad adress byts aldrig. Behöver den bytas: lägg in en omdirigering och uppdatera adresslistan.
 
 ## Frontmatter
@@ -106,4 +117,4 @@ Varje sida har frontmatter. Bygget (docs-internal#50 och #51) använder den till
 - [ ] Antalet dataflöden står i "At a glance" och i "What can be synchronized".
 - [ ] Stycket "Configure it yourself in Business Central" säger konkret vad användaren kan ändra själv.
 - [ ] Minst tre riktiga frågor i FAQ, gärna från supportärenden.
-- [ ] Svensk version med samma `translation_key` (kan komma i en senare PR).
+- [ ] Svensk version `.sv.md` och rad i `nav_sv` (kan komma i en senare PR).

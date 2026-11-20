@@ -1,4 +1,5 @@
 # Menyn i dokumentationen. Ny sida = ny rad här, annars syns den inte i menyn.
+# nav är den engelska menyn. nav_sv längst ner är den svenska och pekar bara på .sv.md-filer.
 nav:
   - Home: README.md
   - Web Connect:
@@ -224,3 +225,5 @@ nav:
     - Job Queue Monitor:
       - How to Configure and Activate: products/job-queue-monitor/how-to-configure.md
 
+# Svenska menyn, visas på svenska sidor (/docs/sv/...). Rubrikerna på svenska.
+nav_sv: []
