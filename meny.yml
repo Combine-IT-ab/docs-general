@@ -16,6 +16,8 @@ nav:
       - Text Mapping: products/web-connect/general/text-mapping.md
       - Item Inventory: products/web-connect/general/item-inventory.md
       - Dynamic Flow Fields: products/web-connect/general/dynamic-flow-fields.md
+      - Lookup Values: products/web-connect/general/lookup-values.md
+      - Table Relations: products/web-connect/general/table-relations.md
       - Webhooks: products/web-connect/general/webhooks.md
       - Logistics Setup: products/web-connect/general/logistics-setup.md
       - WMS Documents: products/web-connect/general/wms-documents.md
