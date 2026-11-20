@@ -10,6 +10,7 @@ Källan till CombineIT:s produktdokumentation på [www.combineit.se/docs](https:
 - Diagram skrivs som Mermaid (```` ```mermaid ````) och ritas när sajten byggs.
 - Ny sida syns i menyn först när den finns i `meny.yml`.
 - Integrationssidor följer mallen i `mallar/`.
+- Svenska sidor heter `<sida>.sv.md` och ligger bredvid den engelska. De hamnar under `/docs/sv/` och har en egen meny, `nav_sv` i `meny.yml`. Se "Svensk version" i `mallar/README.md`.
 - Adressen till en sida i `adresser/gamla-adresser.csv` ändras aldrig.
 
 ## Bygga lokalt
@@ -19,6 +20,8 @@ npm ci
 npm run dev      # http://localhost:4321/docs/
 npm run build    # bygger till dist/
 python3 adresser/kolla.py --strikt --bygge dist
+python3 scripts/kolla_lankar.py dist /docs
+python3 scripts/kolla_ankare.py dist /docs
 ```
 
 Bygget är Astro Starlight. `scripts/forbered.mjs` gör om `docs/` till sidor i `src/content/docs/` (genereras, checkas inte in). Designen ligger i `src/styles/tema.css` och komponenterna i `src/components/`.

@@ -5,7 +5,9 @@
 // - Rubriken (första H1) blir sidans title.
 // - Relativa länkar till .md-filer skrivs om till sidans riktiga adress.
 // - Mermaid-diagram ritas till SVG vid bygget, så att texten finns i HTML:en.
-// - meny.yml blir sidomenyn.
+// - meny.yml blir sidomenyn: nav för engelska och nav_sv för svenska.
+// - Svenska sidor heter <sida>.sv.md och ligger bredvid den engelska. De får adressen
+//   sv/<engelska adressen>, lang: sv och samma translation_key som den engelska.
 // - Kategori- och taggadresser skrivs till dist-wordpress/htaccess-docs.txt för bytet i WordPress.
 import { readFileSync, writeFileSync, mkdirSync, rmSync, readdirSync, statSync, existsSync, cpSync } from 'node:fs';
 import { join, dirname, relative, posix } from 'node:path';
@@ -14,6 +16,7 @@ import { execFileSync } from 'node:child_process';
 import { tmpdir } from 'node:os';
 import matter from 'gray-matter';
 import yaml from 'js-yaml';
+import GithubSlugger from 'github-slugger';
 
 const ROT = process.cwd();
 const KALLA = join(ROT, 'docs');
@@ -42,12 +45,18 @@ for (const rad of csv) {
 	if (typ === 'kategori' || typ === 'tagg') wordpressRader.push([adress, fil]);
 }
 
-const kallFiler = allaFiler(KALLA).filter((f) => f.endsWith('.md'));
+const SVENSK = /\.sv\.md$/;
+// Engelska först, så att varje svensk sida kan hämta sin engelska sidas adress
+const kallFiler = allaFiler(KALLA)
+	.filter((f) => f.endsWith('.md'))
+	.sort((a, b) => SVENSK.test(a) - SVENSK.test(b));
 const sidor = new Map(); // relativ källfil -> { slug, data, body }
 
 for (const fil of kallFiler) {
 	const rel = relative(KALLA, fil).split('\\').join('/');
-	const { data, content } = matter(readFileSync(fil, 'utf8'));
+	// gray-matter cachar på texten och ger samma objekt för identiska filer, så datan kopieras
+	const { data: lastData, content } = matter(readFileSync(fil, 'utf8'));
+	const data = structuredClone(lastData);
 	let body = content;
 	// Starlight visar title som rubrik, så sidans egen H1 tas bort
 	const h1 = body.match(/^\s*#\s+(.+?)\s*$/m);
@@ -58,6 +67,19 @@ for (const fil of kallFiler) {
 	}
 	if (h1 && forstaRaden.startsWith('# ')) body = body.replace(h1[0], '');
 	const vagSlug = rel.replace(/(^|\/)README\.md$/, '$1').replace(/\.md$/, '').replace(/\/$/, '').toLowerCase();
+	if (SVENSK.test(rel)) {
+		const engelsk = sidor.get(rel.replace(SVENSK, '.md'));
+		if (!engelsk) throw new Error(`${rel} saknar engelsk sida (${rel.replace(SVENSK, '.md')})`);
+		const slug = engelsk.slug ? `sv/${engelsk.slug}` : 'sv';
+		if (data.slug && data.slug !== slug) throw new Error(`${rel} har slug ${data.slug}, ska vara ${slug} (samma som den engelska med sv/ före)`);
+		if (data.lang && data.lang !== 'sv') throw new Error(`${rel} har lang: ${data.lang}, ska vara sv`);
+		const nyckel = engelsk.data.translation_key;
+		if (data.translation_key && nyckel && data.translation_key !== nyckel) throw new Error(`${rel} har translation_key ${data.translation_key}, den engelska har ${nyckel}`);
+		data.lang = 'sv';
+		if (nyckel) data.translation_key = nyckel;
+		sidor.set(rel, { slug, data, body, svensk: true });
+		continue;
+	}
 	const slug = data.slug ?? (gamlaSlugs.has(rel) ? gamlaSlugs.get(rel) : vagSlug);
 	sidor.set(rel, { slug, data, body });
 }
@@ -70,16 +92,48 @@ for (const [rel, { slug }] of sidor) {
 
 const adress = (slug) => (slug ? `${BAS}/${slug}/` : `${BAS}/`);
 
+// Rubrikernas ankare, på samma sätt som Astro räknar fram id:t på rubriken
+const rubrikAnkare = (body) => {
+	const slugger = new GithubSlugger();
+	return body
+		.replace(/^```[\s\S]*?^```/gm, '')
+		.split('\n')
+		.map((rad) => rad.match(/^#{1,6}\s+(.+?)\s*#*\s*$/))
+		.filter(Boolean)
+		.map((m) => slugger.slug(m[1].replace(/\[([^\]]*)\]\([^)]*\)/g, '$1').replace(/[`*_]/g, '').replace(/<[^>]+>/g, '')));
+};
+// En svensk sida har samma rubriker i samma ordning som den engelska, så ett engelskt ankare
+// (#choose-your-setup) kan översättas till rubrikens svenska ankare (#välj-upplägg).
+const ankarKarta = new Map();
+const svenskaAnkare = (rel) => {
+	if (!ankarKarta.has(rel)) {
+		const en = rubrikAnkare(sidor.get(rel.replace(SVENSK, '.md')).body);
+		const sv = rubrikAnkare(sidor.get(rel).body);
+		if (en.length !== sv.length) console.warn(`varning: ${rel} har ${sv.length} rubriker, den engelska ${en.length}. Ankarlänkar översätts inte.`);
+		ankarKarta.set(rel, en.length === sv.length ? new Map(en.map((a, i) => [a, sv[i]])) : new Map());
+	}
+	return ankarKarta.get(rel);
+};
+const oversattAnkare = (malRel, ankare) => {
+	if (!ankare || !SVENSK.test(malRel)) return ankare;
+	const id = decodeURIComponent(ankare.slice(1));
+	const sv = svenskaAnkare(malRel).get(id);
+	return sv ? `#${sv}` : ankare;
+};
+
 // Länkar: [text](../annan.md#ankare) -> [text](/docs/annan-slug/#ankare)
+// En svensk sida som länkar till en engelsk sida hamnar på den svenska versionen om den finns.
 const skrivOmLankar = (rel, body) =>
-	body.replace(/\]\((?!https?:|mailto:|#)([^)\s]+?\.md)(#[^)\s]*)?\)/g, (hel, lank, ankare = '') => {
+	body.replace(/\]\((#[^)\s]+)\)/g, (hel, ankare) => (SVENSK.test(rel) ? `](${oversattAnkare(rel, ankare)})` : hel)).replace(/\]\((?!https?:|mailto:|#)([^)\s]+?\.md)(#[^)\s]*)?\)/g, (hel, lank, ankare = '') => {
 		const mal = posix.normalize(posix.join(posix.dirname(rel), lank));
-		const sida = sidor.get(mal);
+		const svMal = mal.replace(/(?<!\.sv)\.md$/, '.sv.md');
+		const malRel = SVENSK.test(rel) && sidor.has(svMal) ? svMal : mal;
+		const sida = sidor.get(malRel);
 		if (!sida) {
 			console.warn(`varning: ${rel} länkar till ${lank}, som inte finns`);
 			return hel;
 		}
-		return `](${adress(sida.slug)}${ankare})`;
+		return `](${adress(sida.slug)}${oversattAnkare(malRel, ankare)})`;
 	});
 
 // Bilder i docs/assets/ läggs i public/assets/ och nås via /docs/assets/...
@@ -119,7 +173,7 @@ const beskrivning = ({ data, body }) => {
 		.map((s) => s.trim())
 		.filter((s) => s && !/^[#|<>`!-]/.test(s) && !/^\d+\./.test(s))
 		.map((s) => s.replace(/\[([^\]]+)\]\([^)]+\)/g, '$1').replace(/[*_`]/g, '').replace(/\s+/g, ' '))
-		.find((s) => !/^(Direction|Error message|Swedish Business Central view name):/.test(s));
+		.find((s) => !/^(Direction|Error message|Swedish Business Central view name|Riktning|Felmeddelande|Namn i svenska Business Central):/.test(s));
 	if (!text) return '';
 	return text.length > 200 ? `${text.slice(0, 197).replace(/\s\S*$/, '')}...` : text;
 };
@@ -142,7 +196,9 @@ if (!sidor.has('README.md')) throw new Error('docs/README.md saknas');
 if (existsSync(join(KALLA, 'assets'))) cpSync(join(KALLA, 'assets'), join(ROT, 'public/assets'), { recursive: true });
 
 // Sidomenyn från meny.yml
-const meny = yaml.load(readFileSync(join(ROT, 'meny.yml'), 'utf8')).nav;
+const menyer = yaml.load(readFileSync(join(ROT, 'meny.yml'), 'utf8'));
+const meny = menyer.nav;
+const menySv = menyer.nav_sv ?? [];
 const tillMeny = (post) => {
 	const [etikett, varde] = Object.entries(post)[0];
 	if (typeof varde === 'string') {
@@ -155,6 +211,35 @@ const tillMeny = (post) => {
 };
 mkdirSync(GENERERAT, { recursive: true });
 writeFileSync(join(GENERERAT, 'meny.json'), JSON.stringify(meny.map(tillMeny), null, 2));
+
+// Den svenska menyn visas på svenska sidor i stället för den engelska (src/routeData.ts).
+// Den pekar bara på svenska sidor, så att ingen svensk sida länkar till en engelsk kopia.
+// En rad vars .sv.md inte finns än hoppas över, och en grupp utan sidor försvinner. Så kan
+// menyn stå klar före översättningarna. Den engelska sidan måste finnas, så att stavfel stoppar.
+const iMenySv = new Set();
+const tillMenySv = (post) => {
+	const [etikett, varde] = Object.entries(post)[0];
+	if (typeof varde === 'string') {
+		if (!SVENSK.test(varde)) throw new Error(`nav_sv i meny.yml pekar på ${varde}, som inte är en svensk sida (.sv.md)`);
+		const sida = sidor.get(varde);
+		if (!sida) {
+			if (!sidor.has(varde.replace(SVENSK, '.md'))) throw new Error(`nav_sv i meny.yml pekar på ${varde}, och den engelska sidan finns inte heller`);
+			return [];
+		}
+		iMenySv.add(varde);
+		return [{ label: etikett, href: adress(sida.slug) }];
+	}
+	const items = varde.flatMap(tillMenySv);
+	return items.length ? [{ label: etikett, collapsed: true, items }] : [];
+};
+writeFileSync(join(GENERERAT, 'meny-sv.json'), JSON.stringify(menySv.flatMap(tillMenySv), null, 2));
+for (const [rel, { svensk }] of sidor) if (svensk && !iMenySv.has(rel)) console.warn(`varning: ${rel} finns inte i nav_sv i meny.yml`);
+
+// Vilka sidor som finns på svenska. Starlight gör en engelsk kopia under /sv/ av varje sida som
+// saknar svensk version. Kopiorna tas bort efter bygget och hålls borta från sitemap, språkväljare
+// och hreflang (astro.config.mjs, src/routeData.ts).
+const svenska = [...sidor.values()].filter((s) => s.svensk).map((s) => s.slug).sort();
+writeFileSync(join(GENERERAT, 'sprak.json'), JSON.stringify({ svenska }, null, 2));
 
 // 301 för kategori- och taggadresser, läggs i WordPress .htaccess vid bytet
 const wpDir = join(ROT, 'dist-wordpress');
@@ -179,11 +264,26 @@ const llmsRader = (post, vag = []) => {
 	const [etikett, varde] = Object.entries(post)[0];
 	if (typeof varde !== 'string') return varde.flatMap((p) => llmsRader(p, [...vag, etikett]));
 	const sida = sidor.get(varde);
-	const namn = [...vag.slice(1), etikett].filter((d) => d !== 'Overview').join(' / ') || sida.data.title;
+	const namn = [...vag.slice(1), etikett].filter((d) => d !== 'Overview' && d !== 'Översikt').join(' / ') || sida.data.title;
 	const text = beskrivning(sida);
 	return [`- [${namn}](${SAJT}/docs/${sida.slug ? `${sida.slug}/` : ''})${text ? `: ${text}` : ''}`];
 };
 const start = sidor.get('README.md');
+// Svenska sidor i en egen rubrik, i samma ordning som den svenska menyn
+const finnsSv = (post) => {
+	const varde = Object.values(post)[0];
+	return typeof varde === 'string' ? sidor.has(varde) : varde.some(finnsSv);
+};
+const bara = (poster) =>
+	poster.filter(finnsSv).map((p) => {
+		const [etikett, varde] = Object.entries(p)[0];
+		return typeof varde === 'string' ? p : { [etikett]: bara(varde) };
+	});
+const llmsSv = bara(menySv).flatMap((p) => {
+	const [etikett, varde] = Object.entries(p)[0];
+	if (typeof varde === 'string') return llmsRader(p);
+	return [`### ${etikett}`, '', ...varde.flatMap((u) => llmsRader(u, [etikett])), ''];
+});
 const llms = [
 	'# CombineIT',
 	'',
@@ -194,9 +294,10 @@ const llms = [
 		const [etikett, varde] = Object.entries(p)[0];
 		return ['', `## ${etikett}`, '', ...varde.flatMap((u) => llmsRader(u, [etikett]))];
 	}),
+	...(llmsSv.length ? ['', '## På svenska', '', ...llmsSv] : []),
 	'',
 ];
-writeFileSync(join(wpDir, 'llms.txt'), llms.join('\n'));
+writeFileSync(join(wpDir, 'llms.txt'), llms.join('\n').replace(/\n{3,}/g, '\n\n'));
 
 // docs.combineit.se (gamla MkDocs-sajten på GitHub Pages) skickas vidare till samma sida på
 // www.combineit.se/docs. MkDocs-adressen är filens sökväg, README.md blir mappen.
@@ -208,7 +309,9 @@ const omdirigering = (mal) =>
 	`<script>location.replace(${JSON.stringify(mal)} + location.hash)</script></head>` +
 	`<body><p>This page has moved to <a href="${mal}">${mal}</a>.</p></body></html>\n`;
 const PROD = 'https://www.combineit.se/docs';
-for (const [rel, { slug }] of sidor) {
+for (const [rel, { slug, svensk }] of sidor) {
+	// Svenska sidor fanns aldrig på MkDocs-sajten
+	if (svensk) continue;
 	const mkdocsVag = rel.replace(/(^|\/)README\.md$/, '$1').replace(/\.md$/, '/');
 	const ut = join(pagesDir, mkdocsVag, 'index.html');
 	mkdirSync(dirname(ut), { recursive: true });
