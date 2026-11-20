@@ -10,7 +10,9 @@ nav:
       - Integrations: products/web-connect/general/integrations.md
       - Objects: products/web-connect/general/objects.md
       - Condition List: products/web-connect/general/condition-list.md
+      - Authentication: products/web-connect/general/authentication.md
       - Secret Value Storage: products/web-connect/general/secret-value-storage.md
+      - Integration Variables: products/web-connect/general/integration-variables.md
       - Destinations: products/web-connect/general/destinations.md
       - Entries: products/web-connect/general/entries.md
       - Text Mapping: products/web-connect/general/text-mapping.md
