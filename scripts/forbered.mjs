@@ -183,19 +183,25 @@ writeFileSync(join(GENERERAT, 'meny.json'), JSON.stringify(meny.map(tillMeny), n
 
 // Den svenska menyn visas på svenska sidor i stället för den engelska (src/routeData.ts).
 // Den pekar bara på svenska sidor, så att ingen svensk sida länkar till en engelsk kopia.
+// En rad vars .sv.md inte finns än hoppas över, och en grupp utan sidor försvinner. Så kan
+// menyn stå klar före översättningarna. Den engelska sidan måste finnas, så att stavfel stoppar.
 const iMenySv = new Set();
 const tillMenySv = (post) => {
 	const [etikett, varde] = Object.entries(post)[0];
 	if (typeof varde === 'string') {
+		if (!SVENSK.test(varde)) throw new Error(`nav_sv i meny.yml pekar på ${varde}, som inte är en svensk sida (.sv.md)`);
 		const sida = sidor.get(varde);
-		if (!sida) throw new Error(`nav_sv i meny.yml pekar på ${varde}, som inte finns`);
-		if (!sida.svensk) throw new Error(`nav_sv i meny.yml pekar på ${varde}, som inte är en svensk sida (.sv.md)`);
+		if (!sida) {
+			if (!sidor.has(varde.replace(SVENSK, '.md'))) throw new Error(`nav_sv i meny.yml pekar på ${varde}, och den engelska sidan finns inte heller`);
+			return [];
+		}
 		iMenySv.add(varde);
-		return { label: etikett, href: adress(sida.slug) };
+		return [{ label: etikett, href: adress(sida.slug) }];
 	}
-	return { label: etikett, collapsed: true, items: varde.map(tillMenySv) };
+	const items = varde.flatMap(tillMenySv);
+	return items.length ? [{ label: etikett, collapsed: true, items }] : [];
 };
-writeFileSync(join(GENERERAT, 'meny-sv.json'), JSON.stringify(menySv.map(tillMenySv), null, 2));
+writeFileSync(join(GENERERAT, 'meny-sv.json'), JSON.stringify(menySv.flatMap(tillMenySv), null, 2));
 for (const [rel, { svensk }] of sidor) if (svensk && !iMenySv.has(rel)) console.warn(`varning: ${rel} finns inte i nav_sv i meny.yml`);
 
 // Vilka sidor som finns på svenska. Starlight gör en engelsk kopia under /sv/ av varje sida som
@@ -233,7 +239,16 @@ const llmsRader = (post, vag = []) => {
 };
 const start = sidor.get('README.md');
 // Svenska sidor i en egen rubrik, i samma ordning som den svenska menyn
-const llmsSv = menySv.flatMap((p) => {
+const finnsSv = (post) => {
+	const varde = Object.values(post)[0];
+	return typeof varde === 'string' ? sidor.has(varde) : varde.some(finnsSv);
+};
+const bara = (poster) =>
+	poster.filter(finnsSv).map((p) => {
+		const [etikett, varde] = Object.entries(p)[0];
+		return typeof varde === 'string' ? p : { [etikett]: bara(varde) };
+	});
+const llmsSv = bara(menySv).flatMap((p) => {
 	const [etikett, varde] = Object.entries(p)[0];
 	if (typeof varde === 'string') return llmsRader(p);
 	return [`### ${etikett}`, '', ...varde.flatMap((u) => llmsRader(u, [etikett])), ''];
