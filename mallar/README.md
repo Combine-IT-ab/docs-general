@@ -74,7 +74,7 @@ Engelska: `/docs/integrations/business-central-<system>/`, svenska: `/docs/sv/in
 
 - Den svenska sidan heter som den engelska med `.sv` före `.md` och ligger bredvid: `overview.sv.md`, `flows/order-inbound.sv.md`.
 - Bygget ger den adressen `sv/` plus den engelska adressen, `lang: sv` och samma `translation_key`. Skriv inte `slug` själv. Står den där ska den vara exakt så, annars stoppar bygget.
-- Länka som på den engelska sidan, till `.md`-filen. Finns en svensk version av målet länkar bygget dit, annars till den engelska sidan.
+- Länka som på den engelska sidan, till `.md`-filen och med samma `#ankare`. Finns en svensk version av målet länkar bygget dit, annars till den engelska sidan. Ankaret översätts till den svenska rubrikens, efter rubrikernas ordning, så rubrikerna måste vara lika många och i samma ordning som på engelska.
 - Den svenska menyn är `nav_sv` i `meny.yml`, med svenska rubriker, och pekar bara på `.sv.md`-filer. Alla integrationssidor som finns i dag har redan en rad där. En rad vars `.sv.md` inte finns än hoppas över. Ny integration: lägg till raderna i både `nav` och `nav_sv`.
 - Språkväljaren och `hreflang` kommer bara på sidor som finns på båda språken. Starlights engelska kopior under `/sv/` tas bort vid bygget. Ingen automatisk omdirigering mellan språken.
 - Samma fakta och samma struktur som den engelska sidan. Systemnamn, fältnamn i Business Central och Web Connect och kodexempel står kvar på engelska.

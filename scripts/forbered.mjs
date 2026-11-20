@@ -16,6 +16,7 @@ import { execFileSync } from 'node:child_process';
 import { tmpdir } from 'node:os';
 import matter from 'gray-matter';
 import yaml from 'js-yaml';
+import GithubSlugger from 'github-slugger';
 
 const ROT = process.cwd();
 const KALLA = join(ROT, 'docs');
@@ -91,18 +92,48 @@ for (const [rel, { slug }] of sidor) {
 
 const adress = (slug) => (slug ? `${BAS}/${slug}/` : `${BAS}/`);
 
+// Rubrikernas ankare, på samma sätt som Astro räknar fram id:t på rubriken
+const rubrikAnkare = (body) => {
+	const slugger = new GithubSlugger();
+	return body
+		.replace(/^```[\s\S]*?^```/gm, '')
+		.split('\n')
+		.map((rad) => rad.match(/^#{1,6}\s+(.+?)\s*#*\s*$/))
+		.filter(Boolean)
+		.map((m) => slugger.slug(m[1].replace(/\[([^\]]*)\]\([^)]*\)/g, '$1').replace(/[`*_]/g, '').replace(/<[^>]+>/g, '')));
+};
+// En svensk sida har samma rubriker i samma ordning som den engelska, så ett engelskt ankare
+// (#choose-your-setup) kan översättas till rubrikens svenska ankare (#välj-upplägg).
+const ankarKarta = new Map();
+const svenskaAnkare = (rel) => {
+	if (!ankarKarta.has(rel)) {
+		const en = rubrikAnkare(sidor.get(rel.replace(SVENSK, '.md')).body);
+		const sv = rubrikAnkare(sidor.get(rel).body);
+		if (en.length !== sv.length) console.warn(`varning: ${rel} har ${sv.length} rubriker, den engelska ${en.length}. Ankarlänkar översätts inte.`);
+		ankarKarta.set(rel, en.length === sv.length ? new Map(en.map((a, i) => [a, sv[i]])) : new Map());
+	}
+	return ankarKarta.get(rel);
+};
+const oversattAnkare = (malRel, ankare) => {
+	if (!ankare || !SVENSK.test(malRel)) return ankare;
+	const id = decodeURIComponent(ankare.slice(1));
+	const sv = svenskaAnkare(malRel).get(id);
+	return sv ? `#${sv}` : ankare;
+};
+
 // Länkar: [text](../annan.md#ankare) -> [text](/docs/annan-slug/#ankare)
 // En svensk sida som länkar till en engelsk sida hamnar på den svenska versionen om den finns.
 const skrivOmLankar = (rel, body) =>
-	body.replace(/\]\((?!https?:|mailto:|#)([^)\s]+?\.md)(#[^)\s]*)?\)/g, (hel, lank, ankare = '') => {
+	body.replace(/\]\((#[^)\s]+)\)/g, (hel, ankare) => (SVENSK.test(rel) ? `](${oversattAnkare(rel, ankare)})` : hel)).replace(/\]\((?!https?:|mailto:|#)([^)\s]+?\.md)(#[^)\s]*)?\)/g, (hel, lank, ankare = '') => {
 		const mal = posix.normalize(posix.join(posix.dirname(rel), lank));
 		const svMal = mal.replace(/(?<!\.sv)\.md$/, '.sv.md');
-		const sida = (SVENSK.test(rel) && sidor.get(svMal)) || sidor.get(mal);
+		const malRel = SVENSK.test(rel) && sidor.has(svMal) ? svMal : mal;
+		const sida = sidor.get(malRel);
 		if (!sida) {
 			console.warn(`varning: ${rel} länkar till ${lank}, som inte finns`);
 			return hel;
 		}
-		return `](${adress(sida.slug)}${ankare})`;
+		return `](${adress(sida.slug)}${oversattAnkare(malRel, ankare)})`;
 	});
 
 // Bilder i docs/assets/ läggs i public/assets/ och nås via /docs/assets/...

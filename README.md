@@ -21,6 +21,7 @@ npm run dev      # http://localhost:4321/docs/
 npm run build    # bygger till dist/
 python3 adresser/kolla.py --strikt --bygge dist
 python3 scripts/kolla_lankar.py dist /docs
+python3 scripts/kolla_ankare.py dist /docs
 ```
 
 Bygget är Astro Starlight. `scripts/forbered.mjs` gör om `docs/` till sidor i `src/content/docs/` (genereras, checkas inte in). Designen ligger i `src/styles/tema.css` och komponenterna i `src/components/`.

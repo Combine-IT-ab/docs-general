@@ -40,6 +40,9 @@ jobs:
       - name: Kontrollera interna länkar
         run: python3 scripts/kolla_lankar.py dist /docs
 
+      - name: Kontrollera ankare i interna länkar
+        run: python3 scripts/kolla_ankare.py dist /docs
+
       - name: Bygg förhandsvisningen
         if: github.event_name != 'pull_request'
         env:
