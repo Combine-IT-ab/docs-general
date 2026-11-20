@@ -232,28 +232,28 @@ nav_sv:
     - Översikt: products/web-connect/integrations/README.sv.md
     - Centra:
       - Översikt: products/web-connect/integrations/centra/overview.sv.md
-      - Orderimport: products/web-connect/integrations/centra/flows/order-inbound.sv.md
+      - Order: products/web-connect/integrations/centra/flows/order-inbound.sv.md
       - Produktdata: products/web-connect/integrations/centra/flows/product-data.sv.md
       - Lagersaldo: products/web-connect/integrations/centra/flows/stock-update.sv.md
       - Leveranser: products/web-connect/integrations/centra/flows/shipment.sv.md
-      - Makulering: products/web-connect/integrations/centra/flows/cancellation.sv.md
+      - Makuleringar: products/web-connect/integrations/centra/flows/cancellation.sv.md
     - Virtualstock:
       - Översikt: products/web-connect/integrations/virtual-stock/overview.sv.md
       - Order: products/web-connect/integrations/virtual-stock/flows/order-inbound.sv.md
       - Orderbekräftelse: products/web-connect/integrations/virtual-stock/flows/order-confirmation.sv.md
-      - Leveransbesked: products/web-connect/integrations/virtual-stock/flows/shipment.sv.md
+      - Leveranser: products/web-connect/integrations/virtual-stock/flows/shipment.sv.md
       - Lagersaldo: products/web-connect/integrations/virtual-stock/flows/stock-update.sv.md
       - Makulering: products/web-connect/integrations/virtual-stock/flows/cancellation.sv.md
       - Produktdata: products/web-connect/integrations/virtual-stock/flows/product-data.sv.md
     - Norce Commerce:
       - Översikt: products/web-connect/integrations/norce/overview.sv.md
-      - Orderimport: products/web-connect/integrations/norce/flows/order-inbound.sv.md
+      - Order: products/web-connect/integrations/norce/flows/order-inbound.sv.md
       - Orderstatus: products/web-connect/integrations/norce/flows/order-status.sv.md
       - Leveranser: products/web-connect/integrations/norce/flows/shipment.sv.md
       - Lagersaldo: products/web-connect/integrations/norce/flows/stock-update.sv.md
-      - Produktdata: products/web-connect/integrations/norce/flows/product-data.sv.md
-      - Priser: products/web-connect/integrations/norce/flows/prices.sv.md
-      - Kunder: products/web-connect/integrations/norce/flows/customers.sv.md
+      - Produkter: products/web-connect/integrations/norce/flows/product-data.sv.md
+      - Prislistor och priser: products/web-connect/integrations/norce/flows/prices.sv.md
+      - Kunder och företag: products/web-connect/integrations/norce/flows/customers.sv.md
     - Ongoing WMS:
       - Översikt: products/web-connect/integrations/ongoing/overview.sv.md
       - Artiklar: products/web-connect/integrations/ongoing/flows/items.sv.md
@@ -261,7 +261,7 @@ nav_sv:
       - Orderändringar och makuleringar: products/web-connect/integrations/ongoing/flows/order-change-cancellation.sv.md
       - Leveranser: products/web-connect/integrations/ongoing/flows/shipment.sv.md
       - Inköpsorder: products/web-connect/integrations/ongoing/flows/purchase-order.sv.md
-      - Inleveranskvitton: products/web-connect/integrations/ongoing/flows/receipt.sv.md
+      - Inleveranser: products/web-connect/integrations/ongoing/flows/receipt.sv.md
       - Returer: products/web-connect/integrations/ongoing/flows/returns.sv.md
       - Lagerjusteringar: products/web-connect/integrations/ongoing/flows/stock-adjustment.sv.md
       - Lageravstämning: products/web-connect/integrations/ongoing/flows/stock-reconciliation.sv.md
@@ -269,7 +269,7 @@ nav_sv:
       - Översikt: products/web-connect/integrations/shopify/README.sv.md
     - Crystallize:
       - Översikt: products/web-connect/integrations/crystallize/overview.sv.md
-      - Orderimport: products/web-connect/integrations/crystallize/flows/order-inbound.sv.md
+      - Order: products/web-connect/integrations/crystallize/flows/order-inbound.sv.md
       - Orderstatus: products/web-connect/integrations/crystallize/flows/order-status.sv.md
       - Lagersaldo: products/web-connect/integrations/crystallize/flows/stock-update.sv.md
       - Priser: products/web-connect/integrations/crystallize/flows/prices.sv.md
@@ -277,30 +277,30 @@ nav_sv:
     - Astro WMS:
       - Översikt: products/web-connect/integrations/astro/overview.sv.md
       - Artiklar: products/web-connect/integrations/astro/flows/items.sv.md
-      - Utleveransorder: products/web-connect/integrations/astro/flows/order-outbound.sv.md
+      - Utgående order: products/web-connect/integrations/astro/flows/order-outbound.sv.md
       - Inköpsorder: products/web-connect/integrations/astro/flows/purchase-order.sv.md
       - Leveranser: products/web-connect/integrations/astro/flows/shipment.sv.md
-      - Inleveranskvitton: products/web-connect/integrations/astro/flows/receipt.sv.md
+      - Inleveranser: products/web-connect/integrations/astro/flows/receipt.sv.md
       - Lagerjusteringar: products/web-connect/integrations/astro/flows/stock-adjustment.sv.md
       - Lageravstämning: products/web-connect/integrations/astro/flows/stock-reconciliation.sv.md
     - Plytix PIM:
       - Översikt: products/web-connect/integrations/plytix/overview.sv.md
-      - Produktdata: products/web-connect/integrations/plytix/flows/product-data.sv.md
-      - Produktmatchning: products/web-connect/integrations/plytix/flows/product-matching.sv.md
+      - Artikeldata: products/web-connect/integrations/plytix/flows/product-data.sv.md
+      - Matchning av produkter på SKU: products/web-connect/integrations/plytix/flows/product-matching.sv.md
     - Nyce Logic WMS:
       - Översikt: products/web-connect/integrations/nyce/overview.sv.md
       - Artiklar: products/web-connect/integrations/nyce/flows/item-data.sv.md
-      - Artikelmått: products/web-connect/integrations/nyce/flows/item-dimensions.sv.md
-      - Utleveransorder: products/web-connect/integrations/nyce/flows/order-outbound.sv.md
+      - Artikelmått och vikter: products/web-connect/integrations/nyce/flows/item-dimensions.sv.md
+      - Utgående order: products/web-connect/integrations/nyce/flows/order-outbound.sv.md
       - Leveranser: products/web-connect/integrations/nyce/flows/shipment.sv.md
-      - Inleveranser: products/web-connect/integrations/nyce/flows/purchase-order.sv.md
-      - Inleveranskvitton: products/web-connect/integrations/nyce/flows/receipt.sv.md
+      - Inkommande order: products/web-connect/integrations/nyce/flows/purchase-order.sv.md
+      - Inleveranser: products/web-connect/integrations/nyce/flows/receipt.sv.md
       - Kundreturer: products/web-connect/integrations/nyce/flows/customer-return.sv.md
       - Lagerjusteringar: products/web-connect/integrations/nyce/flows/stock-adjustment.sv.md
       - Lagersaldo: products/web-connect/integrations/nyce/flows/stock-balance.sv.md
     - CHESS:
       - Översikt: products/web-connect/integrations/chess/overview.sv.md
-      - Leveransbiljetter: products/web-connect/integrations/chess/flows/shipment-ticket.sv.md
+      - Ärenden för leveranser: products/web-connect/integrations/chess/flows/shipment-ticket.sv.md
       - Säkerhetsdatablad: products/web-connect/integrations/chess/flows/safety-data-sheets.sv.md
       - Dokument markerade som utskrivna: products/web-connect/integrations/chess/flows/set-to-printed.sv.md
     - Resourced PLM:
@@ -312,40 +312,40 @@ nav_sv:
     - Shelfless:
       - Översikt: products/web-connect/integrations/shelfless/overview.sv.md
       - Produktdata: products/web-connect/integrations/shelfless/flows/product-data.sv.md
-      - Inleveranser: products/web-connect/integrations/shelfless/flows/inbound-delivery.sv.md
-      - Godsmottagning: products/web-connect/integrations/shelfless/flows/goods-receipt.sv.md
-      - Utleveranser: products/web-connect/integrations/shelfless/flows/outbound-delivery.sv.md
+      - Inkommande leveranser: products/web-connect/integrations/shelfless/flows/inbound-delivery.sv.md
+      - Inleveranser: products/web-connect/integrations/shelfless/flows/goods-receipt.sv.md
+      - Utgående leveranser: products/web-connect/integrations/shelfless/flows/outbound-delivery.sv.md
       - Leveransbekräftelser: products/web-connect/integrations/shelfless/flows/shipment-confirmation.sv.md
       - Returer: products/web-connect/integrations/shelfless/flows/returns.sv.md
       - Inventering: products/web-connect/integrations/shelfless/flows/stock-reconciliation.sv.md
     - Nowaste:
       - Översikt: products/web-connect/integrations/nowaste/overview.sv.md
       - Artiklar: products/web-connect/integrations/nowaste/flows/items.sv.md
-      - Utleveransorder: products/web-connect/integrations/nowaste/flows/order-outbound.sv.md
+      - Utgående order: products/web-connect/integrations/nowaste/flows/order-outbound.sv.md
       - Leveranser: products/web-connect/integrations/nowaste/flows/shipment.sv.md
-      - Inleveranser: products/web-connect/integrations/nowaste/flows/purchase-order.sv.md
-      - Inleveranskvitton: products/web-connect/integrations/nowaste/flows/receipt.sv.md
+      - Förväntade inleveranser: products/web-connect/integrations/nowaste/flows/purchase-order.sv.md
+      - Inleveranser: products/web-connect/integrations/nowaste/flows/receipt.sv.md
       - Lagerjusteringar: products/web-connect/integrations/nowaste/flows/stock-adjustment.sv.md
       - Lageravstämning: products/web-connect/integrations/nowaste/flows/stock-reconciliation.sv.md
     - Sitoo POS:
       - Översikt: products/web-connect/integrations/sitoo/overview.sv.md
-      - Produktdata: products/web-connect/integrations/sitoo/flows/product-data.sv.md
+      - Artikeldata: products/web-connect/integrations/sitoo/flows/product-data.sv.md
       - Priser: products/web-connect/integrations/sitoo/flows/prices.sv.md
       - Försäljning: products/web-connect/integrations/sitoo/flows/sales-inbound.sv.md
-      - Leveranser till butik: products/web-connect/integrations/sitoo/flows/shipment-to-store.sv.md
-      - Inleverans i butik: products/web-connect/integrations/sitoo/flows/store-receipt.sv.md
-      - Butiksorder från centrallagret: products/web-connect/integrations/sitoo/flows/store-order-delivery.sv.md
-      - Returer från butik: products/web-connect/integrations/sitoo/flows/returns-from-store.sv.md
+      - Leveranser till butiker: products/web-connect/integrations/sitoo/flows/shipment-to-store.sv.md
+      - Inleveranser i butik: products/web-connect/integrations/sitoo/flows/store-receipt.sv.md
+      - Butiksorder som levereras från centrallagret: products/web-connect/integrations/sitoo/flows/store-order-delivery.sv.md
+      - Returer från butiker: products/web-connect/integrations/sitoo/flows/returns-from-store.sv.md
       - Webborder för returer i butik: products/web-connect/integrations/sitoo/flows/online-orders-for-store-returns.sv.md
       - Lagerjusteringar: products/web-connect/integrations/sitoo/flows/stock-adjustment.sv.md
       - Lagersaldon: products/web-connect/integrations/sitoo/flows/stock-balance.sv.md
     - WooCommerce:
       - Översikt: products/web-connect/integrations/woocommerce/overview.sv.md
-      - Orderimport: products/web-connect/integrations/woocommerce/flows/order-inbound.sv.md
-      - Kunder in: products/web-connect/integrations/woocommerce/flows/customer-inbound.sv.md
-      - Slutförda order: products/web-connect/integrations/woocommerce/flows/order-completion.sv.md
+      - Order: products/web-connect/integrations/woocommerce/flows/order-inbound.sv.md
+      - Kunder: products/web-connect/integrations/woocommerce/flows/customer-inbound.sv.md
+      - Färdigställda order: products/web-connect/integrations/woocommerce/flows/order-completion.sv.md
       - Lagersaldo: products/web-connect/integrations/woocommerce/flows/stock-update.sv.md
-      - Prisuppdatering: products/web-connect/integrations/woocommerce/flows/price-update.sv.md
+      - Priser: products/web-connect/integrations/woocommerce/flows/price-update.sv.md
       - Produktmatchning: products/web-connect/integrations/woocommerce/flows/product-matching.sv.md
     - Boots marketplace:
       - Översikt: products/web-connect/integrations/boots/overview.sv.md
@@ -356,7 +356,7 @@ nav_sv:
     - Voyado:
       - Översikt: products/web-connect/integrations/voyado/overview.sv.md
       - Kontakter: products/web-connect/integrations/voyado/flows/contacts.sv.md
-      - Kontaktsamtycken: products/web-connect/integrations/voyado/flows/contact-preferences.sv.md
+      - Kontaktens samtycke: products/web-connect/integrations/voyado/flows/contact-preferences.sv.md
       - Order: products/web-connect/integrations/voyado/flows/orders.sv.md
     - Addimotion:
       - Översikt: products/web-connect/integrations/addimotion/overview.sv.md
@@ -378,6 +378,6 @@ nav_sv:
       - Översikt: products/web-connect/integrations/milient/overview.sv.md
       - Projekt: products/web-connect/integrations/milient/flows/projects.sv.md
       - Kunder: products/web-connect/integrations/milient/flows/customers.sv.md
-      - Leverantörskostnader: products/web-connect/integrations/milient/flows/supplier-costs.sv.md
+      - Leverantörskostnader på projekt: products/web-connect/integrations/milient/flows/supplier-costs.sv.md
       - Kundfakturor och kreditnotor: products/web-connect/integrations/milient/flows/invoice-inbound.sv.md
       - Bokförda fakturanummer: products/web-connect/integrations/milient/flows/posted-invoice-number.sv.md
