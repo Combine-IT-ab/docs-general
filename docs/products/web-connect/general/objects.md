@@ -97,6 +97,7 @@ These fields are used on the object for sales headers.
 |-------|-------------|
 | **Enable Totals Check** | Before the document is released, Business Central compares its total with the total in the message. Which values are compared is set with **Document Totals Function** in the [mapping](incoming-data/mapping.md). |
 | **Enable VAT Check** | The VAT amount is compared in the same way. |
+| **Totals Check Condition** and **VAT Check Condition** | A [condition](condition-list.md) that must be met for the totals check or the VAT check to run. Leave them empty to check every document. |
 | **Total Amt. Document Tolerance** | How much the totals may differ, for example for rounding. |
 | **Auto Release Documents** | The document is released automatically when it has been created and checked. |
 | **Auto-Release Condition Code** | A [condition](condition-list.md) that must be met for the document to be released automatically. |
