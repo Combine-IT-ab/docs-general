@@ -24,7 +24,7 @@ All integration variables live in your own Business Central. You can see and cha
 | **Current Value Date** | The value of a `Date` variable. |
 | **Current Value Date Time** | The value of a `Date & Time` variable, for example the time of the last download. |
 | **Current Value Integer** | The value of an `Integer` variable, for example a goods owner ID or the number of the last processed transaction. |
-| **Is CurrentDateTime** | The variable gives the current date or the current date and time. Used for variables such as `CURRENT-DATETIME` or `TODAY`. |
+| **Is CurrentDateTime** | The variable gives the current date or the current date and time at the moment it is read. Used for variables such as `CURRENT-DATETIME` or `TODAY`. |
 | **Adjustment Dateformula** | A Business Central date formula that is applied to the date, for example `-1D` for the day before. Used together with **Is CurrentDateTime** to ask for everything since yesterday. |
 
 ## Where variables are used
