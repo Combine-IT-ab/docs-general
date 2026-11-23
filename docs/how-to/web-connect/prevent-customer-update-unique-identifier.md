@@ -4,7 +4,7 @@
 
 ## Short Answer
 
-Set **Unique Identifier Action** to **No Action** for the customer object in Web Connect Incoming Data.
+Set **Unique Identity Action** to **No Action** for the customer object in Web Connect Incoming Data.
 
 This ensures that Web Connect does not update existing customer records when the identifier already exists in Business Central.
 
@@ -21,11 +21,11 @@ This setup is commonly used when handling both B2C and B2B customers.
 1. Go to **Web Connect Incoming Data**
 2. Filter on the Web Object you want to change (e.g. Customer)
 3. In the Object Tree, select the row where the identifier is defined and click **Edit Incoming Field Mapping**
-4. On the mapping line where **Unique Identifier** is enabled, set **Unique Identifier Action = No Action**
+4. On the mapping line where **Unique Identifier** is enabled, set **Unique Identity Action = No Action**
 
 ## What Does "No Action" Mean?
 
-When Unique Identifier Action = No Action:
+When Unique Identity Action = No Action:
 
 - Web Connect checks if the record exists
 - If found → the record is left untouched (no update, no overwrite, no validation error)
@@ -36,6 +36,9 @@ When Unique Identifier Action = No Action:
 - This setting only applies when the record already exists
 - It is typically used for B2B customers
 - B2C customers usually use Update/Create instead
+- If the identifier consists of several fields, for example a code and a value, all of them must have the **same Validation Order**. Fields with the same Validation Order form one key, and with different orders Web Connect does not find the existing record
+- If a key value can contain characters such as `&` or `*`, tick **As Is Filter**, see ["Already exists" when a code contains filter characters](already-exists-code-contains-filter-characters.md)
+- To check whether the identifier matches, set the record back to not validated and process it. If **Record ID** is filled in, the existing record was found, see [How do I find out which part of an incoming message is failing?](debug-why-an-incoming-record-fails.md)
 
 ## Related
 

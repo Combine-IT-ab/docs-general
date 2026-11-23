@@ -19,6 +19,17 @@ Step-by-step guides for common tasks and troubleshooting across CombineIT produc
 - [A Ready Integrations field is not visible or not editable](web-connect/integration-field-not-visible-enable-feature.md)
 - [Outgoing triggers do not fire: no entry in Outgoing Data](web-connect/outgoing-triggers-missing-permission.md)
 - [Nothing downloads to Business Central](web-connect/nothing-downloads-to-business-central.md)
+- ["The filter is not valid for the field" when excluding a range](web-connect/filter-not-valid-exclude-range.md)
+- [How do I set up an incoming webhook that creates a document in BC?](web-connect/set-up-incoming-webhook.md)
+- ["NotFound" when an update is sent to a webhook](web-connect/notfound-when-sending-to-webhook.md)
+- ["Already exists" when a code contains filter characters](web-connect/already-exists-code-contains-filter-characters.md)
+- [How do I find out which part of an incoming message is failing?](web-connect/debug-why-an-incoming-record-fails.md)
+- [How do I map to an enum value added by an extension?](web-connect/map-to-extended-enum-value.md)
+- [How do I pause incoming downloads temporarily?](web-connect/pause-incoming-download-temporarily.md)
+- [How do I stop a record from syncing before it is complete?](web-connect/stop-a-record-from-syncing-before-it-is-complete.md)
+- [How do I test what an outgoing mapping produces?](web-connect/test-a-mapping-with-test-message.md)
+- [How do I check that an incoming order matches what the customer paid?](web-connect/check-order-total-before-release.md)
+- [Ongoing rejects a return order for an order it did not ship](web-connect/ongoing-rejects-return-order.md)
 
 ## Easy Connect
 
