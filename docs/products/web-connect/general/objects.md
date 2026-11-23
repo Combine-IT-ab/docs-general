@@ -4,93 +4,142 @@
 
 ## Overview
 
-Web Connect Objects define which Business Central data is exchanged with an external system. Each object is linked to a specific BC table and belongs to an integration.
+A Web Connect Object describes one kind of data that is exchanged with an external system, for example orders, order lines, items or stock. Each object belongs to an [integration](integrations.md) and is linked to a Business Central table. The object says where the data is fetched from or sent to, when it runs, and how records are found, created and checked.
 
-Objects serve as the bridge between BC data and the external system — they determine what data is read, how it is structured, and how it is written back.
+Objects are nested in a tree that follows the structure of the message. An order object has underlying objects for its lines, addresses and payments, and the values are mapped on each object with [Incoming Data Mapping](incoming-data/mapping.md) or [Outgoing Mapping](outgoing-mapping/README.md).
 
-## Incoming vs Outgoing
+All objects live in your own Business Central. You can see and change every setting yourself.
 
-Each object can be configured for incoming data (receiving from external systems), outgoing data (sending to external systems), or both.
-
-**Incoming best practices:**
-
-- Keep objects focused on a single BC table (e.g. Sales Header)
-- Use underlying objects for related child data (e.g. Sales Lines)
-- Define conditions to filter out irrelevant records early
-
-**Outgoing best practices:**
-
-- Map only the fields the external system actually needs
-- Use Dynamic Flow Fields for calculated values
-- Use Text Mapping for value translations
-
-## Object Tree
-
-Objects can be nested to represent parent–child data structures. The tree mirrors the JSON or XML hierarchy sent to or received from the external system.
-
-Example — a Sales Order with lines:
-
-```
-Sales Header (root object)
-└── Sales Lines (underlying object)
-    └── Item (lookup object)
-```
-
-This maps to a JSON payload like:
-
-```json
-{
-  "orderNumber": "SO-001",
-  "lines": [
-    { "itemNo": "ITEM-1", "quantity": 2 }
-  ]
-}
-```
-
-## Object Fields
+## General
 
 | Field | Description |
 |-------|-------------|
-| **Code** | Unique identifier for the object within the integration. |
-| **Description** | Human-readable name. |
-| **Table No.** | BC table number this object is based on. |
-| **Table Name** | BC table name (read-only reference). |
-| **Direction** | Incoming, Outgoing, or Both. |
-| **Key** | Which BC table key to use for lookups (0 = Primary Key). |
-| **Enabled** | Whether this object is active. |
-| **Number of Contents per Transaction** | How many outgoing records are grouped into one Web Entry. See below. |
-| **Download Data** | Enables the download job for this object (incoming). |
-| **Number of Minutes Between Runs** | Interval for the download job on this object. |
-| **Content Create Order** | The order in which BC records are created from an incoming payload. See below. |
-| **Data Array** | JSON path to the array that holds the records in an incoming payload, e.g. `items`. See below. |
+| **WCM Object** | The code of the object. It usually starts with the **Web Object Prefix** of the integration, for example `CA_ORDER` for Centra. |
+| **Description** | A readable description, for example what the object is used for. |
+| **Integration Source** | The integration that the object belongs to. |
+| **Source** | Limits the object to data from one source, when the same integration receives data from several sources. |
+| **Table No.** | The Business Central table that records are read from or written to, for example 36 for Sales Header or 27 for Item. |
+| **Primary Key No.** | Which key on the table Web Connect uses to find records. |
+| **Integration Queue Code** | The queue that the object's data is processed in, so that urgent data can run separately from large batches. |
+| **Monitor E-Mail List** | Email addresses that are notified when the object has errors. |
 
-## Grouping Outgoing Records: Number of Contents per Transaction
+## The object tree
 
-The upload job groups Outgoing Data records into a single Web Entry to reduce the number of API calls to the external system. The setting controls both the grouping and the shape of the payload:
+| Field | Description |
+|-------|-------------|
+| **Parent Object** | The object that this object sits under, for example the order object for order lines. |
+| **Json Key Identifier List** | The key in the parent part of the message that this object handles, for example `lines` or `billingAddress`. |
+| **Object Id. Condition Code** | A [condition](condition-list.md) that decides which object a part of the message goes to, when the same key can hold different kinds of data. For example, a customer can be routed to one object for companies and another for persons. |
+| **Inherit Content from Parent** | The object reads its values from the parent's part of the message instead of a nested key. |
+| **Content Create Order** | The order in which records are created from one message, so that the header exists before the lines and the lines before the payments. |
+| **Ignore Object In Download** | The object is skipped and not used. The data in the message is still available, because it is also part of the parent object. |
 
-| Value | Payload |
-|-------|---------|
-| `0` | One record, sent as a single object |
-| `1` | One record, sent as a list with one object |
-| `>1` | A list with up to that many records |
+## Addresses and requests
 
-Pick `0` when the external API expects one object per call, and `1` or higher when it expects an array.
+| Field | Description |
+|-------|-------------|
+| **Path** | The path added to the integration's address for this object. `%1` is replaced with an ID, for example the external ID of the record. |
+| **Download Path** and **Upload Path** | A separate path or query string for downloads and uploads, when they differ. |
+| **HTTP Method Download**, **Create**, **Update** and **Delete** | Override the methods on the [integration](integrations.md) for this object, for example `PATCH` for one endpoint. |
+| **HTTP Headers Object** | An object that holds extra HTTP headers for the requests, for example an API version or a language. |
+| **URL Parameters Object** | An object that builds the query parameters of the request. |
+| **GraphQL Query** | The GraphQL query or mutation that is sent, for GraphQL integrations. |
+| **GraphQL Extra** | Fragments and other GraphQL text that the query uses. |
+| **Standard XML Namespace** and **Standard XML Prefix** | The namespace and prefix used for XML and SOAP messages. |
+| **Data Array Jpath** | The path to the list of records in the response, for example `data.orders`. Overrides **Data Array Jpath** on the integration. |
 
-## Downloading Data
+## Downloading
 
-For incoming objects the download job sends a Download Request to the external system when **Download Data** is ticked, at the interval set in **Number of Minutes Between Runs**. The HTTP method defaults to the one set on the Integration Card (GET, POST) but can be overridden per object.
+| Field | Description |
+|-------|-------------|
+| **Download Data** | The object is downloaded by the download job. |
+| **No. of Minutes between Runs** | How often the object is downloaded. |
+| **Starting Time** and **Ending Time** | The time of day the download runs within, for example only at night. |
+| **Download Priority Order** | The order in which objects are downloaded. A lower number runs first. |
+| **Service Type for Download** | Whether the download fetches one record (`Get`) or all records (`Get All`). |
+| **Web Object for Download Req.** | Another object that is downloaded for each record, for example the status of each order. |
+| **Jpath External Id For Download** | The key in the message that holds the ID used in that request, for example `orderNumber`. |
+| **Download Poll DateTime Var.** | An [integration variable](integrations.md) that remembers when the object was last downloaded, so that the next download only fetches what has changed since then. |
+| **Poll DateTime Major** and **Poll DateTime Major At** | Once a day, at the time in **Poll DateTime Major At**, the download looks further back, for example `-1D` or `-2W`, to catch anything that was missed in the regular downloads. |
+| **Pagination Option** | How Web Connect fetches more pages when the response is split: `No Pagination`, a page number in the query, or a value from the response such as a `next` link. |
+| **Pagination Parameter** | The query parameter for the page, for example `?Page=` or `&start=`. |
+| **Data Entries per Page** | How many records each page holds, for example `200`. |
+| **JPath for Pagination** | The key in the response that holds the next page, for example `next`. |
 
-The response is stored as an Incoming Data record and converted to JSON regardless of the original format (XML, CSV), so all downstream processing works the same way. When one response contains several records, **Data Array** tells Web Connect which array to split into separate Incoming Data records.
+## Uploading
 
-## Creating BC Records in the Right Order
+| Field | Description |
+|-------|-------------|
+| **MaxRecord per Entry** | How many outgoing records are grouped into one message. `0` sends one record as an object, `1` sends a list with one record, and a higher number sends a list with up to that many records, for example for stock updates. Pick what the external API expects. |
+| **Upload Priority Order** | The order in which objects are uploaded. A lower number runs first. |
+| **Upload Condition Code** | A [condition](condition-list.md) that must be met for a record to be sent, for example that the item has an ID in the external system. |
+| **Upload OK Condition Code** | A condition on the response that decides whether the upload counts as successful. |
+| **Extract Ext. Id From Create** | The ID that the external system returns when a record is created is saved as the external ID in Business Central. |
+| **Process Created Content** | When outgoing data is sent, a record is also created in the incoming data and processed. Used for example to save the Business Central order number as the external ID in the other system. |
+| **Outgoing Sync Table View** | A filter on the table that limits which records are sent, for example only items of a certain type. |
+| **Item Data Export**, **Price Data Export**, **Inventory Data Export** and **Customer Data Export** | Marks the object as the one that sends items, prices, stock or customers, for the standard exports in Web Connect. |
 
-Incoming JSON is mapped onto the object tree (for example Order Header → Order Line). Fields can be mapped from the current record, its parent, or related records. **Content Create Order** controls the sequence in which BC records are created from one payload, so that a Sales Header exists before its Sales Lines and BC validation does not fail.
+## Processing incoming data
+
+| Field | Description |
+|-------|-------------|
+| **Process Condition Code** | A [condition](condition-list.md) that must be met for the incoming record to be processed, for example only orders from one sales channel. |
+| **Insert Option** | Whether the record is inserted into the table (`Standard (Insert)`) or only used to update or read (`No Insert`). |
+| **Object Retention Policy** | How long incoming data for the object is kept before it is cleaned up, for example `1 Hour` for frequent stock messages. |
+| **Web Hook Action** | What happens when the external system calls Web Connect through a [webhook](webhooks.md): `No Action`, `Download Content`, `Create Content`, `Find Record and Respond` or `Create and Respond`. The last two are synchronous and answer the caller directly. |
+| **Web Hook Response** | The response that is sent back to the caller, for example `OK`. |
+
+## Sales documents
+
+These fields are used on the object for sales headers.
+
+| Field | Description |
+|-------|-------------|
+| **Enable Totals Check** | Before the document is released, Business Central compares its total with the total in the message. Which values are compared is set with **Document Totals Function** in the [mapping](incoming-data/mapping.md). |
+| **Enable VAT Check** | The VAT amount is compared in the same way. |
+| **Total Amt. Document Tolerance** | How much the totals may differ, for example for rounding. |
+| **Auto Release Documents** | The document is released automatically when it has been created and checked. |
+| **Auto-Release Condition Code** | A [condition](condition-list.md) that must be met for the document to be released automatically. |
+| **Shipping Fee Type** and **Shipping Fee No.** | The G/L account or item that freight from the message is added as. |
+| **Discount Type** and **Discount No.** | The G/L account or item that a document discount from the message is added as. |
+| **No. Series Underlying** | The number series used for records created by the underlying objects. |
+| **Allow Modify on Posted** | Allows the object to update documents that are already posted. |
+
+## Processors
+
+The processors split the processing of an object into parallel jobs. The fields are filled in by Web Connect and show the state: **Processor No.**, **Create Content Prefix** and **Create Content Counter** (how the created records are numbered), **StartKey** and **EndKey** (the range the processor works on), **Enqued Task**, **Session Running**, **Last Start Datetime**, **Last End Datetime**, **Processor Duration** and **Job Queue ID**.
+
+## Advanced settings
+
+These fields are used in a few setups for special cases. Leave them as they are unless CombineIT has set them up for you.
+
+| Field | Description |
+|-------|-------------|
+| **Cloned from Parent** | Advanced setting for objects copied from their parent. |
+| **Download from Request Content** | Advanced setting for downloads based on the request. |
+| **Content Id from Ext. Id** | Advanced setting for the ID of incoming content. |
+| **Page Multiply Data Entries** | Advanced setting for pagination. |
+| **Max Resend Requests** | Advanced setting for resending requests. |
+| **Variable Text Seperator** | Advanced setting for messages in text format. |
+| **Upload Data Compression** | Advanced setting for compressing uploads. |
+| **Deleted Data Option** | Advanced setting for records deleted in Business Central. |
+| **Double Price Check** | Advanced setting for price checks. |
+| **Create Request Codeunit**, **Read Codeunit**, **Validator Codeunit**, **Create/Update Codeunit** and **Post Create/Update Codeunit** | The code that runs each step. The standard values work for most objects. |
+
+## Configure it yourself in Business Central
+
+| What you can change | Where | Example |
+|---|---|---|
+| How often data is fetched | **No. of Minutes between Runs**, **Starting Time** and **Ending Time** | Fetch orders every five minutes, prices only at night |
+| Which records are sent | **Upload Condition Code** and **Outgoing Sync Table View** | Only send items that exist in the e-commerce platform |
+| How many records go in one call | **MaxRecord per Entry** | Send stock in batches of 100 |
+| When orders are released | **Auto Release Documents** and **Auto-Release Condition Code** | Release web orders automatically, but not wholesale orders |
+| How much a total may differ | **Total Amt. Document Tolerance** | Allow a small rounding difference |
 
 ## Related
 
 - [Web Connect Integrations](integrations.md)
-- [Web Connect Incoming Data](incoming-data/README.md)
-- [Web Connect Outgoing Data](outgoing-mapping/outgoing-data-web.md)
+- [Web Connect Incoming Data Mapping](incoming-data/mapping.md)
+- [Web Connect Outgoing Mapping](outgoing-mapping/README.md)
 - [Web Connect Condition List](condition-list.md)
-- [Web Connect Dynamic Flow Fields](dynamic-flow-fields.md)
 - [Web Connect Webhooks](webhooks.md)
