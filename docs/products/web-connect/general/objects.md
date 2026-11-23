@@ -32,6 +32,7 @@ All objects live in your own Business Central. You can see and change every sett
 | **Object Id. Condition Code** | A [condition](condition-list.md) that decides which object a part of the message goes to, when the same key can hold different kinds of data. For example, a customer can be routed to one object for companies and another for persons. |
 | **Inherit Content from Parent** | The object reads its values from the parent's part of the message instead of a nested key. |
 | **Content Create Order** | The order in which records are created from one message, so that the header exists before the lines and the lines before the payments. |
+| **Ignore Object In Download** | The object is skipped and not used. The data in the message is still available, because it is also part of the parent object. |
 
 ## Addresses and requests
 
@@ -59,6 +60,7 @@ All objects live in your own Business Central. You can see and change every sett
 | **Web Object for Download Req.** | Another object that is downloaded for each record, for example the status of each order. |
 | **Jpath External Id For Download** | The key in the message that holds the ID used in that request, for example `orderNumber`. |
 | **Download Poll DateTime Var.** | An [integration variable](integrations.md) that remembers when the object was last downloaded, so that the next download only fetches what has changed since then. |
+| **Poll DateTime Major** and **Poll DateTime Major At** | Once a day, at the time in **Poll DateTime Major At**, the download looks further back, for example `-1D` or `-2W`, to catch anything that was missed in the regular downloads. |
 | **Pagination Option** | How Web Connect fetches more pages when the response is split: `No Pagination`, a page number in the query, or a value from the response such as a `next` link. |
 | **Pagination Parameter** | The query parameter for the page, for example `?Page=` or `&start=`. |
 | **Data Entries per Page** | How many records each page holds, for example `200`. |
@@ -73,6 +75,7 @@ All objects live in your own Business Central. You can see and change every sett
 | **Upload Condition Code** | A [condition](condition-list.md) that must be met for a record to be sent, for example that the item has an ID in the external system. |
 | **Upload OK Condition Code** | A condition on the response that decides whether the upload counts as successful. |
 | **Extract Ext. Id From Create** | The ID that the external system returns when a record is created is saved as the external ID in Business Central. |
+| **Process Created Content** | When outgoing data is sent, a record is also created in the incoming data and processed. Used for example to save the Business Central order number as the external ID in the other system. |
 | **Outgoing Sync Table View** | A filter on the table that limits which records are sent, for example only items of a certain type. |
 | **Item Data Export**, **Price Data Export**, **Inventory Data Export** and **Customer Data Export** | Marks the object as the one that sends items, prices, stock or customers, for the standard exports in Web Connect. |
 
@@ -112,12 +115,9 @@ These fields are used in a few setups for special cases. Leave them as they are 
 
 | Field | Description |
 |-------|-------------|
-| **Ignore Object In Download** | Advanced setting for underlying objects during download. |
 | **Cloned from Parent** | Advanced setting for objects copied from their parent. |
 | **Download from Request Content** | Advanced setting for downloads based on the request. |
-| **Process Created Content** | Advanced setting for processing created content. |
 | **Content Id from Ext. Id** | Advanced setting for the ID of incoming content. |
-| **Poll DateTime Major** and **Poll DateTime Major At** | Advanced setting for a longer look back on a schedule. |
 | **Page Multiply Data Entries** | Advanced setting for pagination. |
 | **Max Resend Requests** | Advanced setting for resending requests. |
 | **Variable Text Seperator** | Advanced setting for messages in text format. |
