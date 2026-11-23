@@ -8,6 +8,8 @@ Secret Value Storage holds the passwords, tokens, API keys and client secrets th
 
 The secret is kept in the isolated storage of Business Central, which only the Web Connect app can read. The Secret Value Storage line only holds the code, a description and a reference to the stored value.
 
+You enter the secret in a field on the Secret Value Storage line. Once it is saved, it cannot be read back, not even by you. To change a secret, enter the new value in the same field.
+
 ## Fields
 
 | Field | Description |
