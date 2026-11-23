@@ -88,7 +88,8 @@ Underlying objects often need a value from the record above them, for example th
 | Field | Description |
 |-------|-------------|
 | **Trigger Download Object** | Starts a download with another object, for example to fetch the full order when a message only contains its ID. |
-| **Document Totals Function** | Points out where in the message the document totals are, so that Business Central can check them. When the document is complete and before it is released, Business Central calculates the total and compares it with the value from the message. This makes sure the order matches what the customer paid or what the payment provider reserved. `Total Amount Including VAT Check`, `Total Amount Excluding VAT Check` and `Total VAT Amount Check` compare the totals. `Freight Amount` and `Header Discount Amount` point out freight and document discount. The check is turned on with **Enable Totals Check** on the [object](../objects.md) for sales documents. |
+| **Document Totals Function** | Points out where in the message the document totals are, so that Business Central can check them. When the document is complete and before it is released, Business Central calculates the total and compares it with the value from the message. This makes sure the order matches what the customer paid or what the payment provider reserved. `Total Amount Including VAT Check`, `Total Amount Excluding VAT Check` and `Total VAT Amount Check` compare the totals. `Freight Amount` and `Header Discount Amount` point out freight and document discount. The check is turned on with **Enable Totals Check** on the [object](../objects.md) for sales documents. When the totals do not match, the incoming data stops with an error that shows both amounts, for example that the source says 100 and the document adds up to 199, and the document is not released. |
+| **Doc. Release Condition** | The line holds a [condition code](../condition-list.md) that decides whether the document is released when it has been created from the message. For example, web orders can be released directly while orders that need a manual check stay open. |
 
 ## Advanced settings
 
@@ -101,7 +102,6 @@ These fields are used in a few setups for special cases. Leave them as they are 
 | **Numeric Sum** | Advanced setting for numbers in a list. |
 | **Value From Content Field No.** | Advanced setting for reading a value from another line. |
 | **Execute After Under. Objects** | Advanced setting for the order in which a line is processed. |
-| **Doc. Release Condition** | Advanced setting for releasing the document. |
 
 ## Examples
 
