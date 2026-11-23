@@ -27,7 +27,7 @@ If a change in Business Central does not create a row here, the user probably la
 | **Generate Web Entry of Marked** | Builds the message and creates a Web Entry for the selected rows now, instead of waiting for the job queue. |
 | **Go to Web Entry** | Opens the Web Entry of the row, where you can see the request and the response and send it with **Process Entry**. |
 
-There is also an action that runs the whole step for all rows that are not synced, the same thing that the upload job does.
+**Run Sync to Web Entry** runs the whole step for all rows that are not synced yet and creates their Web Entries. It does the same thing as the upload job, so use it when you do not want to wait for the next run.
 
 ## Configure it yourself in Business Central
 

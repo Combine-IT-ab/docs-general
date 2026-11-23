@@ -31,7 +31,10 @@ All triggers live in your own Business Central. You can see and change every tri
 | **Trigger on Modify** | Fires when a record is changed. `All Fields` fires on any change. `Some Fields` fires only when one of the fields you choose for the trigger changes: Web Connect compares the value before and after the change. Blank does not fire on changes. |
 | **Trigger on Rename** | Fires when the primary key of a record is changed. |
 | **Trigger on Delete** | Fires when a record is deleted. Used for example on sales lines, so that a deleted line sends a new stock level. |
-| **Trigger on Post** | Used on posted documents, such as shipments and invoices, and on item ledger entries, so that posting sends the record. |
+| **Trigger on Post** | Fires when a document is posted, for example a posted shipment or invoice, or an item ledger entry. |
+| **Trigger on Job Queue** | The job queue creates outgoing data for every record in the table view each time it runs. Use it for full updates, for example all prices once a night. |
+| **Trigger on Incremental** | Goes through the records that are new since the last record it handled, for example new posted shipments. **Last Incremental Record Id** shows the last record handled. |
+| **Incremental Check** | How often the incremental trigger runs: `Always`, `Once per hour`, `Every 4 hours` or `Every 24 hours`. **Incremental Check Last** shows when it last ran. |
 
 ## Limiting the trigger
 
@@ -41,18 +44,6 @@ All triggers live in your own Business Central. You can see and change every tri
 | **Trigger Condition** | A [condition](../condition-list.md) that must be met for the trigger to fire, for example that the sales order is released. Use it for rules that a table filter cannot express. |
 
 The table view and the condition decide whether a change creates outgoing data at all. To record the change but wait to send it until the record is complete, use **Upload Condition Code** on the [object](../objects.md) instead.
-
-## Advanced settings
-
-These fields are used in a few setups for special cases. Leave them as they are unless CombineIT has set them up for you.
-
-| Field | Description |
-|-------|-------------|
-| **Trigger on Job Queue** | Advanced setting for creating outgoing data from the job queue. |
-| **Trigger on Incremental** | Advanced setting for sending new records in steps. |
-| **Last Incremental Record Id** | Advanced setting that shows the last record handled by **Trigger on Incremental**. |
-| **Incremental Check** | Advanced setting for how often records are checked, for example `Always` or `Every 4 hours`. |
-| **Incremental Check Last** | Advanced setting that shows when records were last checked. |
 
 ## Examples
 
