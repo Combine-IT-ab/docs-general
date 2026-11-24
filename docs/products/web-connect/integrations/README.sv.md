@@ -1,38 +1,66 @@
 # Integrationer i Web Connect
 
-Dokumentation per plattform för varje externt system som är kopplat till Business Central via Web Connect.
+Web Connect kopplar ihop Business Central med systemen nedan. Varje sida beskriver vad som synkroniseras, vilka val som finns för varje flöde och vad du själv kan ställa in i Business Central.
 
----
+Alla mappningar, villkor och triggers sätts upp i Web Connect i ditt eget Business Central, där du kan se och ändra dem.
 
-## Tillgängliga integrationer
+## E-handel
 
-| Integration | Status | Beskrivning |
+| Integration | Vad som synkroniseras |
+|---|---|
+| [Centra](centra/overview.md) | Order, lagersaldo, produkter, leveranser |
+| [Shopify](shopify/README.md) | Order, produkter, priser, lagersaldo, leveranser |
+| [Norce Commerce](norce/overview.md) | Order, orderstatus, leveranser, lagersaldo, produkter, priser, kunder |
+| [Crystallize](crystallize/overview.md) | Order, orderstatus, lagersaldo, priser |
+| [WooCommerce](woocommerce/overview.md) | Order, kunder, slutförda order, lagersaldo, priser, produktmatchning |
+
+## Marknadsplatser
+
+| Integration | Vad som synkroniseras |
+|---|---|
+| [Virtualstock](virtual-stock/overview.md) | Dropshiporder, orderkvittenser, utleveranser, lagersaldo, makuleringar, produktdata |
+| [Boots marketplace](boots/overview.md) | Lagersaldo |
+| [Sello](sello/overview.md) | Returorder |
+
+## Lager (WMS och 3PL)
+
+| Integration | Vad som synkroniseras |
+|---|---|
+| [Ongoing WMS](ongoing/overview.md) | Artiklar, order, leveranser, inköpsorder, inleveranser, returer, lagersaldo |
+| [Astro WMS](astro/overview.md) | Artiklar, order, inköpsorder, leveranser, inleveranser, lagersaldo |
+| [Nyce Logic WMS](nyce/overview.md) | Artiklar, order, inköpsorder, leveranser, inleveranser, returer, lagersaldo |
+| [Nowaste](nowaste/overview.md) | Artiklar, order, leveranser, inkommande leveranser, inleveranser, lagersaldo |
+| [Shelfless](shelfless/overview.md) | Produktdata, inkommande och utgående leveranser, inleveranser, leveranser, returer, inventering |
+
+## Kassasystem
+
+| Integration | Vad som synkroniseras |
+|---|---|
+| [Sitoo POS](sitoo/overview.md) | Produkter, priser, försäljning, leveranser till och inleveranser i butik, returer, lagersaldo |
+
+## Returer
+
+| Integration | Vad som synkroniseras |
+|---|---|
+| [Global-e returns](global-e/overview.md) | Returer och återbetalningar |
+| [Inretrn](inretrn/overview.md) | Fakturerade order, returorder |
+| [Reclaimit](reclaimit/overview.md) | Uppslagning av köp, returorder, returstatus |
+
+## Produktdata (PIM och PLM)
+
+| Integration | Vad som synkroniseras |
+|---|---|
+| [Plytix PIM](plytix/overview.md) | Produktdata, produktmatchning |
+| [Resourced PLM](resourced/overview.md) | Produktdata, varianter och streckkoder, försäljningspriser, inköpspriser och kostnader |
+
+## Övriga system
+
+| Integration | Typ | Vad som synkroniseras |
 |---|---|---|
-| [Centra](centra/overview.md) | ✅ I drift | E-handelsplattform: order, lagersaldo, produkter, leveranser |
-| [Virtualstock](virtual-stock/overview.md) | ✅ I drift | Marknadsplats för dropship: order, orderkvittenser, utleveranser, lagersaldo, makuleringar, produktdata |
-| [Shopify](shopify/README.md) | ✅ I drift | E-handelsplattform: order, produkter, priser, lagersaldo, leveranser |
-| [Norce Commerce](norce/overview.md) | ✅ I drift | E-handelsplattform: order, orderstatus, leveranser, lagersaldo, produkter, priser, kunder |
-| [Ongoing WMS](ongoing/overview.md) | ✅ I drift | Lagersystem (WMS): artiklar, order, leveranser, inköpsorder, inleveranser, returer, lagersaldo |
-| [Crystallize](crystallize/overview.md) | ✅ I drift | E-handelsplattform: order, orderstatus, lagersaldo, priser |
-| [Astro WMS](astro/overview.md) | ✅ I drift | Lagersystem (WMS): artiklar, order, inköpsorder, leveranser, inleveranser, lagersaldo |
-| [Plytix PIM](plytix/overview.md) | ✅ I drift | PIM: produktdata och produktmatchning |
-| [Nyce Logic WMS](nyce/overview.md) | ✅ I drift | Lagersystem (WMS): artiklar, order, inköpsorder, leveranser, inleveranser, returer, lagersaldo |
-| [CHESS](chess/overview.md) | ✅ I drift | Hantering av kemikalier: ärenden för leveranser, säkerhetsdatablad, dokument markerade som utskrivna |
-| [Resourced PLM](resourced/overview.md) | ✅ I drift | PLM: produktdata, varianter och streckkoder, försäljningspriser, inköpspriser och kostnader |
-| [Shelfless](shelfless/overview.md) | ✅ I drift | Returer och lager: produktdata, inkommande och utgående leveranser, inleveranser, leveranser, returer, inventering |
-| [Nowaste](nowaste/overview.md) | ✅ I drift | Lager (3PL): artiklar, order, leveranser, inkommande leveranser, inleveranser, lagersaldo |
-| [Sitoo POS](sitoo/overview.md) | ✅ I drift | Kassasystem: produkter, priser, försäljning, leveranser till och inleveranser i butik, returer, lagersaldo |
-| [WooCommerce](woocommerce/overview.md) | ✅ I drift | E-handelsplattform: order, kunder, slutförda order, lagersaldo, priser, produktmatchning |
-| [Boots marketplace](boots/overview.md) | ✅ I drift | Marknadsplats: lagersaldo |
-| [Sello](sello/overview.md) | ✅ I drift | Marknadsplatser: returorder |
-| [Voyado](voyado/overview.md) | ✅ I drift | Lojalitet och CRM: kontakter, kontakternas samtycken, order |
-| [Addimotion](addimotion/overview.md) | ✅ I drift | Leveranshantering: försäljningsorder |
-| [Global-e returns](global-e/overview.md) | ✅ I drift | Returer: returer och återbetalningar |
-| [Inretrn](inretrn/overview.md) | ✅ I drift | Returer: fakturerade order och returorder |
-| [Reclaimit](reclaimit/overview.md) | ✅ I drift | Returer: uppslagning av köp, returorder, returstatus |
-| [Milient](milient/overview.md) | ✅ I drift | Tid och projekt: projekt, kunder, leverantörskostnader, fakturor |
-
----
+| [Voyado](voyado/overview.md) | Lojalitet och CRM | Kontakter, kontakternas samtycken, order |
+| [Addimotion](addimotion/overview.md) | Leveranshantering | Försäljningsorder |
+| [CHESS](chess/overview.md) | Hantering av kemikalier | Ärenden för leveranser, säkerhetsdatablad, dokument markerade som utskrivna |
+| [Milient Time Flow](milient/overview.md) | Tid och projekt | Projekt, kunder, leverantörskostnader, fakturor |
 
 ## Relaterat
 
