@@ -41,6 +41,43 @@ Example: a warehouse sends the return reason IDs `1001` (other reason) and `1002
 
 If the external system later introduces new IDs, add new rows and keep the old ones until no returns with the old IDs remain.
 
+## Location: Which Rule Wins
+
+There are two ways to set the location of a returned item. Do not use both for the same return.
+
+| Rule | Where | Effect |
+|---|---|---|
+| **Location Code** on a WMS/Return Reason Code row | This table | Overrides the location logic of the Business Central return reason code. This is the recommended way. |
+| A value mapping to **Location Code** on the return line | [Incoming Data Mapping](incoming-data/mapping.md) | Works, but the location set on the Business Central return reason code is applied afterwards and overwrites it. |
+
+If you map the location with a value mapping, leave the location blank on the Business Central return reason codes that are used. Otherwise the return reason code decides the location, and the mapping seems to have no effect.
+
+The WMS/Return Reason Code does not have to be the same as the Business Central return reason code. It can be, but it is a code of its own that points to a return reason code, a location and the other fields above.
+
+## Combine Two Values Into One Code
+
+Some external systems send the return reason and the outcome in two separate fields. For example, one key holds the reason the customer gave, and another key holds the status after inspection, such as restocked or scrapped. Both values decide what happens to the return.
+
+**Standard:** combine the two keys into one WMS/Return Reason Code and let this table decide everything.
+
+1. In the [incoming data mapping](incoming-data/mapping.md) of the WMS line, read both keys on the line that sets the reason code. List them in **JSON Key Name**, separated by a comma.
+2. Web Connect joins the two values into one value on the WMS line.
+3. Add one row in this table per combination that can occur. Use the joined value, exactly as it appears on the WMS line, as **Code**.
+4. Set **Return Reason Code**, **Location Code** and the other fields on each row.
+
+The table then works as a matrix of the two values:
+
+| Reason (key 1) | Status (key 2) | Return Reason Code | Location Code |
+|---|---|---|---|
+| Changed mind | Restocked | RETURN | MAIN |
+| Changed mind | Scrapped | RETURN | SCRAP |
+| Complaint | Restocked | COMPLAINT | MAIN |
+| Complaint | Scrapped | COMPLAINT | SCRAP |
+
+Include every combination. A combination without a row cannot be given a return reason code.
+
+**Alternative:** map one key to the return reason code through this table, and the other key to **Location Code** with a value mapping. It works, but it needs one more mapping, and the location on the Business Central return reason code must be left blank (see above).
+
 ## Examples
 
 **Damaged goods to a separate location:** Code `DAMAGED`, **Return Reason Code** `DAMAGED`, **Location Code** set to the location for damaged goods. The returned items do not end up in sellable stock.
@@ -54,6 +91,7 @@ If the external system later introduces new IDs, add new rows and keep the old o
 | Add a new return reason | A new row with the value from the external system as **Code** | The warehouse starts sending a new reason ID |
 | Which return reason code is used | **Return Reason Code** | Separate complaints from ordinary returns |
 | Where returned items go | **Location Code** | Send complaints to a scrap location |
+| A new combination of reason and status | A new row with the joined value as **Code** | The returns system starts sending a new status |
 | When a return fee is added | **Add Fee on Return**, **Return Fee Condition** and **Special Return Item** | Charge a fee for parcels that were not picked up |
 
 ## Related
@@ -62,3 +100,4 @@ If the external system later introduces new IDs, add new rows and keep the old o
 - [Web Connect WMS Documents](wms-documents.md)
 - [Web Connect Text Mapping](text-mapping.md)
 - [Web Connect Condition List](condition-list.md)
+- [Web Connect Incoming Data Mapping](incoming-data/mapping.md)
