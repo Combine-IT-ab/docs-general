@@ -1,22 +1,23 @@
 ---
-title: "Business Central och Milient (tidigare Milltime): integration"
+title: "Business Central och Milient Time Flow (tidigare Milltime): integration"
 description: "Web Connect kopplar ihop Business Central med Milient för tid och projekt: fakturor och projekt in, kunder, bokförda fakturor och projektkostnader ut."
-summary: "Web Connect från CombineIT kopplar ihop Microsoft Dynamics 365 Business Central med Milient (tidigare Milltime), systemet för tidrapportering och projektstyrning. Fakturor och projekt hämtas från Milient till Business Central, och kunder, bokförda fakturanummer och leverantörskostnader på projekt skickas till Milient. Alla mappningar och regler finns i ditt eget Business Central, där du själv kan se och ändra dem."
+summary: "Web Connect från CombineIT kopplar ihop Microsoft Dynamics 365 Business Central med Milient Time Flow (tidigare Milltime), systemet för tidrapportering och projektstyrning. Fakturor och projekt hämtas från Milient till Business Central, och kunder, bokförda fakturanummer och leverantörskostnader på projekt skickas till Milient. Alla mappningar och regler finns i ditt eget Business Central, där du själv kan se och ändra dem."
 lang: sv
 translation_key: integration-milient
 product: web-connect
 type: integration
-system: "Milient (formerly Milltime)"
+system: "Milient Time Flow (formerly Milltime)"
 system_category: "time and project management"
 data_flows: 5
 keywords:
+  - milient time flow business central
   - business central milient integration
   - milient business central
   - milltime business central
   - milient erp integration
   - milltime erp integration
 faq:
-  - question: "Går det att integrera Business Central med Milient (tidigare Milltime)?"
+  - question: "Går det att integrera Business Central med Milient Time Flow (tidigare Milltime)?"
     answer: "Ja. Web Connect kopplar ihop Business Central med Milient via Milients REST API. Reserverade fakturor och projekt hämtas till Business Central, och kunder, bokförda fakturanummer och leverantörskostnader på projekt skickas till Milient."
   - question: "Vad händer om en faktura reserveras i Milient med fel fakturadatum?"
     answer: "Web Connect hämtar varje reserverad faktura, och Milient har ingen senare status att vänta på. En faktura som reserverats med fel datum kommer in i Business Central och måste krediteras. Vid månadsskiftet kan du pausa jobbet som hämtar fakturor, granska de reserverade fakturorna i Milient och starta jobbet igen."
@@ -29,15 +30,15 @@ faq:
 last_reviewed: 2026-11-19
 ---
 
-# Business Central och Milient (tidigare Milltime): integration
+# Business Central och Milient Time Flow (tidigare Milltime): integration
 
-Web Connect från CombineIT kopplar ihop Microsoft Dynamics 365 Business Central med Milient (tidigare Milltime), systemet för tidrapportering och projektstyrning. Fakturor och projekt hämtas från Milient till Business Central, och kunder, bokförda fakturanummer och leverantörskostnader på projekt skickas till Milient. Alla mappningar och regler finns i ditt eget Business Central, där du själv kan se och ändra dem.
+Web Connect från CombineIT kopplar ihop Microsoft Dynamics 365 Business Central med Milient Time Flow (tidigare Milltime), systemet för tidrapportering och projektstyrning. Fakturor och projekt hämtas från Milient till Business Central, och kunder, bokförda fakturanummer och leverantörskostnader på projekt skickas till Milient. Alla mappningar och regler finns i ditt eget Business Central, där du själv kan se och ändra dem.
 
 ## I korthet
 
 | | |
 |---|---|
-| **System** | Milient, tidigare Milltime (tidrapportering och projektstyrning) |
+| **System** | Milient Time Flow, tidigare Milltime (tidrapportering och projektstyrning från Milient) |
 | **Integrationsprodukt** | Web Connect för Microsoft Dynamics 365 Business Central |
 | **Körs i** | Din egen Business Central-miljö, som ett tillägg. Web Connect hämtar reserverade fakturor och ändrade projekt från Milient enligt schema i jobbkön i Business Central, och skickar kunder, bokförda fakturanummer och leverantörskostnader till Milient när de ändras eller bokförs i Business Central. Inga webhooks och ingen extern integrationsplattform är inblandade. |
 | **Konfigureras av** | Dig, i Business Central: mappningar, villkor, triggers och flöden. Du kan göra allt själv. Om du vill är CombineIT med i vilket steg som helst, som bollplank eller genom att göra jobbet. |
@@ -210,7 +211,7 @@ All konfiguration och logik i integrationen syns och kan ändras i Business Cent
 
 ## Vanliga frågor
 
-### Går det att integrera Business Central med Milient (tidigare Milltime)?
+### Går det att integrera Business Central med Milient Time Flow (tidigare Milltime)?
 
 Ja. Web Connect kopplar ihop Business Central med Milient via Milients REST API. Reserverade fakturor och projekt hämtas till Business Central, och kunder, bokförda fakturanummer och leverantörskostnader på projekt skickas till Milient.
 

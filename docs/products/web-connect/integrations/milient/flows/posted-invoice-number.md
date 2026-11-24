@@ -1,13 +1,13 @@
 ---
 title: "Business Central to Milient: posted invoice numbers"
 description: "When a sales invoice or credit memo from Milient is posted in Business Central, Web Connect writes the posted number and the status Posted back to Milient."
-summary: "When a sales invoice or credit memo that came from Milient (formerly Milltime) is posted in Business Central, Web Connect writes the posted document number back to the invoice in Milient, together with the status Posted. Milient then shows which Business Central document the invoice became."
+summary: "When a sales invoice or credit memo that came from Milient Time Flow (formerly Milltime) is posted in Business Central, Web Connect writes the posted document number back to the invoice in Milient, together with the status Posted. Milient then shows which Business Central document the invoice became."
 slug: integrations/business-central-milient/posted-invoice-number
 lang: en
 translation_key: integration-milient-posted-invoice-number
 product: web-connect
 type: integration-flow
-system: "Milient (formerly Milltime)"
+system: "Milient Time Flow (formerly Milltime)"
 system_category: "time and project management"
 keywords:
   - business central milient posted invoice
@@ -20,7 +20,7 @@ last_reviewed: 2026-11-19
 
 # Business Central to Milient: posted invoice numbers
 
-When a sales invoice or credit memo that came from Milient (formerly Milltime) is posted in Business Central, Web Connect writes the posted document number back to the invoice in Milient, together with the status Posted. Milient then shows which Business Central document the invoice became.
+When a sales invoice or credit memo that came from Milient Time Flow (formerly Milltime) is posted in Business Central, Web Connect writes the posted document number back to the invoice in Milient, together with the status Posted. Milient then shows which Business Central document the invoice became.
 
 | | |
 |---|---|

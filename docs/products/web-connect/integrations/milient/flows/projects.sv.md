@@ -1,12 +1,12 @@
 ---
 title: "Från Milient till Business Central: projekt"
 description: "Web Connect hämtar nya och ändrade projekt från Milient enligt schema och skapar dem som dimensionsvärden i Business Central, vid behov med attribut."
-summary: "Web Connect hämtar nya och ändrade projekt från Milient (tidigare Milltime) enligt schema och skapar varje projekt som ett dimensionsvärde i Business Central. Om du vill skapar utvalda projektattribut också värden i andra dimensioner. Fakturaraderna får då rätt dimensioner när fakturorna importeras."
+summary: "Web Connect hämtar nya och ändrade projekt från Milient Time Flow (tidigare Milltime) enligt schema och skapar varje projekt som ett dimensionsvärde i Business Central. Om du vill skapar utvalda projektattribut också värden i andra dimensioner. Fakturaraderna får då rätt dimensioner när fakturorna importeras."
 lang: sv
 translation_key: integration-milient-projects
 product: web-connect
 type: integration-flow
-system: "Milient (formerly Milltime)"
+system: "Milient Time Flow (formerly Milltime)"
 system_category: "time and project management"
 keywords:
   - business central milient projects dimensions
@@ -19,14 +19,14 @@ last_reviewed: 2026-11-19
 
 # Från Milient till Business Central: projekt
 
-Web Connect hämtar nya och ändrade projekt från Milient (tidigare Milltime) enligt schema och skapar varje projekt som ett dimensionsvärde i Business Central. Om du vill skapar utvalda projektattribut också värden i andra dimensioner. Fakturaraderna får då rätt dimensioner när fakturorna importeras.
+Web Connect hämtar nya och ändrade projekt från Milient Time Flow (tidigare Milltime) enligt schema och skapar varje projekt som ett dimensionsvärde i Business Central. Om du vill skapar utvalda projektattribut också värden i andra dimensioner. Fakturaraderna får då rätt dimensioner när fakturorna importeras.
 
 | | |
 |---|---|
 | **Riktning** | Milient → Business Central |
 | **Startas av** | Schema i jobbkön i Business Central. Varje körning frågar Milient efter projekt som ändrats sedan förra körningen |
 | **Resultat** | Ett dimensionsvärde per projekt i projektdimensionen, med projektnumret som kod och projektnamnet som namn |
-| **Del av** | [Business Central och Milient (tidigare Milltime): integration](../overview.md) |
+| **Del av** | [Business Central och Milient Time Flow (tidigare Milltime): integration](../overview.md) |
 
 ## Steg för steg
 
@@ -84,6 +84,6 @@ Oftast för att posten stannade med ett fel i Incoming Data, till exempel en kod
 
 ## Relaterat
 
-- [Business Central och Milient (tidigare Milltime): integration](../overview.md)
+- [Business Central och Milient Time Flow (tidigare Milltime): integration](../overview.md)
 - [Kundfakturor och kreditnotor](invoice-inbound.md)
 - [Mappning i Incoming Data](../../../general/incoming-data/mapping.md) · [Condition List](../../../general/condition-list.md) · [Text Mapping](../../../general/text-mapping.md)

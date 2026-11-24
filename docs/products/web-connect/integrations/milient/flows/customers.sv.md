@@ -1,12 +1,12 @@
 ---
 title: "Från Business Central till Milient: kunder"
 description: "Web Connect skapar och uppdaterar kunder i Milient när de skapas eller ändras i Business Central, med adresser, villkor, faktureringsmetod och momstyp."
-summary: "När en kund skapas eller ett utvalt fält ändras i Business Central skapar eller uppdaterar Web Connect kunden i Milient (tidigare Milltime). Nya kunder skapas, och kunder som redan är kopplade till Milient uppdateras med sitt Milient-ID i anropets adress."
+summary: "När en kund skapas eller ett utvalt fält ändras i Business Central skapar eller uppdaterar Web Connect kunden i Milient Time Flow (tidigare Milltime). Nya kunder skapas, och kunder som redan är kopplade till Milient uppdateras med sitt Milient-ID i anropets adress."
 lang: sv
 translation_key: integration-milient-customers
 product: web-connect
 type: integration-flow
-system: "Milient (formerly Milltime)"
+system: "Milient Time Flow (formerly Milltime)"
 system_category: "time and project management"
 keywords:
   - business central milient customer sync
@@ -23,14 +23,14 @@ last_reviewed: 2026-11-19
 
 # Från Business Central till Milient: kunder
 
-När en kund skapas eller ett utvalt fält ändras i Business Central skapar eller uppdaterar Web Connect kunden i Milient (tidigare Milltime). Nya kunder skapas, och kunder som redan är kopplade till Milient uppdateras med sitt Milient-ID i anropets adress.
+När en kund skapas eller ett utvalt fält ändras i Business Central skapar eller uppdaterar Web Connect kunden i Milient Time Flow (tidigare Milltime). Nya kunder skapas, och kunder som redan är kopplade till Milient uppdateras med sitt Milient-ID i anropets adress.
 
 | | |
 |---|---|
 | **Riktning** | Business Central → Milient |
 | **Startas av** | En kund skapas, eller något av de utvalda fälten ändras, i Business Central. Bara kunder som uppfyller filtret på objektet skickas. Uppladdningen körs från jobbkön |
 | **Resultat** | Kunden finns i Milient med samma kundnummer, och Milient-ID:t sparas som externt ID i Business Central |
-| **Del av** | [Business Central och Milient (tidigare Milltime): integration](../overview.md) |
+| **Del av** | [Business Central och Milient Time Flow (tidigare Milltime): integration](../overview.md) |
 
 ## Steg för steg
 
@@ -112,6 +112,6 @@ Ja. Markera kunden i kundlistan i Business Central och använd Send to external 
 
 ## Relaterat
 
-- [Business Central och Milient (tidigare Milltime): integration](../overview.md)
+- [Business Central och Milient Time Flow (tidigare Milltime): integration](../overview.md)
 - [Kundfakturor och kreditnotor](invoice-inbound.md)
 - [Outgoing Sync Triggers](../../../general/outgoing-mapping/outgoing-sync-triggers.md) · [Text Mapping](../../../general/text-mapping.md)

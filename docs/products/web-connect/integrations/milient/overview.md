@@ -1,23 +1,24 @@
 ---
-title: "Business Central and Milient (formerly Milltime) integration"
+title: "Business Central and Milient Time Flow (formerly Milltime) integration"
 description: "Web Connect connects Business Central with Milient time and project management: invoices and projects in, customers, posted invoices and project costs out."
-summary: "Web Connect by CombineIT connects Microsoft Dynamics 365 Business Central with Milient (formerly Milltime), the time and project management system. Invoices and projects are fetched from Milient into Business Central, and customers, posted invoice numbers and supplier costs on projects are sent to Milient. All mappings and rules live in your own Business Central, where you can see and change them yourself."
+summary: "Web Connect by CombineIT connects Microsoft Dynamics 365 Business Central with Milient Time Flow (formerly Milltime), the time and project management system. Invoices and projects are fetched from Milient into Business Central, and customers, posted invoice numbers and supplier costs on projects are sent to Milient. All mappings and rules live in your own Business Central, where you can see and change them yourself."
 slug: integrations/business-central-milient
 lang: en
 translation_key: integration-milient
 product: web-connect
 type: integration
-system: "Milient (formerly Milltime)"
+system: "Milient Time Flow (formerly Milltime)"
 system_category: "time and project management"
 data_flows: 5
 keywords:
+  - milient time flow business central
   - business central milient integration
   - milient business central
   - milltime business central
   - milient erp integration
   - milltime erp integration
 faq:
-  - question: "Can Business Central be integrated with Milient (formerly Milltime)?"
+  - question: "Can Business Central be integrated with Milient Time Flow (formerly Milltime)?"
     answer: "Yes. Web Connect connects Business Central with Milient through the Milient REST API. Reserved invoices and projects are fetched into Business Central, and customers, posted invoice numbers and supplier costs on projects are sent to Milient."
   - question: "What happens if an invoice is reserved in Milient with the wrong invoice date?"
     answer: "Web Connect fetches every reserved invoice, and Milient has no later status to wait for. An invoice reserved with the wrong date reaches Business Central and has to be credited. During month end you can pause the job that fetches invoices, review the reserved invoices in Milient and start the job again."
@@ -30,15 +31,15 @@ faq:
 last_reviewed: 2026-11-19
 ---
 
-# Business Central and Milient (formerly Milltime) integration
+# Business Central and Milient Time Flow (formerly Milltime) integration
 
-Web Connect by CombineIT connects Microsoft Dynamics 365 Business Central with Milient (formerly Milltime), the time and project management system. Invoices and projects are fetched from Milient into Business Central, and customers, posted invoice numbers and supplier costs on projects are sent to Milient. All mappings and rules live in your own Business Central, where you can see and change them yourself.
+Web Connect by CombineIT connects Microsoft Dynamics 365 Business Central with Milient Time Flow (formerly Milltime), the time and project management system. Invoices and projects are fetched from Milient into Business Central, and customers, posted invoice numbers and supplier costs on projects are sent to Milient. All mappings and rules live in your own Business Central, where you can see and change them yourself.
 
 ## At a glance
 
 | | |
 |---|---|
-| **System** | Milient, formerly Milltime (time and project management) |
+| **System** | Milient Time Flow, formerly Milltime (time and project management from Milient) |
 | **Integration product** | Web Connect for Microsoft Dynamics 365 Business Central |
 | **Runs in** | Your own Business Central environment, as an extension. Web Connect fetches reserved invoices and changed projects from Milient on a schedule in the Business Central job queue, and sends customers, posted invoice numbers and supplier costs to Milient when they change or are posted in Business Central. No webhooks and no external integration platform are involved. |
 | **Configured by** | You, in Business Central: mappings, conditions, triggers and flows. You can do all of it yourself. If you want, CombineIT takes part in any step, as a sounding board or by doing the work. |
@@ -211,7 +212,7 @@ All configuration and logic in the integration is visible and editable in Busine
 
 ## Frequently asked questions
 
-### Can Business Central be integrated with Milient (formerly Milltime)?
+### Can Business Central be integrated with Milient Time Flow (formerly Milltime)?
 
 Yes. Web Connect connects Business Central with Milient through the Milient REST API. Reserved invoices and projects are fetched into Business Central, and customers, posted invoice numbers and supplier costs on projects are sent to Milient.
 

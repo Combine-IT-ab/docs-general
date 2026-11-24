@@ -1,13 +1,13 @@
 ---
 title: "Milient to Business Central: customer invoices and credit notes"
 description: "Web Connect fetches reserved invoices from Milient on a schedule and creates sales invoices or credit memos in Business Central, with project dimensions."
-summary: "When an invoice is reserved in Milient (formerly Milltime), Web Connect fetches it on the next scheduled run and creates a sales invoice in Business Central. Invoices that credit another invoice become sales credit memos. The lines get their dimensions from the project and its attributes in Milient."
+summary: "When an invoice is reserved in Milient Time Flow (formerly Milltime), Web Connect fetches it on the next scheduled run and creates a sales invoice in Business Central. Invoices that credit another invoice become sales credit memos. The lines get their dimensions from the project and its attributes in Milient."
 slug: integrations/business-central-milient/invoice-inbound
 lang: en
 translation_key: integration-milient-invoice-inbound
 product: web-connect
 type: integration-flow
-system: "Milient (formerly Milltime)"
+system: "Milient Time Flow (formerly Milltime)"
 system_category: "time and project management"
 keywords:
   - business central milient invoice import
@@ -22,7 +22,7 @@ last_reviewed: 2026-11-19
 
 # Milient to Business Central: customer invoices and credit notes
 
-When an invoice is reserved in Milient (formerly Milltime), Web Connect fetches it on the next scheduled run and creates a sales invoice in Business Central. Invoices that credit another invoice become sales credit memos. The lines get their dimensions from the project and its attributes in Milient.
+When an invoice is reserved in Milient Time Flow (formerly Milltime), Web Connect fetches it on the next scheduled run and creates a sales invoice in Business Central. Invoices that credit another invoice become sales credit memos. The lines get their dimensions from the project and its attributes in Milient.
 
 | | |
 |---|---|

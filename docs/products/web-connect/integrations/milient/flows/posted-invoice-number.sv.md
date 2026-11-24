@@ -1,12 +1,12 @@
 ---
 title: "Från Business Central till Milient: bokförda fakturanummer"
 description: "När en försäljningsfaktura eller kreditnota från Milient bokförs i Business Central skriver Web Connect tillbaka bokfört nummer och status Posted till Milient."
-summary: "När en försäljningsfaktura eller kreditnota som kom från Milient (tidigare Milltime) bokförs i Business Central skriver Web Connect tillbaka det bokförda dokumentnumret till fakturan i Milient, tillsammans med statusen Posted. Milient visar då vilket dokument i Business Central fakturan blev."
+summary: "När en försäljningsfaktura eller kreditnota som kom från Milient Time Flow (tidigare Milltime) bokförs i Business Central skriver Web Connect tillbaka det bokförda dokumentnumret till fakturan i Milient, tillsammans med statusen Posted. Milient visar då vilket dokument i Business Central fakturan blev."
 lang: sv
 translation_key: integration-milient-posted-invoice-number
 product: web-connect
 type: integration-flow
-system: "Milient (formerly Milltime)"
+system: "Milient Time Flow (formerly Milltime)"
 system_category: "time and project management"
 keywords:
   - business central milient posted invoice
@@ -19,14 +19,14 @@ last_reviewed: 2026-11-19
 
 # Från Business Central till Milient: bokförda fakturanummer
 
-När en försäljningsfaktura eller kreditnota som kom från Milient (tidigare Milltime) bokförs i Business Central skriver Web Connect tillbaka det bokförda dokumentnumret till fakturan i Milient, tillsammans med statusen Posted. Milient visar då vilket dokument i Business Central fakturan blev.
+När en försäljningsfaktura eller kreditnota som kom från Milient Time Flow (tidigare Milltime) bokförs i Business Central skriver Web Connect tillbaka det bokförda dokumentnumret till fakturan i Milient, tillsammans med statusen Posted. Milient visar då vilket dokument i Business Central fakturan blev.
 
 | | |
 |---|---|
 | **Riktning** | Business Central → Milient |
 | **Startas av** | Bokföring av en försäljningsfaktura eller försäljningskreditnota i Business Central |
 | **Resultat** | Fakturan i Milient har det bokförda numret från Business Central som externt fakturanummer och statusen Posted |
-| **Del av** | [Business Central och Milient (tidigare Milltime): integration](../overview.md) |
+| **Del av** | [Business Central och Milient Time Flow (tidigare Milltime): integration](../overview.md) |
 
 ## Steg för steg
 
@@ -82,6 +82,6 @@ Nej. Bara bokförda försäljningsfakturor och kreditnotor som skapats från en 
 
 ## Relaterat
 
-- [Business Central och Milient (tidigare Milltime): integration](../overview.md)
+- [Business Central och Milient Time Flow (tidigare Milltime): integration](../overview.md)
 - [Kundfakturor och kreditnotor](invoice-inbound.md)
 - [Outgoing Sync Triggers](../../../general/outgoing-mapping/outgoing-sync-triggers.md) · [Entries](../../../general/entries.md)

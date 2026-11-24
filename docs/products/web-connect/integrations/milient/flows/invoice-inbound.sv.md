@@ -1,12 +1,12 @@
 ---
 title: "Från Milient till Business Central: kundfakturor och kreditnotor"
 description: "Web Connect hämtar reserverade fakturor från Milient enligt schema och skapar försäljningsfakturor eller kreditnotor i Business Central, med projektdimensioner."
-summary: "När en faktura reserveras i Milient (tidigare Milltime) hämtar Web Connect den vid nästa schemalagda körning och skapar en försäljningsfaktura i Business Central. Fakturor som krediterar en annan faktura blir försäljningskreditnotor. Raderna får sina dimensioner från projektet och dess attribut i Milient."
+summary: "När en faktura reserveras i Milient Time Flow (tidigare Milltime) hämtar Web Connect den vid nästa schemalagda körning och skapar en försäljningsfaktura i Business Central. Fakturor som krediterar en annan faktura blir försäljningskreditnotor. Raderna får sina dimensioner från projektet och dess attribut i Milient."
 lang: sv
 translation_key: integration-milient-invoice-inbound
 product: web-connect
 type: integration-flow
-system: "Milient (formerly Milltime)"
+system: "Milient Time Flow (formerly Milltime)"
 system_category: "time and project management"
 keywords:
   - business central milient invoice import
@@ -21,14 +21,14 @@ last_reviewed: 2026-11-19
 
 # Från Milient till Business Central: kundfakturor och kreditnotor
 
-När en faktura reserveras i Milient (tidigare Milltime) hämtar Web Connect den vid nästa schemalagda körning och skapar en försäljningsfaktura i Business Central. Fakturor som krediterar en annan faktura blir försäljningskreditnotor. Raderna får sina dimensioner från projektet och dess attribut i Milient.
+När en faktura reserveras i Milient Time Flow (tidigare Milltime) hämtar Web Connect den vid nästa schemalagda körning och skapar en försäljningsfaktura i Business Central. Fakturor som krediterar en annan faktura blir försäljningskreditnotor. Raderna får sina dimensioner från projektet och dess attribut i Milient.
 
 | | |
 |---|---|
 | **Riktning** | Milient → Business Central |
 | **Startas av** | Schema i jobbkön i Business Central. Varje körning frågar Milient efter reserverade fakturor med deras rader |
 | **Resultat** | En obokförd försäljningsfaktura eller försäljningskreditnota i Business Central, kopplad till fakturanumret i Milient. Inget ändras i Milient förrän dokumentet bokförs, se [Bokförda fakturanummer](posted-invoice-number.md) |
-| **Del av** | [Business Central och Milient (tidigare Milltime): integration](../overview.md) |
+| **Del av** | [Business Central och Milient Time Flow (tidigare Milltime): integration](../overview.md) |
 
 ## Steg för steg
 
@@ -113,6 +113,6 @@ Den hämtas som vilken annan reserverad faktura som helst och måste krediteras.
 
 ## Relaterat
 
-- [Business Central och Milient (tidigare Milltime): integration](../overview.md)
+- [Business Central och Milient Time Flow (tidigare Milltime): integration](../overview.md)
 - [Bokförda fakturanummer](posted-invoice-number.md) · [Projekt](projects.md)
 - [Mappning i Incoming Data](../../../general/incoming-data/mapping.md) · [Condition List](../../../general/condition-list.md) · [Text Mapping](../../../general/text-mapping.md)
