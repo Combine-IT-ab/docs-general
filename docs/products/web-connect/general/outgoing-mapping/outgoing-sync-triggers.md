@@ -65,6 +65,38 @@ The table view and the condition decide whether a change creates outgoing data a
 
 Test changes in a sandbox first. Records that changed before the trigger was set up are not sent by themselves. Add them manually in [Web Connect Outgoing Data](outgoing-data-web.md).
 
+## Best Practice
+
+### Send a Message Only for Documents Created by an Integration
+
+Use this when a message, for example an order confirmation, should be sent when an integration creates a document, but not when a user creates an order or a quote manually.
+
+**Standard:** trigger on modify of the **WCM Source** field on the document header.
+
+1. Set **Trigger on Modify** to **Some Fields**.
+2. Add **WCM Source** as the only trigger field.
+
+Why it works:
+
+- Web Connect sets **WCM Source** only when an integration creates the document. The field is blank on documents created manually.
+- The field is not changed afterwards, so the message is sent once.
+- Business Central first inserts the document with only the primary key. The other fields, including **WCM Source**, arrive in a modify right after. The modify trigger therefore catches the creation.
+- Standard fields can be changed by other processes in Business Central. Web Connect fields are only updated by Web Connect mappings.
+
+**Why not Trigger on Insert:** many processes in Business Central insert records without running the insert events, especially in posting routines. Web Connect, and any other app, never sees those inserts, so the trigger does not fire.
+
+**Alternative:** use **Trigger on Incremental** instead. It goes through the records that are new since the last record it handled, however they were inserted. The message is then sent when the incremental check runs (see **Incremental Check**), not immediately. Do not use **Trigger on Job Queue** for this: it creates outgoing data for every record in the table view on each run.
+
+### New or Changed Triggers Need a New Session
+
+Business Central activates outgoing sync triggers when a session starts. A trigger that is added or changed (for example Trigger on Insert or Trigger on Modify) does not fire in a session that was already open.
+
+1. Save the trigger.
+2. Sign out of Business Central and sign in again. Refreshing the page (F5) is not enough.
+3. Test the trigger in the new session.
+
+If a new trigger seems not to work, start a new session before troubleshooting further. Business Central's change log works the same way and asks for a restart of the session when it is enabled.
+
 ## Related
 
 - [Web Connect Outgoing Data](outgoing-data-web.md)
