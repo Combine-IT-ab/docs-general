@@ -33,10 +33,15 @@ An integration can be disabled without any visible error. Messages simply stop b
 
 ## 4. Is the Job Queue Running?
 
-Web Connect relies on job queue entries to move data. Verify that the relevant entries are running:
+Web Connect relies on job queue entries to move data. Every integration needs the upload and download jobs. A logistics integration (a WMS or 3PL) also needs the logistics job. Without it, receipts and shipments from the warehouse never reach Business Central.
 
-- **WCM Upload** — sends outgoing data
-- **WCM Download / Update** — fetches and processes incoming data
+| Job queue entry | Codeunit | Needed for | Created from |
+|---|---|---|---|
+| **WCM Upload Job** | 12096509 | All integrations. Sends outgoing data | [Web Connect General Setup](../../products/web-connect/general/general-setup.md) |
+| **WCM Download/Update Job** | 12096522 | All integrations. Fetches and processes incoming data | [Web Connect General Setup](../../products/web-connect/general/general-setup.md) |
+| **WCM Logistics Job** | 12096563 | Logistics integrations. Processes WMS documents such as receipts and shipments | [Logistics Setup](../../products/web-connect/general/logistics-setup.md) |
+
+Create the entries from Web Connect, not by hand in **Job Queue Entries**. New entries are created *On Hold*. Someone with permission to start job queue entries must set them to **Ready**.
 
 For each entry, check that:
 
@@ -46,7 +51,11 @@ For each entry, check that:
 
 If an entry has stopped, open it and read the error message, then choose **Set Status to Ready** to restart it. If it fails again immediately, the error message points to the underlying cause.
 
-<!-- screenshot: Job Queue Entries filtered on WCM Upload and WCM Download / Update -->
+To see that the chain works, run the entries once in the foreground: Download/Update first, then Logistics. Any error is shown directly.
+
+Install [Job Queue Monitor](../../products/job-queue-monitor/README.md) to keep the entries running. It restarts them when they stop.
+
+<!-- screenshot: Job Queue Entries filtered on WCM Upload, WCM Download / Update and WCM Logistics -->
 
 ## 5. Are Transactions Being Created and Processed?
 
