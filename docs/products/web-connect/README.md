@@ -21,13 +21,17 @@ Product-level documentation covering how Web Connect works — setup, configurat
 
 ## Integrations
 
-Platform-specific documentation for each external system connected via Web Connect.
+Web Connect has documented integrations for these systems. See [all integrations](integrations/README.md) for what each one synchronizes.
 
-| Integration | Description |
+| Type | Integrations |
 |---|---|
-| [Centra](integrations/centra/overview.md) | E-commerce platform — orders, stock, products, shipments |
-| [Virtual Stock](integrations/virtual-stock/overview.md) | Dropship marketplace platform |
-| [Shopify](integrations/shopify/README.md) | E-commerce platform: orders, products, prices, stock and shipments |
+| E-commerce | [Centra](integrations/centra/overview.md) · [Shopify](integrations/shopify/README.md) · [Norce Commerce](integrations/norce/overview.md) · [Crystallize](integrations/crystallize/overview.md) · [WooCommerce](integrations/woocommerce/overview.md) |
+| Marketplaces | [Virtualstock](integrations/virtual-stock/overview.md) · [Boots marketplace](integrations/boots/overview.md) · [Sello](integrations/sello/overview.md) |
+| Warehouse (WMS and 3PL) | [Ongoing WMS](integrations/ongoing/overview.md) · [Astro WMS](integrations/astro/overview.md) · [Nyce Logic WMS](integrations/nyce/overview.md) · [Nowaste](integrations/nowaste/overview.md) · [Shelfless](integrations/shelfless/overview.md) |
+| POS | [Sitoo POS](integrations/sitoo/overview.md) |
+| Returns | [Global-e returns](integrations/global-e/overview.md) · [Inretrn](integrations/inretrn/overview.md) · [Reclaimit](integrations/reclaimit/overview.md) |
+| Product data (PIM and PLM) | [Plytix PIM](integrations/plytix/overview.md) · [Resourced PLM](integrations/resourced/overview.md) |
+| Other | [Voyado](integrations/voyado/overview.md) · [Addimotion](integrations/addimotion/overview.md) · [CHESS](integrations/chess/overview.md) · [Milient Time Flow](integrations/milient/overview.md) |
 
 ---
 
