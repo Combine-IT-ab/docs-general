@@ -10,6 +10,8 @@ The setup says which documents are sent to the system, which [Web Connect Object
 
 The integration pages describe how each system uses the setup: [Ongoing WMS](../integrations/ongoing/overview.md), [Nyce Logic WMS](../integrations/nyce/overview.md), [Astro WMS](../integrations/astro/overview.md), [Nowaste](../integrations/nowaste/overview.md), [Shelfless](../integrations/shelfless/overview.md), [Sitoo POS](../integrations/sitoo/overview.md), [Reclaimit](../integrations/reclaimit/overview.md) and [Sello](../integrations/sello/overview.md).
 
+WMS documents are processed automatically by the Logistics job, a job queue entry (codeunit `12096563`) created from the logistics setup. The setup decides, per document type, whether the job only fills in the Business Central document or also posts it. See [Automatic posting](#automatic-posting).
+
 All logistics setups live in your own Business Central. You can see and change every field yourself.
 
 The tables use the names shown on the card. When a field has another name in a configuration export, that name is shown below it.
@@ -84,8 +86,8 @@ Orders that are sent to the system to pick and ship, and the shipments it report
 
 | Field | Description |
 |-------|-------------|
-| **Integrate Sales Order** | Sales orders for the location are sent to the system. |
-| **Integrate Inventory Pick**<br>`Integrate Warehouse Pick` | Inventory picks are sent to the system, as in [Astro WMS](../integrations/astro/overview.md). |
+| **Integrate Sales Order** | Sales orders for the location are sent to the system. The sales order gets a WMS status and a **Warehouse** action. |
+| **Integrate Inventory Pick**<br>`Integrate Warehouse Pick` | Inventory picks are sent to the system, as in [Astro WMS](../integrations/astro/overview.md). The sales order gets no WMS status and no WMS actions. |
 | **Integrate Warehouse Shipment** | Warehouse shipments are sent to the system. |
 | **Include Service/Non-Inventory Items**<br>`Include Serv./Non-Inv. Items` | Lines without stock, such as freight, are sent with the order. Without it they are left out. |
 | **Auto-Send on Document Release**<br>`Send on Goods Out on Release` | The order is sent when it is released in Business Central. |
@@ -93,7 +95,7 @@ Orders that are sent to the system to pick and ship, and the shipments it report
 | **Auto-Send Non-Sent Inv. Pick**<br>`Auto-Send Non-Sent Inv.Pick` | The job queue sends inventory picks that have not been sent yet. |
 | **Allow Over Shipment** | The system may report more shipped than ordered. |
 | **Tolerance % - Over Shipment** | How much more than ordered may be shipped, in percent. |
-| **Post Shipping** | The shipment is posted automatically when the system reports it. |
+| **Post Shipping** | The shipment is posted automatically when the system reports it. Without it, the quantity to ship is filled in on the order and the shipment waits for you to post it. |
 | **Post Shipment View** | A filter on the WMS documents that decides which shipments are posted, usually on the status from the system, for example `Sent` in Ongoing. |
 | **Change Posting Date to Work Date**<br>`Posting Date to Work Date` | The shipment or receipt is posted with the work date of the job queue run instead of the date from the system. |
 | **Invoice & Ship Sales Document**<br>`Invoice and Ship` | The sales order is shipped and invoiced in one posting. |
@@ -166,7 +168,7 @@ Stock adjustments and stock counts from the system are written to item journals.
 | **Phys. Inventory Journal Template**<br>`Invent. Journal Template` | The physical inventory journal template for stock counts from the system. |
 | **Phys. Inventory Journal Batch**<br>`Invent. Journal Batch` | The physical inventory journal batch for stock counts. |
 | **Add Missing Items to Phys. Inv. Journal**<br>`Add Missing Items To Journal` | Items in stock in Business Central that are missing in the stock count are added to the journal. |
-| **Auto-Post Balance** | The physical inventory journal is posted automatically. |
+| **Auto-Post Balance** | The physical inventory journal is posted automatically. Usually off, see [Automatic posting](#automatic-posting). |
 | **Serial No. on Adjustments/Balance**<br>`Serial No. - Journal` | Serial numbers from the system are used in the journals. |
 | **Batch No. on Adjustments/Balance**<br>`Batch No. - Journal` | Lot numbers (batch numbers) from the system are used in the journals. |
 | **Clear Phys. Inv. on Both Zero** | Journal lines where both the counted and the calculated quantity are zero are removed. |
@@ -214,6 +216,30 @@ These fields are used in a few setups for special cases. Leave them as they are 
 | **Sitoo Auto Get Balance**<br>`WCM Sitoo Auto Get Balance` | Advanced setting for stock balances from Sitoo POS. |
 | **Sitoo Auto Get Balance Time**<br>`WCM Sitoo Auto Get Bal. Time` | Advanced setting for stock balances from Sitoo POS. |
 | **Sitoo Last Balance Time**<br>`WCM Sitoo Last Balance Time` | Advanced setting for stock balances from Sitoo POS. Filled in by Web Connect. |
+
+## Automatic posting
+
+The Logistics job processes every WMS document from the system. Each document type has its own setting that decides whether the job also posts the result.
+
+| Document from the system | Setting | Off | On |
+|---|---|---|---|
+| Shipping notice | **Post Shipping** and **Post Shipment View** | The quantity to ship is filled in on the order. Nothing is posted | The shipment is posted |
+| Receipt notice | **Post Receipt** and **Post Receipt View** | Nothing is posted. The receipt waits for you to post it | The receipt is posted |
+| Item adjustment | **Auto-Post Adjustment** | The lines wait in the adjustment journal | The journal is posted |
+| Stock count | **Auto-Post Balance** | The lines wait in the physical inventory journal | The journal is posted |
+
+With posting off, everything the warehouse reported is filled in on the Business Central documents, and you review the values before you post. A partial shipment shows up as the quantity to ship on the order lines.
+
+The stock count is rarely posted automatically. It is a control of the stock in Business Central against the warehouse, not something that should change the stock continuously. Review the differences in the physical inventory journal and post them yourself.
+
+## Which documents get WMS actions
+
+The document types you integrate also decide where the WMS actions appear in Business Central.
+
+| Integrated document | On the sales order |
+|---|---|
+| **Integrate Sales Order** | The WMS status and a **Warehouse** action |
+| **Integrate Inventory Pick** | No WMS status and no WMS actions. The pick is the document sent to the system |
 
 ## Examples
 
