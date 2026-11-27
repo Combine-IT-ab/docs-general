@@ -1,13 +1,13 @@
 ---
 title: "Milient to Business Central: projects"
 description: "Web Connect fetches new and changed projects from Milient on a schedule and creates them as dimension values in Business Central, optionally with attributes."
-summary: "Web Connect fetches new and changed projects from Milient (formerly Milltime) on a schedule and creates each project as a dimension value in Business Central. If you choose, selected project attributes also create values in other dimensions. Invoice lines then get the right dimensions when invoices are imported."
+summary: "Web Connect fetches new and changed projects from Milient Time Flow (formerly Milltime) on a schedule and creates each project as a dimension value in Business Central. If you choose, selected project attributes also create values in other dimensions. Invoice lines then get the right dimensions when invoices are imported."
 slug: integrations/business-central-milient/projects
 lang: en
 translation_key: integration-milient-projects
 product: web-connect
 type: integration-flow
-system: "Milient (formerly Milltime)"
+system: "Milient Time Flow (formerly Milltime)"
 system_category: "time and project management"
 keywords:
   - business central milient projects dimensions
@@ -20,7 +20,7 @@ last_reviewed: 2026-11-19
 
 # Milient to Business Central: projects
 
-Web Connect fetches new and changed projects from Milient (formerly Milltime) on a schedule and creates each project as a dimension value in Business Central. If you choose, selected project attributes also create values in other dimensions. Invoice lines then get the right dimensions when invoices are imported.
+Web Connect fetches new and changed projects from Milient Time Flow (formerly Milltime) on a schedule and creates each project as a dimension value in Business Central. If you choose, selected project attributes also create values in other dimensions. Invoice lines then get the right dimensions when invoices are imported.
 
 | | |
 |---|---|

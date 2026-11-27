@@ -1,13 +1,13 @@
 ---
 title: "Business Central to Milient: supplier costs on projects"
 description: "Web Connect sends posted vendor costs on selected G/L accounts with a project from Business Central to Milient as supplier invoices, ready to be invoiced on."
-summary: "When a vendor invoice or credit memo is posted in Business Central with a project, Web Connect sends the entries on selected G/L accounts to Milient (formerly Milltime) as a supplier invoice. The project manager can then pass the cost on to the end customer in Milient."
+summary: "When a vendor invoice or credit memo is posted in Business Central with a project, Web Connect sends the entries on selected G/L accounts to Milient Time Flow (formerly Milltime) as a supplier invoice. The project manager can then pass the cost on to the end customer in Milient."
 slug: integrations/business-central-milient/supplier-costs
 lang: en
 translation_key: integration-milient-supplier-costs
 product: web-connect
 type: integration-flow
-system: "Milient (formerly Milltime)"
+system: "Milient Time Flow (formerly Milltime)"
 system_category: "time and project management"
 keywords:
   - business central milient supplier invoice
@@ -22,7 +22,7 @@ last_reviewed: 2026-11-19
 
 # Business Central to Milient: supplier costs on projects
 
-When a vendor invoice or credit memo is posted in Business Central with a project, Web Connect sends the entries on selected G/L accounts to Milient (formerly Milltime) as a supplier invoice. The project manager can then pass the cost on to the end customer in Milient.
+When a vendor invoice or credit memo is posted in Business Central with a project, Web Connect sends the entries on selected G/L accounts to Milient Time Flow (formerly Milltime) as a supplier invoice. The project manager can then pass the cost on to the end customer in Milient.
 
 | | |
 |---|---|

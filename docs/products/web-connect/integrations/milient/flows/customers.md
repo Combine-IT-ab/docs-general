@@ -1,13 +1,13 @@
 ---
 title: "Business Central to Milient: customers"
 description: "Web Connect creates and updates customers in Milient when they are created or changed in Business Central, with addresses, terms, invoice method and VAT type."
-summary: "When a customer is created or a selected field changes in Business Central, Web Connect creates or updates the customer in Milient (formerly Milltime). New customers are created, and customers already linked to Milient are updated with their Milient ID in the address of the call."
+summary: "When a customer is created or a selected field changes in Business Central, Web Connect creates or updates the customer in Milient Time Flow (formerly Milltime). New customers are created, and customers already linked to Milient are updated with their Milient ID in the address of the call."
 slug: integrations/business-central-milient/customers
 lang: en
 translation_key: integration-milient-customers
 product: web-connect
 type: integration-flow
-system: "Milient (formerly Milltime)"
+system: "Milient Time Flow (formerly Milltime)"
 system_category: "time and project management"
 keywords:
   - business central milient customer sync
@@ -24,7 +24,7 @@ last_reviewed: 2026-11-19
 
 # Business Central to Milient: customers
 
-When a customer is created or a selected field changes in Business Central, Web Connect creates or updates the customer in Milient (formerly Milltime). New customers are created, and customers already linked to Milient are updated with their Milient ID in the address of the call.
+When a customer is created or a selected field changes in Business Central, Web Connect creates or updates the customer in Milient Time Flow (formerly Milltime). New customers are created, and customers already linked to Milient are updated with their Milient ID in the address of the call.
 
 | | |
 |---|---|

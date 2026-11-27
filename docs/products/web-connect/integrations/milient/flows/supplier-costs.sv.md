@@ -1,12 +1,12 @@
 ---
 title: "Från Business Central till Milient: leverantörskostnader på projekt"
 description: "Web Connect skickar bokförda leverantörskostnader med projekt på utvalda konton från Business Central till Milient som leverantörsfakturor, redo att faktureras."
-summary: "När en leverantörsfaktura eller leverantörskreditnota bokförs i Business Central med ett projekt skickar Web Connect posterna på utvalda konton till Milient (tidigare Milltime) som en leverantörsfaktura. Projektledaren kan sedan vidarefakturera kostnaden till slutkunden i Milient."
+summary: "När en leverantörsfaktura eller leverantörskreditnota bokförs i Business Central med ett projekt skickar Web Connect posterna på utvalda konton till Milient Time Flow (tidigare Milltime) som en leverantörsfaktura. Projektledaren kan sedan vidarefakturera kostnaden till slutkunden i Milient."
 lang: sv
 translation_key: integration-milient-supplier-costs
 product: web-connect
 type: integration-flow
-system: "Milient (formerly Milltime)"
+system: "Milient Time Flow (formerly Milltime)"
 system_category: "time and project management"
 keywords:
   - business central milient supplier invoice
@@ -21,14 +21,14 @@ last_reviewed: 2026-11-19
 
 # Från Business Central till Milient: leverantörskostnader på projekt
 
-När en leverantörsfaktura eller leverantörskreditnota bokförs i Business Central med ett projekt skickar Web Connect posterna på utvalda konton till Milient (tidigare Milltime) som en leverantörsfaktura. Projektledaren kan sedan vidarefakturera kostnaden till slutkunden i Milient.
+När en leverantörsfaktura eller leverantörskreditnota bokförs i Business Central med ett projekt skickar Web Connect posterna på utvalda konton till Milient Time Flow (tidigare Milltime) som en leverantörsfaktura. Projektledaren kan sedan vidarefakturera kostnaden till slutkunden i Milient.
 
 | | |
 |---|---|
 | **Riktning** | Business Central → Milient |
 | **Startas av** | En redovisningspost skapas när ett leverantörsdokument bokförs. Bara poster som uppfyller tabellvyn på objektet skickas |
 | **Resultat** | En leverantörsfaktura i Milient med en rad per post, på projektet |
-| **Del av** | [Business Central och Milient (tidigare Milltime): integration](../overview.md) |
+| **Del av** | [Business Central och Milient Time Flow (tidigare Milltime): integration](../overview.md) |
 
 ## Steg för steg
 
@@ -96,6 +96,6 @@ Ja, men Milient avvisar en leverantörsfaktura som redan finns där som en dubbl
 
 ## Relaterat
 
-- [Business Central och Milient (tidigare Milltime): integration](../overview.md)
+- [Business Central och Milient Time Flow (tidigare Milltime): integration](../overview.md)
 - [Projekt](projects.md)
 - [Outgoing Sync Triggers](../../../general/outgoing-mapping/outgoing-sync-triggers.md) · [Entries](../../../general/entries.md)
