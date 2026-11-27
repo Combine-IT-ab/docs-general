@@ -1,6 +1,6 @@
 # How do I resend an outgoing message from Web Connect Outgoing Data?
 
-Open Web Connect Outgoing Data, select the row, run Set Marked to Non-Synced and then Generate Web Entry of Marked. The Job Queue sends the message again on its next run.
+Open Web Connect Outgoing Data, select the row, run Set Marked to Non-Synced and then Generate Web Entry of Marked. If the object sends a list (MaxRecord per Entry is 1 or higher), use Run Sync to Web Entry instead. The Job Queue sends the message again on its next run.
 
 > ⚠️ Changes to Web Connect in a production environment are sensitive and may cause integrations to stop working if configured incorrectly. We strongly recommend testing all changes in a test/sandbox environment first. If you are unsure, contact us before making changes.
 
@@ -16,9 +16,13 @@ Open Web Connect Outgoing Data, select the row, run Set Marked to Non-Synced and
 1. Open **Web Connect Outgoing Data**
 2. Select the row you want to resend
 3. Go to **Actions → Set Marked to Non-Synced** — this marks the record as not synced and ready to be sent again
-4. Click **Generate Web Entry of Marked**
+4. Create the Web Entry:
+   - If **MaxRecord per Entry** on the object is `0`, click **Generate Web Entry of Marked**.
+   - If it is `1` or higher, the object sends a list (JSON array). Click **Run Sync to Web Entry** instead. **Generate Web Entry of Marked** does not close the list, and the Web Entry gets invalid JSON. **Run Sync to Web Entry** also creates Web Entries for all other rows that are not synced yet.
 
 The message will now be handled automatically by the Job Queue during the next run.
+
+> **Tip:** To find which record fails in an object that sends a list, set **MaxRecord per Entry** to `1`. Each Web Entry then holds one record. See [Objects that send a list](../../products/web-connect/general/outgoing-mapping/outgoing-data-web.md#objects-that-send-a-list).
 
 ### Send Immediately (Without Waiting for Job Queue)
 
